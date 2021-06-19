@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         screenFunction: () async {
-          bool logined = (1 > 2); // function with data from storage and login
+          bool logined = (1 < 2); // function with data from storage and login
           return logined ? MenuPage() : LoginPage();
         },
       ),
