@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ClrStyle {
   static const Color lightBackground = const Color(0xFFFDFDFD);
@@ -64,4 +64,29 @@ class TxtStyle {
   );
 }
 
-class GrdStyle {}
+class GrdStyle {
+  static const LinearGradient panel = const LinearGradient(colors: [
+    ClrStyle.lightPanel,
+    ClrStyle.darkPanel,
+  ]);
+  static const LinearGradient decline = const LinearGradient(colors: [
+    ClrStyle.lightDecline,
+    ClrStyle.darkDecline,
+  ]);
+  static const LinearGradient accept = const LinearGradient(colors: [
+    ClrStyle.lightAccept,
+    ClrStyle.darkAccept,
+  ]);
+  static const LinearGradient select = const LinearGradient(colors: [
+    ClrStyle.lightSelect,
+    ClrStyle.darkSelect,
+  ]);
+  static const LinearGradient button = const LinearGradient(colors: [
+    ClrStyle.lightButton,
+    ClrStyle.darkButton,
+  ]);
+  static const LinearGradient wave = const LinearGradient(colors: [
+    ClrStyle.lightWave,
+    ClrStyle.darkWave,
+  ]);
+}

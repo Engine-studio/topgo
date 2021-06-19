@@ -51,6 +51,27 @@ class MyApp extends StatelessWidget {
                 ],
               ),
               Spacer(),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: GrdStyle.decline,
+                ),
+                child: Center(
+                  child: ShaderMask(
+                    shaderCallback: (bounds) => LinearGradient(
+                      colors: [
+                        ClrStyle.lightAccept,
+                        ClrStyle.darkAccept,
+                      ],
+                    ).createShader(bounds),
+                    child: Text(
+                      "Hello, world",
+                      style: TxtStyle.mainHeader.copyWith(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
