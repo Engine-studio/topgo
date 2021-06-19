@@ -89,4 +89,12 @@ class GrdStyle {
     ClrStyle.lightWave,
     ClrStyle.darkWave,
   ]);
+  static const LinearGradient splash = const LinearGradient(
+    begin: Alignment.bottomCenter,
+    end: Alignment.topCenter,
+    colors: [
+      Color(0xFF16A7D8),
+      Color(0xFF937FF5),
+    ],
+  );
 }

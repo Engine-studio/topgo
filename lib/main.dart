@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:topgo/pages/login.dart';
+import 'package:topgo/pages/menu.dart';
 import 'package:topgo/styles.dart';
 
 void main() => runApp(MyApp());
@@ -7,74 +10,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'TopGo',
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Spacer(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Заголовок",
-                    style: TxtStyle.mainHeader,
-                  ),
-                  Text(
-                    "Заголовок",
-                    style: TxtStyle.smallHeader,
-                  ),
-                  Text(
-                    "Кнопка",
-                    style: TxtStyle.button,
-                  ),
-                ],
-              ),
-              Spacer(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Основной текст",
-                    style: TxtStyle.mainText,
-                  ),
-                  Text(
-                    "Основной текст выделение",
-                    style: TxtStyle.selectedMainText,
-                  ),
-                  Text("Основной маленький", style: TxtStyle.smallText),
-                  Text(
-                    "Основной маленький выделение",
-                    style: TxtStyle.selectedSmallText,
-                  ),
-                ],
-              ),
-              Spacer(),
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  gradient: GrdStyle.decline,
-                ),
-                child: Center(
-                  child: ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
-                      colors: [
-                        ClrStyle.lightAccept,
-                        ClrStyle.darkAccept,
-                      ],
-                    ).createShader(bounds),
-                    child: Text(
-                      "Hello, world",
-                      style: TxtStyle.mainHeader.copyWith(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+      home: AnimatedSplashScreen.withScreenFunction(
+        splashIconSize: double.infinity,
+        backgroundColor: Color(0xFF16A7D8),
+        splash: Container(
+          decoration: BoxDecoration(
+            gradient: GrdStyle.splash,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 75),
+            child: Image.asset('assets/images/logo.png'),
           ),
         ),
+        screenFunction: () async {
+          bool logined = (1 > 2); // function with data from storage and login
+          return logined ? MenuPage() : LoginPage();
+        },
       ),
     );
   }
