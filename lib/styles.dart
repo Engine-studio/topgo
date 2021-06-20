@@ -17,6 +17,7 @@ class ClrStyle {
   static const Color darkWave = const Color(0xFF1290B4);
   static const Color text = const Color(0xFF31477B);
   static const Color icons = const Color(0xFF31477B);
+  static const Color dropShadow = const Color(0x266A9DD9);
 }
 
 class TxtStyle {
@@ -93,8 +94,12 @@ class GrdStyle {
     begin: Alignment.bottomCenter,
     end: Alignment.topCenter,
     colors: [
-      Color(0xFF16A7D8),
-      Color(0xFF937FF5),
+      const Color(0xFF16A7D8),
+      const Color(0xFF937FF5),
     ],
   );
+  static const LinearGradient lightPanel = const LinearGradient(colors: [
+    const Color(0x336AA5D7),
+    const Color(0x336788DA),
+  ]);
 }

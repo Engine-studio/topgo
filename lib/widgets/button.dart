@@ -6,6 +6,7 @@ enum ButtonType {
   Accept,
   Decline,
   Select,
+  Panel,
 }
 
 class Button extends StatefulWidget {
@@ -78,7 +79,9 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
                 ? GrdStyle.accept
                 : _buttonType == ButtonType.Decline
                     ? GrdStyle.decline
-                    : GrdStyle.select,
+                    : _buttonType == ButtonType.Panel
+                        ? GrdStyle.panel
+                        : GrdStyle.select,
           ),
           child: Center(
             child: Text(
