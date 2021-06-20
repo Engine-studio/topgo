@@ -1,15 +1,21 @@
 import 'package:flutter/widgets.dart';
 
 class Items {
-  static bottomNavBarIcons(String role) {
-    return ['history', 'rocket', 'user'];
+  static List<String> bottomNavBarIcons(String role) {
+    return [
+      'history',
+      'rocket',
+      'user',
+      'documents',
+    ];
   }
 
-  static bottomNavBarTabs(String role) {
+  static List<Widget> bottomNavBarTabs(String role) {
     return <Widget>[
-      Center(child: Text('history')),
-      Center(child: Text('rocket')),
-      Center(child: Text('user')),
+      Text('history'),
+      Text('rocket'),
+      Text('user'),
+      Text('documents'),
     ];
   }
 }

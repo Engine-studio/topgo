@@ -65,36 +65,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       label: icon,
                     ))
                 .toList(),
-
-            //   BottomNavigationBarItem(
-            //     icon: ShaderMask(
-            //       shaderCallback: _currentIndex == 1
-            //           ? (bounds) => GrdStyle.select.createShader(bounds)
-            //           : (bounds) => GrdStyle.panel.createShader(bounds),
-            //       child: Image.asset(
-            //         'assets/icons/rocket.png',
-            //         width: 30,
-            //         height: 30,
-            //         color: Colors.white,
-            //       ),
-            //     ),
-            //     label: 'rocket',
-            //   ),
-            //   BottomNavigationBarItem(
-            //     icon: ShaderMask(
-            //       shaderCallback: _currentIndex == 2
-            //           ? (bounds) => GrdStyle.select.createShader(bounds)
-            //           : (bounds) => GrdStyle.panel.createShader(bounds),
-            //       child: Image.asset(
-            //         'assets/icons/user.png',
-            //         width: 30,
-            //         height: 30,
-            //         color: Colors.white,
-            //       ),
-            //     ),
-            //     label: 'user',
-            //   ),
-            // ],
             onTap: (index) {
               setState(() {
                 _currentIndex = index;

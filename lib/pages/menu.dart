@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/items.dart';
+import 'package:topgo/widgets/appbar.dart';
 import 'package:topgo/widgets/bottom_navbar.dart';
 
 class MenuPage extends StatefulWidget {
@@ -11,19 +12,29 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  Widget currentPage = Center(child: Text('history'));
+  int currentIndex = 0;
+  List<String> icons = Items.bottomNavBarIcons('courier');
+  List<Widget> tabs = Items.bottomNavBarTabs('courier');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Appbar(
+        icons[currentIndex],
+        onPressed: () {
+          setState(() {
+            this.currentIndex = icons.length - 1;
+          });
+        },
+      ),
       body: SafeArea(
-        child: currentPage,
+        child: SingleChildScrollView(child: tabs[currentIndex]),
       ),
       bottomNavigationBar: BottomNavBar(
-        icons: Items.bottomNavBarIcons('courier'),
+        icons: icons.sublist(0, icons.length - 1),
         onPressed: (index) {
           setState(() {
-            this.currentPage = Items.bottomNavBarTabs('courier')[index];
+            this.currentIndex = index;
           });
         },
       ),
