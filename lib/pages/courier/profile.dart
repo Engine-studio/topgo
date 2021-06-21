@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/courier/money_holder.dart';
 import 'package:topgo/widgets/courier/profile_card.dart';
+import 'package:topgo/widgets/courier/start_work_dialog.dart';
 
 class CourierProfileTab extends StatelessWidget {
   const CourierProfileTab({Key? key}) : super(key: key);
@@ -33,7 +35,12 @@ class CourierProfileTab extends StatelessWidget {
           Button(
             text: 'Начать смену',
             buttonType: ButtonType.Panel,
-            onPressed: () => {},
+            onPressed: () => showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return StartWorkDialog();
+              },
+            ),
           ),
           SizedBox(height: 100),
           Text(
