@@ -36,7 +36,7 @@ class ProfilePhoto extends StatelessWidget {
                 ),
                 child: ShaderMask(
                   shaderCallback: (bounds) =>
-                      GrdStyle.panel.createShader(bounds),
+                      GrdStyle().panelGradient(context).createShader(bounds),
                   child: Image(
                     image: ResizeImage(
                       AssetImage('assets/icons/pen.png'),

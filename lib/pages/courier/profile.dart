@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/courier/money_holder.dart';
@@ -37,8 +39,11 @@ class CourierProfileTab extends StatelessWidget {
             buttonType: ButtonType.Panel,
             onPressed: () => showDialog(
               context: context,
-              builder: (BuildContext context) {
-                return StartWorkDialog();
+              builder: (_) {
+                return ChangeNotifierProvider.value(
+                  value: Provider.of<User>(context, listen: false),
+                  child: StartWorkDialog(),
+                );
               },
             ),
           ),

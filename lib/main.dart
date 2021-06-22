@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:topgo/pages/login.dart';
 import 'package:topgo/pages/menu.dart';
 import 'package:topgo/styles.dart';
+
+import 'models/user.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,8 +28,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
         screenFunction: () async {
-          bool logined = (1 < 2); // function with data from storage and login
-          return logined ? MenuPage() : LoginPage();
+          User user = User.authorized();
+          return ChangeNotifierProvider<User>(
+            create: (context) => user,
+            child: user.authorized ? MenuPage() : LoginPage(),
+          );
         },
       ),
     );

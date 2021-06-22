@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:topgo/styles.dart';
+import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/courier/profile_photo.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -16,21 +17,10 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    return BorderBox(
       height: 105,
-      decoration: BoxDecoration(
-        gradient: GrdStyle.lightPanel,
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: [BoxShadow(color: ClrStyle.dropShadow, blurRadius: 3)],
-      ),
-      child: Container(
-        margin: const EdgeInsets.all(1.5),
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.circular(6),
-        ),
         child: Row(
           children: [
             ProfilePhoto(),

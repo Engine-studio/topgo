@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:topgo/styles.dart';
+import 'package:topgo/widgets/border_box.dart';
 
 String moneyString(double sum) {
   String str = sum.toStringAsFixed(2);
@@ -30,25 +31,12 @@ class MoneyHolder extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(text, style: TxtStyle.selectedSmallText),
           ),
-          Container(
-            width: double.infinity,
+          BorderBox(
             height: 35,
-            decoration: BoxDecoration(
-              gradient: GrdStyle.lightPanel,
-              borderRadius: BorderRadius.circular(6),
-              boxShadow: [BoxShadow(color: ClrStyle.dropShadow, blurRadius: 3)],
-            ),
-            child: Container(
-              margin: const EdgeInsets.all(1.5),
-              decoration: BoxDecoration(
-                color: Color(0xFFFFFFFF),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Center(
-                child: Text(
-                  moneyString(sum),
-                  style: TxtStyle.smallText,
-                ),
+            child: Center(
+              child: Text(
+                moneyString(sum),
+                style: TxtStyle.smallText,
               ),
             ),
           ),

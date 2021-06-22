@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:topgo/styles.dart';
+import 'package:topgo/widgets/border_box.dart';
 
 class TerminalSelection extends StatefulWidget {
   final bool has;
@@ -27,6 +28,7 @@ class _TerminalSelectionState extends State<TerminalSelection> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> buttons = ['Есть', 'Нет'];
     return Container(
       child: Container(
         width: double.infinity,
@@ -44,73 +46,26 @@ class _TerminalSelectionState extends State<TerminalSelection> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 109,
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: 79,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      gradient:
-                          this.has ? GrdStyle.accept : GrdStyle.lightPanel,
-                      borderRadius: BorderRadius.circular(6),
-                      boxShadow: [
-                        BoxShadow(color: ClrStyle.dropShadow, blurRadius: 3)
-                      ],
-                    ),
-                    child: GestureDetector(
-                      onTap: () => switchChoise(true),
-                      child: Container(
-                        margin: const EdgeInsets.all(1.5),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Есть',
-                            style: TxtStyle.mainHeader,
+              children: buttons
+                  .map(
+                    (txt) => Container(
+                      width: 109,
+                      alignment: Alignment.center,
+                      child: GestureDetector(
+                        onTap: () => switchChoise(txt == 'Есть'),
+                        child: BorderBox(
+                          height: 44,
+                          selected: (this.has && txt == 'Есть') ||
+                              (!this.has && txt == 'Нет'),
+                          child: Center(
+                            child: Text(txt, style: TxtStyle.mainHeader),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Container(
-                  width: 109,
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: 79,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      gradient:
-                          !this.has ? GrdStyle.accept : GrdStyle.lightPanel,
-                      borderRadius: BorderRadius.circular(6),
-                      boxShadow: [
-                        BoxShadow(color: ClrStyle.dropShadow, blurRadius: 3)
-                      ],
-                    ),
-                    child: GestureDetector(
-                      onTap: () => switchChoise(false),
-                      child: Container(
-                        margin: const EdgeInsets.all(1.5),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Нет',
-                            style: TxtStyle.mainHeader,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
+                  )
+                  .toList(),
+            ),
           ],
         ),
       ),

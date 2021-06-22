@@ -58,8 +58,11 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
                   )
                 : Container()
           ],
-          flexibleSpace:
-              Container(decoration: BoxDecoration(gradient: GrdStyle.panel)),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: GrdStyle().panelGradient(context),
+            ),
+          ),
         ),
       ),
     );

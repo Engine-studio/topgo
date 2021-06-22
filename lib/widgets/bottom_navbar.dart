@@ -54,7 +54,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       icon: ShaderMask(
                         shaderCallback: _currentIndex == icons.indexOf(icon)
                             ? (bounds) => GrdStyle.select.createShader(bounds)
-                            : (bounds) => GrdStyle.panel.createShader(bounds),
+                            : (bounds) => GrdStyle()
+                                .panelGradient(context)
+                                .createShader(bounds),
                         child: Image.asset(
                           'assets/icons/$icon.png',
                           width: 30,

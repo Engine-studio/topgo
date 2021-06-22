@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:topgo/models/user.dart';
 
 class ClrStyle {
   static const Color lightBackground = const Color(0xFFFDFDFD);
@@ -98,8 +100,29 @@ class GrdStyle {
       const Color(0xFF937FF5),
     ],
   );
-  static const LinearGradient lightPanel = const LinearGradient(colors: [
-    const Color(0x336AA5D7),
-    const Color(0x336788DA),
-  ]);
+
+  LinearGradient panelGradient(BuildContext context) {
+    switch (context.read<User>().role) {
+      case Role.Administrator:
+        return wave;
+      case Role.Courier:
+        return panel;
+      case Role.Curator:
+        return button;
+    }
+  }
+
+  LinearGradient lightPanelGradient(BuildContext context) {
+    switch (context.read<User>().role) {
+      case Role.Administrator:
+        return LinearGradient(
+            colors: wave.colors.map((clr) => clr.withOpacity(0.15)).toList());
+      case Role.Courier:
+        return LinearGradient(
+            colors: panel.colors.map((clr) => clr.withOpacity(0.15)).toList());
+      case Role.Curator:
+        return LinearGradient(
+            colors: button.colors.map((clr) => clr.withOpacity(0.15)).toList());
+    }
+  }
 }

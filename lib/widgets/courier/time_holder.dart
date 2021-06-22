@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:topgo/styles.dart';
+import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/time_picker.dart';
 
 class TimeHolder extends StatefulWidget {
@@ -39,35 +40,23 @@ class _TimeHolderState extends State<TimeHolder> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(widget.text, style: TxtStyle.selectedSmallText),
-          Container(
-            width: 79,
-            height: 44,
-            decoration: BoxDecoration(
-              gradient: GrdStyle.lightPanel,
-              borderRadius: BorderRadius.circular(6),
-              boxShadow: [BoxShadow(color: ClrStyle.dropShadow, blurRadius: 3)],
-            ),
-            child: AbsorbPointer(
-              absorbing: widget.disabled,
-              child: GestureDetector(
-                onTap: () => showTimePicker(
-                  context: context,
-                  selected: this.time,
-                  onConfirm: (List<int> time) => changeTime(time),
-                ),
-                child: Container(
-                  margin: const EdgeInsets.all(1.5),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${this.time[0] < 10 ? "0${this.time[0]}" : this.time[0]}' +
-                          ' : ' +
-                          '${this.time[1] < 10 ? "0${this.time[1]}" : this.time[1]}',
-                      style: TxtStyle.mainHeader,
-                    ),
+          AbsorbPointer(
+            absorbing: widget.disabled,
+            child: GestureDetector(
+              onTap: () => showTimePicker(
+                context: context,
+                selected: time,
+                onConfirm: (List<int> time) => changeTime(time),
+              ),
+              child: BorderBox(
+                width: 79,
+                height: 44,
+                child: Center(
+                  child: Text(
+                    '${time[0] < 10 ? "0${time[0]}" : time[0]}' +
+                        ' : ' +
+                        '${time[1] < 10 ? "0${time[1]}" : time[1]}',
+                    style: TxtStyle.mainHeader,
                   ),
                 ),
               ),

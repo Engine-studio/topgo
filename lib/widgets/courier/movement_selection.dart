@@ -58,7 +58,7 @@ class _MovementSelectionState extends State<MovementSelection> {
                             height: 44,
                             decoration: BoxDecoration(
                               gradient: pics.indexOf(pic) == currentIndex
-                                  ? GrdStyle.panel
+                                  ? GrdStyle().panelGradient(context)
                                   : LinearGradient(colors: [
                                       Color(0xFFFFFFFF),
                                       Color(0xFFFFFFFF),
@@ -69,13 +69,13 @@ class _MovementSelectionState extends State<MovementSelection> {
                                   color: ClrStyle.dropShadow,
                                   blurRadius:
                                       pics.indexOf(pic) == currentIndex ? 3 : 0,
-                                )
+                                ),
                               ],
                             ),
                             child: ShaderMask(
                               shaderCallback: (bounds) =>
                                   (pics.indexOf(pic) != currentIndex
-                                          ? GrdStyle.panel
+                                          ? GrdStyle().panelGradient(context)
                                           : LinearGradient(colors: [
                                               Color(0xFFFFFFFF),
                                               Color(0xFFFFFFFF),
@@ -92,42 +92,7 @@ class _MovementSelectionState extends State<MovementSelection> {
                             ),
                           ),
                         ))
-                    .toList()
-                // GestureDetector(
-                //   onTap: () => switchChoise(0),
-                //   child: Container(
-                //     width: 44,
-                //     height: 44,
-                //     decoration: BoxDecoration(
-                //       gradient: this.currentIndex == 0
-                //           ? GrdStyle.accept
-                //           : GrdStyle.lightPanel,
-                //       borderRadius: BorderRadius.circular(6),
-                //       boxShadow: [
-                //         BoxShadow(color: ClrStyle.dropShadow, blurRadius: 3)
-                //       ],
-                //     ),
-                //     child: GestureDetector(
-                //       onTap: () => switchChoise(0),
-                //       child: Container(
-                //         margin: const EdgeInsets.all(1.5),
-                //         decoration: BoxDecoration(
-                //           color: Color(0xFFFFFFFF),
-                //           borderRadius: BorderRadius.circular(6),
-                //         ),
-                //         child: Center(
-                //           child: Text(
-                //             'Есть',
-                //             style: TxtStyle.mainHeader,
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-
-                //),
-                ),
+                    .toList()),
           ],
         ),
       ),
