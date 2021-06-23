@@ -21,6 +21,7 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
       appBar: Appbar(
         icons[currentIndex],
+        withSearch: icons[currentIndex] == 'history',
         onPressed: () {
           setState(() {
             this.currentIndex = icons.length - 1;

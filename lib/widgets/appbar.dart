@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:topgo/styles.dart';
+import 'package:topgo/widgets/search.dart';
 
 List dictionary = [
   {
@@ -14,14 +15,20 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
   final String title;
+  final bool withSearch;
   final void Function() onPressed;
 
-  Appbar(this.title, {Key? key, required this.onPressed})
-      : preferredSize = Size.fromHeight(50),
+  Appbar(
+    this.title, {
+    Key? key,
+    required this.onPressed,
+    this.withSearch = false,
+  })  : preferredSize = Size.fromHeight(withSearch ? 124 : 50),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(6)),
@@ -35,10 +42,22 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(6)),
         child: AppBar(
-          title: Text(
-            dictionary[0][title],
-            style:
-                TxtStyle.mainHeader.copyWith(color: ClrStyle.lightBackground),
+          toolbarHeight: withSearch ? 124 : 50,
+          title: Column(
+            children: [
+              SizedBox(height: withSearch ? 4 : 0),
+              Text(
+                dictionary[0][title],
+                style: TxtStyle.mainHeader
+                    .copyWith(color: ClrStyle.lightBackground),
+              ),
+              ...withSearch
+                  ? [
+                      SizedBox(height: 16),
+                      Search(text: 'Search', controller: controller),
+                    ]
+                  : [],
+            ],
           ),
           actions: [
             title == 'user' || title == 'documents'
