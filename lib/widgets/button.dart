@@ -73,7 +73,7 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
         : _buttonType == ButtonType.Decline
             ? GrdStyle.decline
             : _buttonType == ButtonType.Panel
-                ? GrdStyle.panel
+                ? GrdStyle().panelGradient(context)
                 : GrdStyle.select;
     return GestureDetector(
       onTapDown: _tapDown,

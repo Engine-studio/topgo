@@ -8,20 +8,21 @@ class MovementSelection extends StatefulWidget {
   const MovementSelection({
     Key? key,
     this.index = 0,
-    required this.onChange,
     required this.disabled,
+    required this.onChange,
   }) : super(key: key);
 
   @override
   _MovementSelectionState createState() =>
-      _MovementSelectionState(index, onChange);
+      _MovementSelectionState(index, onChange, disabled);
 }
 
 class _MovementSelectionState extends State<MovementSelection> {
   int currentIndex;
+  final bool disabled;
   final void Function(int) onChange;
 
-  _MovementSelectionState(this.currentIndex, this.onChange);
+  _MovementSelectionState(this.currentIndex, this.onChange, this.disabled);
 
   void switchChoise(int ind) {
     setState(() {
@@ -33,7 +34,8 @@ class _MovementSelectionState extends State<MovementSelection> {
   @override
   Widget build(BuildContext context) {
     List<String> pics = ['pedestrian', 'bicycle', 'car'];
-    return Container(
+    return AbsorbPointer(
+      absorbing: disabled,
       child: Container(
         width: double.infinity,
         height: 69,

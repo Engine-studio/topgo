@@ -16,9 +16,10 @@ class BorderBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double _borderWidth = 1.5;
     return Container(
-      width: width,
-      height: height,
+      width: width + _borderWidth * 2,
+      height: height + _borderWidth * 2,
       decoration: BoxDecoration(
         gradient:
             selected ? GrdStyle.accept : GrdStyle().lightPanelGradient(context),
@@ -26,7 +27,7 @@ class BorderBox extends StatelessWidget {
         boxShadow: [BoxShadow(color: ClrStyle.dropShadow, blurRadius: 3)],
       ),
       child: Container(
-        margin: const EdgeInsets.all(1.5),
+        margin: const EdgeInsets.all(_borderWidth),
         decoration: BoxDecoration(
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(6),

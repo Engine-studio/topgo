@@ -28,7 +28,7 @@ class _MenuPageState extends State<MenuPage> {
         },
       ),
       body: SafeArea(
-        child: SingleChildScrollView(child: tabs[currentIndex]),
+        child: tabs[currentIndex],
       ),
       bottomNavigationBar: BottomNavBar(
         icons: icons.sublist(0, icons.length - 1),
