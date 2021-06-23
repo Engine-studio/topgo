@@ -13,15 +13,15 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   int currentIndex = 0;
-  List<String> icons = Items.bottomNavBarIcons('courier');
-  List<Widget> tabs = Items.bottomNavBarTabs('courier');
 
   @override
   Widget build(BuildContext context) {
+    List<String> icons = Items().bottomNavBarIcons(context);
+    List<Widget> tabs = Items().bottomNavBarTabs(context);
+    List<AppBarItem> appBarItems = Items().appBarItems(context);
     return Scaffold(
       appBar: Appbar(
-        icons[currentIndex],
-        withSearch: icons[currentIndex] == 'history',
+        appBarItem: appBarItems[currentIndex],
         onPressed: () {
           setState(() {
             this.currentIndex = icons.length - 1;

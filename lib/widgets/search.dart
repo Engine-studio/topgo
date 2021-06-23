@@ -4,14 +4,23 @@ import 'package:topgo/styles.dart';
 class Search extends StatelessWidget {
   final String text;
   final TextEditingController controller;
-  const Search({Key? key, required this.text, required this.controller})
-      : super(key: key);
+  final List<Map<String, void Function()>> searchHelpers;
+
+  const Search({
+    Key? key,
+    required this.text,
+    required this.controller,
+    this.searchHelpers = const [],
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
+          margin: searchHelpers.isEmpty
+              ? const EdgeInsets.only(top: 23)
+              : const EdgeInsets.only(top: 0),
           height: 35,
           decoration: BoxDecoration(
             color: Color(0xFFFFFFFF),
@@ -47,8 +56,8 @@ class Search extends StatelessWidget {
         SizedBox(height: 8),
         Row(
           children: [
-            ...['По имени', 'По адресу'].map(
-              (txt) => Container(
+            ...searchHelpers.map(
+              (elem) => Container(
                 margin: const EdgeInsets.only(right: 8),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18.5, vertical: 4),
@@ -58,10 +67,11 @@ class Search extends StatelessWidget {
                   color: ClrStyle.lightBackground,
                 ),
                 child: Center(
-                  child: Text(txt, style: TxtStyle.selectedSmallText),
+                  child:
+                      Text(elem.keys.first, style: TxtStyle.selectedSmallText),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ],
