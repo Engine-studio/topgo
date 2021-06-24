@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/courier/profile_photo.dart';
+import 'package:topgo/widgets/courier/star_holder.dart';
 
 class ProfileCard extends StatelessWidget {
   final String surname, name, patronymic, phone;
@@ -36,21 +37,7 @@ class ProfileCard extends StatelessWidget {
                   Spacer(flex: 3),
                   Text('$phone', style: TxtStyle.smallText),
                   Spacer(flex: 2),
-                  Row(
-                    children: [
-                      Text('$rating', style: TxtStyle.smallText),
-                      ShaderMask(
-                        shaderCallback: (bounds) =>
-                            GrdStyle.select.createShader(bounds),
-                        child: Image.asset(
-                          'assets/icons/star.png',
-                          width: 15,
-                          height: 15,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                      )
-                    ],
-                  ),
+                  StarHolder(rating: rating),
                 ],
               ),
             ),

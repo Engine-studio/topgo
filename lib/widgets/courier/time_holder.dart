@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/functions/time_string.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/time_picker.dart';
@@ -52,12 +53,7 @@ class _TimeHolderState extends State<TimeHolder> {
                 width: 79,
                 height: 44,
                 child: Center(
-                  child: Text(
-                    '${time[0] < 10 ? "0${time[0]}" : time[0]}' +
-                        ' : ' +
-                        '${time[1] < 10 ? "0${time[1]}" : time[1]}',
-                    style: TxtStyle.mainHeader,
-                  ),
+                  child: Text(timeString(time), style: TxtStyle.mainHeader),
                 ),
               ),
             ),
