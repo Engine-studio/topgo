@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         screenFunction: () async {
-          User user = User.authorized();
+          User user = User();
           return ChangeNotifierProvider<User>(
             create: (context) => user,
             child: user.authorized ? MenuPage() : LoginPage(),

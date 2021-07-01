@@ -13,83 +13,80 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: BorderBox(
-        height: 208,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            children: [
-              AddressHolder(dist: 'Откуда:', address: item.from),
-              SizedBox(height: 8),
-              AddressHolder(dist: 'Куда:', address: item.to),
-              SizedBox(height: 18),
-              OrderInfoHolder(
-                time: item.time,
-                payment: item.payment,
-                sum: item.sum,
-              ),
-              SizedBox(height: 18),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 6,
-                    child: Row(
-                      children: [
-                        Text('Внешний вид:', style: TxtStyle.smallText),
-                        SizedBox(width: 8),
-                        StarHolder(rating: item.viewPoint),
-                      ],
-                    ),
+    return BorderBox(
+      height: 208,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Column(
+          children: [
+            AddressHolder(dist: 'Откуда:', address: item.from),
+            SizedBox(height: 8),
+            AddressHolder(dist: 'Куда:', address: item.to),
+            SizedBox(height: 18),
+            OrderInfoHolder(
+              time: item.time,
+              payment: item.payment,
+              sum: item.sum,
+            ),
+            SizedBox(height: 18),
+            Row(
+              children: [
+                Flexible(
+                  flex: 6,
+                  child: Row(
+                    children: [
+                      Text('Внешний вид:', style: TxtStyle.smallText),
+                      SizedBox(width: 8),
+                      StarHolder(rating: item.viewPoint),
+                    ],
                   ),
-                  Spacer(),
-                  Flexible(
-                    flex: 4,
-                    child: Row(
-                      children: [
-                        Text('Получен:', style: TxtStyle.smallText),
-                        SizedBox(width: 8),
-                        Text(
-                          timeString(item.timeFrom),
-                          style: TxtStyle.smallText,
-                        ),
-                      ],
-                    ),
+                ),
+                Spacer(),
+                Flexible(
+                  flex: 4,
+                  child: Row(
+                    children: [
+                      Text('Получен:', style: TxtStyle.smallText),
+                      SizedBox(width: 8),
+                      Text(
+                        timeString(item.timeFrom),
+                        style: TxtStyle.smallText,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              SizedBox(height: 4),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 6,
-                    child: Row(
-                      children: [
-                        Text('Вежливость:', style: TxtStyle.smallText),
-                        SizedBox(width: 8),
-                        StarHolder(rating: item.behaviorPoint),
-                      ],
-                    ),
+                ),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Flexible(
+                  flex: 6,
+                  child: Row(
+                    children: [
+                      Text('Вежливость:', style: TxtStyle.smallText),
+                      SizedBox(width: 8),
+                      StarHolder(rating: item.behaviorPoint),
+                    ],
                   ),
-                  Spacer(),
-                  Flexible(
-                    flex: 4,
-                    child: Row(
-                      children: [
-                        Text('Доставлен:', style: TxtStyle.smallText),
-                        SizedBox(width: 8),
-                        Text(
-                          timeString(item.timeTo),
-                          style: TxtStyle.smallText,
-                        ),
-                      ],
-                    ),
+                ),
+                Spacer(),
+                Flexible(
+                  flex: 4,
+                  child: Row(
+                    children: [
+                      Text('Доставлен:', style: TxtStyle.smallText),
+                      SizedBox(width: 8),
+                      Text(
+                        timeString(item.timeTo),
+                        style: TxtStyle.smallText,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

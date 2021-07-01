@@ -8,7 +8,7 @@ class TimeHolder extends StatefulWidget {
   final String text;
   final List<int> time;
   final bool disabled;
-  final void Function() onChange;
+  final void Function(List<int>) onChange;
   const TimeHolder({
     Key? key,
     required this.text,
@@ -27,6 +27,7 @@ class _TimeHolderState extends State<TimeHolder> {
   _TimeHolderState({required this.time});
 
   changeTime(List<int> time) {
+    widget.onChange(time);
     setState(() {
       this.time = time;
     });

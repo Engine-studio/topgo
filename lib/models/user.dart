@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:topgo/models/administrator.dart';
+import 'package:topgo/models/courier.dart';
+import 'package:topgo/models/curator.dart';
 
 enum Role {
   Administrator,
@@ -7,36 +10,20 @@ enum Role {
 }
 
 class User with ChangeNotifier {
+  String token;
   Role role;
   bool authorized;
-  bool working;
-  int orders;
+
+  late Courier courier;
+  late Administrator administrator;
+  late Curator curator;
 
   User()
-      : role = Role.Administrator,
-        authorized = false,
-        working = false,
-        orders = 1;
-
-  User.authorized()
-      : role = Role.Courier,
-        authorized = true,
-        working = true,
-        orders = 1;
-
-  User.nonAuthorized()
-      : role = Role.Courier,
-        authorized = false,
-        working = false,
-        orders = 1;
-
-  void work() {
-    this.working = !this.working;
-    notifyListeners();
+      : token = 'jwt',
+        role = Role.Courier,
+        authorized = true {
+    this.courier = Courier(notify: notify);
   }
 
-  void add() {
-    this.orders += 1;
-    notifyListeners();
-  }
+  void notify() => notifyListeners();
 }

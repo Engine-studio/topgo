@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:topgo/models/work_shift.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
@@ -8,8 +9,13 @@ import 'package:topgo/widgets/courier/time_holder.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class StartWorkDialog extends StatelessWidget {
-  const StartWorkDialog({Key? key}) : super(key: key);
+  List<int> begin = [9, 0], end = [18, 0];
+  int movement = 0;
+  bool terminal = false;
+
+  StartWorkDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +28,25 @@ class StartWorkDialog extends StatelessWidget {
           children: [
             TimeHolder(
               text: 'Начало смены',
-              time: [9, 0],
+              time: this.begin,
               disabled: false,
-              onChange: () => {},
+              onChange: (time) => {this.begin = time},
             ),
             TimeHolder(
               text: 'Конец смены',
-              time: [18, 0],
+              time: this.end,
               disabled: false,
-              onChange: () => {},
+              onChange: (time) => {this.end = time},
             ),
           ],
         ),
         SizedBox(height: 32),
-        TerminalSelection(onChange: (boola) => {}),
+        TerminalSelection(onChange: (has) => {this.terminal = has}),
         SizedBox(height: 32),
-        MovementSelection(onChange: (inta) => {}, disabled: false),
+        MovementSelection(
+          onChange: (movement) => {this.movement = movement},
+          disabled: false,
+        ),
         SizedBox(height: 24),
         Text(
           'Смена не должна длиться\nменее 2 и более 10 часов',
@@ -49,8 +58,19 @@ class StartWorkDialog extends StatelessWidget {
           text: 'Начать',
           buttonType: ButtonType.Accept,
           onPressed: () => {
-            context.read<User>().work(),
-            Navigator.pop(context),
+            if ((2 < end[0] - begin[0] && end[0] - begin[0] < 10) ||
+                (end[0] - begin[0] == 2 && end[1] >= begin[1]) ||
+                (end[0] - begin[0] == 10 && end[1] <= begin[1]))
+              {
+                context.read<User>().courier.startWork(
+                      shift: WorkShift(
+                        movement: movement,
+                        begin: begin,
+                        end: end,
+                      ),
+                    ),
+                Navigator.pop(context),
+              },
           },
         )
       ],
