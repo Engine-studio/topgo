@@ -20,7 +20,7 @@ class User with ChangeNotifier {
 
   User()
       : token = 'jwt',
-        role = Role.Courier,
+        role = Role.Curator,
         authorized = true {
     this.courier = Courier(
       notify: notify,
