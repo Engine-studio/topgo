@@ -14,7 +14,7 @@ class CourierHistoryTab extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 16),
-            ...context.watch<User>().courier.history.map(
+            ...context.watch<User>().courier.shownHistory.map(
                   (item) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: HistoryCard(item: item),

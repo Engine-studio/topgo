@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/courier/profile_photo.dart';
 import 'package:topgo/widgets/courier/star_holder.dart';
+import 'package:provider/provider.dart';
 
 class ProfileCard extends StatelessWidget {
   final String surname, name, patronymic, phone;
@@ -31,11 +33,11 @@ class ProfileCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '$surname $name $patronymic',
+                    context.read<User>().fullName,
                     style: TxtStyle.selectedMainText,
                   ),
                   Spacer(flex: 3),
-                  Text('$phone', style: TxtStyle.smallText),
+                  Text(context.read<User>().phone, style: TxtStyle.smallText),
                   Spacer(flex: 2),
                   StarHolder(rating: rating),
                 ],

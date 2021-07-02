@@ -4,6 +4,7 @@ import 'package:topgo/styles.dart';
 class Search extends StatelessWidget {
   final String text;
   final TextEditingController controller;
+  final void Function(String) onChanged;
   final List<Map<String, void Function()>> searchHelpers;
 
   const Search({
@@ -11,6 +12,7 @@ class Search extends StatelessWidget {
     required this.text,
     required this.controller,
     this.searchHelpers = const [],
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class Search extends StatelessWidget {
             ],
           ),
           child: TextField(
+            onChanged: (text) => onChanged(text),
             controller: this.controller,
             style: TxtStyle.selectedMainText,
             cursorColor: Colors.black,

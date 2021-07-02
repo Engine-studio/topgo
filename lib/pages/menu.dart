@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/items.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/appbar.dart';
 import 'package:topgo/widgets/bottom_navbar.dart';
+import 'package:provider/provider.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -34,6 +36,7 @@ class _MenuPageState extends State<MenuPage> {
       bottomNavigationBar: BottomNavBar(
         icons: icons.sublist(0, icons.length - 1),
         onPressed: (index) {
+          context.read<User>().updateView('');
           setState(() {
             this.currentIndex = index;
           });

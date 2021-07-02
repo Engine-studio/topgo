@@ -19,7 +19,12 @@ class AddressHolder extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: Text(dist, style: TxtStyle.smallText),
         ),
-        Expanded(child: Text(address, style: TxtStyle.smallText)),
+        Expanded(
+          child: Container(
+            height: 45,
+            child: Text(address, style: TxtStyle.smallText),
+          ),
+        ),
       ],
     );
   }

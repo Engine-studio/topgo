@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:topgo/models/items.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/search.dart';
+import 'package:provider/provider.dart';
 
 class Appbar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -68,6 +70,7 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
                             )
                             .toList(),
                         controller: controller,
+                        onChanged: context.read<User>().updateView,
                       ),
                     ]
                   : [],
