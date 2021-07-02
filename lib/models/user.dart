@@ -22,12 +22,11 @@ class User with ChangeNotifier {
       : token = 'jwt',
         role = Role.Curator,
         authorized = true {
-    this.courier = Courier(
+    this.curator = Curator(
       notify: notify,
       surname: 'Третьяков',
       name: 'Николяяяяяя',
       patronymic: 'Дмитриевич',
-      rating: 3.8,
       phone: '+7 (977) 270-23-21',
     );
   }
@@ -50,8 +49,11 @@ class User with ChangeNotifier {
   String get fullName {
     switch (this.role) {
       case Role.Administrator:
-        return '';
-      //return '${this.administrator.surname} $name $patronymic';
+        return this.administrator.surname +
+            ' ' +
+            this.administrator.name +
+            ' ' +
+            this.administrator.patronymic;
       case Role.Courier:
         return this.courier.surname +
             ' ' +
@@ -59,19 +61,22 @@ class User with ChangeNotifier {
             ' ' +
             this.courier.patronymic;
       case Role.Curator:
-        //curator.updateView(key);
-        return '';
+        return this.curator.surname +
+            ' ' +
+            this.curator.name +
+            ' ' +
+            this.curator.patronymic;
     }
   }
 
   String get phone {
     switch (this.role) {
       case Role.Administrator:
-        return '';
+        return this.administrator.phone;
       case Role.Courier:
         return this.courier.phone;
       case Role.Curator:
-        return '';
+        return this.curator.phone;
     }
   }
 

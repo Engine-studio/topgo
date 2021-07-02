@@ -4,12 +4,19 @@ import 'package:topgo/styles.dart';
 class Input extends StatelessWidget {
   final String text;
   final TextEditingController controller;
-  const Input({Key? key, required this.text, required this.controller})
-      : super(key: key);
+  final bool multilined;
+
+  const Input({
+    Key? key,
+    required this.text,
+    required this.controller,
+    this.multilined = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: multilined ? 104 : 44,
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(6),
@@ -25,6 +32,7 @@ class Input extends StatelessWidget {
         obscureText: this.text == 'Пароль',
         style: TxtStyle.selectedMainText,
         cursorColor: Colors.black,
+        maxLines: multilined ? null : 1,
         decoration: InputDecoration(
           hintStyle: TxtStyle.mainText,
           hintText: this.text,

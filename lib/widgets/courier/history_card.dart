@@ -7,9 +7,9 @@ import 'package:topgo/widgets/courier/address_holder.dart';
 import 'package:topgo/widgets/courier/order_info_holder.dart';
 import 'package:topgo/widgets/courier/star_holder.dart';
 
-class HistoryCard extends StatelessWidget {
+class OrderHistoryCard extends StatelessWidget {
   final CourierHistoryItem item;
-  const HistoryCard({Key? key, required this.item}) : super(key: key);
+  const OrderHistoryCard({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -23,13 +23,7 @@ class CourierProfileTab extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         children: [
-          ProfileCard(
-            surname: 'Константинов',
-            name: 'Константин',
-            patronymic: 'Константинович',
-            phone: '+7 (906) 300-37-37',
-            rating: 4.5,
-          ),
+          CourierProfileCard(),
           SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
