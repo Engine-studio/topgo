@@ -5,7 +5,6 @@ import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
-import 'package:topgo/widgets/courier/profile_photo.dart';
 import 'package:topgo/widgets/courier/star_holder.dart';
 import 'package:topgo/widgets/curator/action_icon.dart';
 import 'package:topgo/widgets/curator/courier_blocking_dialog.dart';

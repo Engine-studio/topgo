@@ -14,12 +14,19 @@ class CuratorAndAdminFinancesTab extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 12),
-            ...context.watch<User>().curator.shownCouriers.map(
-                  (courier) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: FinanceCard(courier: courier),
-                  ),
-                ),
+            ...context.read<User>().role == Role.Curator
+                ? context.watch<User>().curator.shownCouriers.map(
+                      (courier) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: FinanceCard(courier: courier),
+                      ),
+                    )
+                : context.watch<User>().administrator.shownCouriers.map(
+                      (courier) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: FinanceCard(courier: courier),
+                      ),
+                    ),
           ],
         ),
       ),

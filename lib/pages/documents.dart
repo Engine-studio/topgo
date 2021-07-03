@@ -3,8 +3,8 @@ import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/report_card.dart';
 import 'package:provider/provider.dart';
 
-class CourierDocumentsTab extends StatelessWidget {
-  const CourierDocumentsTab({Key? key}) : super(key: key);
+class DocumentsTab extends StatelessWidget {
+  const DocumentsTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class CourierDocumentsTab extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 16),
-            ...context.watch<User>().courier.reports.map(
+            ...context.read<User>().reports.map(
                   (report) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ReportCard(report: report),

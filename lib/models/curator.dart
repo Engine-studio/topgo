@@ -1,3 +1,4 @@
+import 'package:topgo/models/report.dart';
 import 'package:topgo/models/simple_courier.dart';
 
 class Curator {
@@ -6,6 +7,7 @@ class Curator {
   String surname, name, patronymic, phone;
 
   List<SimpleCourier> couriers, shownCouriers;
+  List<Report> reports;
 
   Curator({
     required this.notify,
@@ -14,7 +16,13 @@ class Curator {
     required this.patronymic,
     required this.phone,
   })  : this.couriers = [],
-        this.shownCouriers = [] {
+        this.shownCouriers = [],
+        reports = [
+          Report(date: '14.05.21'),
+          Report(date: '13.05.21'),
+          Report(date: '12.05.21'),
+          Report(date: '11.05.21'),
+        ] {
     this.couriers = [
       SimpleCourier(
         'Alex asdasdasdsadf sadfasfasdf',

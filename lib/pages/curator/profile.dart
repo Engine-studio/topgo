@@ -3,10 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
-import 'package:topgo/widgets/curator/courier_addition_dialog.dart';
-import 'package:topgo/widgets/curator/courier_blocking_dialog.dart';
-import 'package:topgo/widgets/curator/courier_deleting_dialog.dart';
-import 'package:topgo/widgets/curator/courier_discard.dart';
 import 'package:topgo/widgets/curator/notification_dialog.dart';
 import 'package:topgo/widgets/curator/profile_card.dart';
 
@@ -29,7 +25,7 @@ class CuratorAndAdminProfileTab extends StatelessWidget {
               builder: (_) {
                 return ChangeNotifierProvider.value(
                   value: Provider.of<User>(context, listen: false),
-                  child: CourierDiscardDialog(),
+                  child: NotificationDialog(),
                 );
               },
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:topgo/models/administrator.dart';
 import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/curator.dart';
+import 'package:topgo/models/report.dart';
 
 enum Role {
   Administrator,
@@ -20,13 +21,13 @@ class User with ChangeNotifier {
 
   User()
       : token = 'jwt',
-        role = Role.Curator,
+        role = Role.Administrator,
         authorized = true {
-    this.curator = Curator(
+    this.administrator = Administrator(
       notify: notify,
-      surname: 'Третьяков',
-      name: 'Николяяяяяя',
-      patronymic: 'Дмитриевич',
+      surname: 'Новиков',
+      name: 'Дмитрий',
+      patronymic: 'Александрович',
       phone: '+7 (977) 270-23-21',
     );
   }
@@ -34,7 +35,7 @@ class User with ChangeNotifier {
   void updateView(String key) {
     switch (this.role) {
       case Role.Administrator:
-        //administrator.updateView(key);
+        administrator.updateView(key);
         break;
       case Role.Courier:
         courier.updateView(key);
@@ -77,6 +78,17 @@ class User with ChangeNotifier {
         return this.courier.phone;
       case Role.Curator:
         return this.curator.phone;
+    }
+  }
+
+  List<Report> get reports {
+    switch (this.role) {
+      case Role.Administrator:
+        return this.administrator.reports;
+      case Role.Courier:
+        return this.courier.reports;
+      case Role.Curator:
+        return this.curator.reports;
     }
   }
 

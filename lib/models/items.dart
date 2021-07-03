@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/pages/administrator/curators.dart';
-import 'package:topgo/pages/courier/documents.dart';
+import 'package:topgo/pages/documents.dart';
 import 'package:topgo/pages/courier/history.dart';
 import 'package:topgo/pages/courier/orders.dart';
 import 'package:topgo/pages/courier/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/pages/curator/couriers.dart';
-import 'package:topgo/pages/curator/documents.dart';
 import 'package:topgo/pages/curator/finances.dart';
 import 'package:topgo/pages/curator/profile.dart';
 import 'package:topgo/pages/curator/restaurants.dart';
@@ -51,7 +50,7 @@ class Items {
           CourierHistoryTab(),
           CourierOrdersTab(),
           CourierProfileTab(),
-          CourierDocumentsTab(),
+          DocumentsTab(),
         ];
       case Role.Administrator:
         return <Widget>[
@@ -60,7 +59,7 @@ class Items {
           CuratorAndAdminFinancesTab(),
           AdministratorCouratorsTab(),
           CuratorAndAdminProfileTab(),
-          CuratorAndAdminDocumentsTab(),
+          DocumentsTab(),
         ];
       case Role.Curator:
         return <Widget>[
@@ -68,7 +67,7 @@ class Items {
           CuratorAndAdminRestaurantsTab(),
           CuratorAndAdminFinancesTab(),
           CuratorAndAdminProfileTab(),
-          CuratorAndAdminDocumentsTab(),
+          DocumentsTab(),
         ];
     }
   }
