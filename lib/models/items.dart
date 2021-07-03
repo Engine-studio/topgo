@@ -166,6 +166,15 @@ class Items {
             name: 'users-alt',
             title: 'Курьеры',
             withSearch: true,
+            button: Container(
+              margin: const EdgeInsets.only(right: 28),
+              child: Image.asset(
+                'assets/icons/plus.png',
+                width: 24,
+                height: 24,
+                color: ClrStyle.lightBackground,
+              ),
+            ),
           ),
           AppBarItem(
             name: 'store',

@@ -40,7 +40,7 @@ class User with ChangeNotifier {
         courier.updateView(key);
         break;
       case Role.Curator:
-        //curator.updateView(key);
+        curator.updateView(key);
         break;
     }
     notifyListeners();

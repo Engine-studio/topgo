@@ -6,8 +6,13 @@ import 'package:topgo/widgets/border_box.dart';
 class MoneyHolder extends StatelessWidget {
   final String text;
   final double sum;
-  const MoneyHolder({Key? key, required this.text, required this.sum})
-      : super(key: key);
+  final bool bordered;
+  const MoneyHolder({
+    Key? key,
+    required this.text,
+    required this.sum,
+    this.bordered = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +28,7 @@ class MoneyHolder extends StatelessWidget {
           ),
           BorderBox(
             height: 35,
+            borderWidth: bordered ? 1.5 : 0,
             child: Center(
               child: Text(
                 moneyString(sum),

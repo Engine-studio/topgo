@@ -25,9 +25,10 @@ class _MenuPageState extends State<MenuPage> {
       appBar: Appbar(
         appBarItem: appBarItems[currentIndex],
         onPressed: () {
-          setState(() {
-            this.currentIndex = icons.length - 1;
-          });
+          if (appBarItems[currentIndex].title == 'Профиль')
+            setState(() {
+              this.currentIndex = icons.length - 1;
+            });
         },
       ),
       body: SafeArea(

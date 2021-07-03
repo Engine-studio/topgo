@@ -6,7 +6,7 @@ import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/button.dart';
-import 'package:topgo/widgets/courier/money_holder.dart';
+import 'package:topgo/widgets/money_holder.dart';
 import 'package:topgo/widgets/courier/movement_selection.dart';
 import 'package:topgo/widgets/courier/profile_card.dart';
 import 'package:topgo/widgets/courier/start_work_dialog.dart';
