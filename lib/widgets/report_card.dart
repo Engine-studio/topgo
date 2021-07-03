@@ -17,9 +17,9 @@ class ReportCard extends StatelessWidget {
           children: [
             SizedBox(
               width: 69,
-              child: Text(this.report.date, style: TxtStyle.selectedMainText),
+              child: Text(report.date!, style: TxtStyle.selectedMainText),
             ),
-            Text(this.report.shift, style: TxtStyle.mainText),
+            Text(report.additional!, style: TxtStyle.mainText),
             Spacer(),
             GestureDetector(
               onTap: () => {},

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:topgo/models/work_shift.dart';
+import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
@@ -18,7 +18,7 @@ class CourierProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WorkShift shift = context.read<User>().courier.shift;
+    WorkShift? shift = context.watch<User>().courier!.shift;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
@@ -33,7 +33,7 @@ class CourierProfileTab extends StatelessWidget {
               MoneyHolder(text: 'Заработная плата', sum: 1000000),
             ],
           ),
-          ...!context.watch<User>().courier.working
+          ...shift != null
               ? [
                   SizedBox(height: 40),
                   Button(
@@ -82,13 +82,13 @@ class CourierProfileTab extends StatelessWidget {
                             children: [
                               TimeHolder(
                                 text: 'Начало смены',
-                                time: shift.begin,
+                                time: shift!.begin!,
                                 disabled: true,
                                 onChange: (time) => {},
                               ),
                               TimeHolder(
                                 text: 'Конец смены',
-                                time: shift.end,
+                                time: shift.end!,
                                 disabled: true,
                                 onChange: (time) => {},
                               ),
@@ -96,7 +96,7 @@ class CourierProfileTab extends StatelessWidget {
                           ),
                           SizedBox(height: 32),
                           MovementSelection(
-                            index: shift.movement,
+                            index: shift.movement!,
                             disabled: true,
                             onChange: (int) => {},
                           )

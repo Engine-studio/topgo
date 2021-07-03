@@ -6,7 +6,7 @@ import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/button.dart';
-import 'package:topgo/widgets/curator/courier_discard.dart';
+import 'package:topgo/widgets/curator/courier_discard_dialog.dart';
 import 'package:topgo/widgets/money_holder.dart';
 import 'package:topgo/widgets/curator/flag.dart';
 
@@ -18,7 +18,8 @@ class FinanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Flag(text: courier.action, gradient: GrdStyle().panelGradient(context)),
+        Flag(
+            text: courier.action!, gradient: GrdStyle().panelGradient(context)),
         SizedBox(height: 8),
         BorderBox(
           height: 229,
@@ -34,7 +35,8 @@ class FinanceCard extends StatelessWidget {
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       clipBehavior: Clip.hardEdge,
                       child: Image.network(
-                        courier.image,
+                        // TODO: implement host link
+                        courier.image!,
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -53,17 +55,17 @@ class FinanceCard extends StatelessWidget {
                   children: [
                     MoneyHolder(
                       text: 'Оплата наличными',
-                      sum: courier.cash,
+                      sum: courier.cash!,
                       bordered: false,
                     ),
                     MoneyHolder(
                       text: 'Оплата\nпо терминалу',
-                      sum: courier.terminal,
+                      sum: courier.terminal!,
                       bordered: false,
                     ),
                     MoneyHolder(
                       text: 'Заработная плата',
-                      sum: courier.salary,
+                      sum: courier.salary!,
                       bordered: false,
                     ),
                   ],

@@ -31,7 +31,8 @@ class StopWorkDialog extends StatelessWidget {
           buttonType: ButtonType.Decline,
           filled: false,
           onPressed: () => {
-            context.read<User>().courier.stopWork(),
+            // TODO: implement server func
+            context.read<User>().courier!.stopWorkShift(),
             Navigator.pop(context),
           },
         ),

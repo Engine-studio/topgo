@@ -15,7 +15,7 @@ import 'package:topgo/styles.dart';
 
 class Items {
   List<String> bottomNavBarIcons(BuildContext context) {
-    switch (context.read<User>().role) {
+    switch (context.read<User>().role!) {
       case Role.Courier:
         return [
           'history',
@@ -44,7 +44,7 @@ class Items {
   }
 
   List<Widget> bottomNavBarTabs(BuildContext context) {
-    switch (context.read<User>().role) {
+    switch (context.read<User>().role!) {
       case Role.Courier:
         return <Widget>[
           CourierHistoryTab(),
@@ -73,7 +73,7 @@ class Items {
   }
 
   List<AppBarItem> appBarItems(BuildContext context) {
-    switch (context.read<User>().role) {
+    switch (context.read<User>().role!) {
       case Role.Courier:
         return [
           AppBarItem(

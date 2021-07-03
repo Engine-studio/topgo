@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
@@ -27,7 +28,7 @@ class CuratorCard extends StatelessWidget {
               decoration: BoxDecoration(shape: BoxShape.circle),
               clipBehavior: Clip.hardEdge,
               child: Image.network(
-                curator.image,
+                curator.image!,
                 fit: BoxFit.fill,
               ),
             ),
@@ -44,11 +45,12 @@ class CuratorCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(curator.phone, style: TxtStyle.smallText),
+                      Text(phoneString(curator.phone),
+                          style: TxtStyle.smallText),
 
                       Spacer(),
                       //TODO: implement functions
-                      curator.blocked
+                      curator.blocked!
                           ? ActionIcon(
                               iconName: 'lock-alt',
                               accept: false,

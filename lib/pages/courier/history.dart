@@ -14,10 +14,10 @@ class CourierHistoryTab extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 16),
-            ...context.watch<User>().courier.shownHistory.map(
-                  (item) => Padding(
+            ...context.watch<User>().courier!.shownHistory.map(
+                  (order) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: OrderHistoryCard(item: item),
+                    child: OrderHistoryCard(order: order),
                   ),
                 ),
             SizedBox(height: 16),

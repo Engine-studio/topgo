@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/functions/time_string.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/user.dart';
@@ -18,7 +19,7 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Flag(text: restaurant.name, gradient: GrdStyle.button),
+        Flag(text: restaurant.name!, gradient: GrdStyle.button),
         SizedBox(height: 8),
         BorderBox(
           height: 111,
@@ -26,21 +27,21 @@ class RestaurantCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
             child: Column(
               children: [
-                AddressHolder(dist: 'Адрес', address: restaurant.address),
+                AddressHolder(dist: 'Адрес', address: restaurant.address!),
                 Spacer(),
                 SizedBox(
                   height: 30,
                   child: Row(
                     children: [
                       Text(
-                        timeString(restaurant.timeFrom) +
+                        timeString(restaurant.open!) +
                             '  -  ' +
-                            timeString(restaurant.timeTill),
+                            timeString(restaurant.close!),
                         style: TxtStyle.smallText,
                       ),
                       Spacer(),
                       Text(
-                        restaurant.phone,
+                        phoneString(restaurant.phone!),
                         style: TxtStyle.smallText,
                       ),
                       Spacer(flex: 3),

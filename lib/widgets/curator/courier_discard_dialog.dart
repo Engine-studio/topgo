@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
-
-enum DiscardType {
-  Full,
-  Cash,
-  Terminal,
-  Salary,
-}
 
 class CourierDiscardDialog extends StatefulWidget {
   const CourierDiscardDialog({Key? key}) : super(key: key);

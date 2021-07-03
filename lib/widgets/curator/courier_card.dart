@@ -19,7 +19,7 @@ class CourierCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Flag(text: courier.action),
+        Flag(text: courier.action!),
         SizedBox(height: 8),
         BorderBox(
           height: 112,
@@ -33,7 +33,8 @@ class CourierCard extends StatelessWidget {
                   decoration: BoxDecoration(shape: BoxShape.circle),
                   clipBehavior: Clip.hardEdge,
                   child: Image.network(
-                    courier.image,
+                    // TODO: implement host link
+                    courier.image!,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -57,7 +58,7 @@ class CourierCard extends StatelessWidget {
                               SizedBox(height: 8),
                               Row(
                                 children: [
-                                  StarHolder(rating: courier.rating),
+                                  StarHolder(rating: courier.rating!),
                                   SizedBox(width: 16),
                                   Image.asset(
                                     courier.movement == 0
@@ -74,7 +75,7 @@ class CourierCard extends StatelessWidget {
                           ),
                           Spacer(),
                           //TODO: implement functions
-                          courier.action.contains('Заблокирован')
+                          courier.action!.contains('Заблокирован')
                               ? ActionIcon(
                                   iconName: 'lock-alt',
                                   accept: false,

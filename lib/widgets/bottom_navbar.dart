@@ -27,7 +27,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     int orders = context.read<User>().role == Role.Courier
-        ? context.watch<User>().courier.orders
+        ? context.watch<User>().courier!.orders.length
         : -1;
     return Theme(
       data: ThemeData(

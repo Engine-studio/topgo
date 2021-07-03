@@ -1,13 +1,10 @@
 class Report {
-  int id;
-  String date;
-  String shift;
-  String link;
+  int? id;
+  String? date, additional, link;
 
-  Report({
-    this.id = -1,
-    this.shift = '',
-    required this.date,
-    this.link = '',
-  });
+  Report.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        date = json['date'],
+        additional = json['additional'],
+        link = json['link'];
 }

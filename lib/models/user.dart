@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/models/administrator.dart';
 import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/curator.dart';
-import 'package:topgo/models/report.dart';
+import 'package:topgo/models/restaurant.dart';
+import 'package:topgo/models/simple_courier.dart';
 
 enum Role {
   Administrator,
@@ -11,86 +13,57 @@ enum Role {
 }
 
 class User with ChangeNotifier {
-  String token;
-  Role role;
-  bool authorized;
+  bool? logined;
+  String? token, surname, name, patronymic, _phone, image, password;
+  Role? role;
 
-  late Courier courier;
-  late Administrator administrator;
-  late Curator curator;
-
-  User()
-      : token = 'jwt',
-        role = Role.Administrator,
-        authorized = true {
-    this.administrator = Administrator(
-      notify: notify,
-      surname: 'Новиков',
-      name: 'Дмитрий',
-      patronymic: 'Александрович',
-      phone: '+7 (977) 270-23-21',
-    );
-  }
+  Courier? courier;
+  Administrator? administrator;
+  Curator? curator;
 
   void updateView(String key) {
-    switch (this.role) {
-      case Role.Administrator:
-        administrator.updateView(key);
-        break;
-      case Role.Courier:
-        courier.updateView(key);
-        break;
-      case Role.Curator:
-        curator.updateView(key);
-        break;
-    }
+    role == Role.Administrator
+        ? administrator!.updateView(key)
+        : role == Role.Courier
+            ? courier!.updateView(key)
+            : curator!.updateView(key);
     notifyListeners();
   }
 
-  String get fullName {
-    switch (this.role) {
-      case Role.Administrator:
-        return this.administrator.surname +
-            ' ' +
-            this.administrator.name +
-            ' ' +
-            this.administrator.patronymic;
-      case Role.Courier:
-        return this.courier.surname +
-            ' ' +
-            this.courier.name +
-            ' ' +
-            this.courier.patronymic;
-      case Role.Curator:
-        return this.curator.surname +
-            ' ' +
-            this.curator.name +
-            ' ' +
-            this.curator.patronymic;
-    }
-  }
-
-  String get phone {
-    switch (this.role) {
-      case Role.Administrator:
-        return this.administrator.phone;
-      case Role.Courier:
-        return this.courier.phone;
-      case Role.Curator:
-        return this.curator.phone;
-    }
-  }
-
-  List<Report> get reports {
-    switch (this.role) {
-      case Role.Administrator:
-        return this.administrator.reports;
-      case Role.Courier:
-        return this.courier.reports;
-      case Role.Curator:
-        return this.curator.reports;
-    }
-  }
-
   void notify() => notifyListeners();
+
+  String get fullName => '${surname!} ${name!} ${patronymic!}';
+  String get phone => phoneString(_phone!);
+
+  set couriers(List<SimpleCourier> couriers) => role == Role.Administrator
+      ? {
+          administrator!.couriers = couriers,
+          administrator!.shownCouriers = couriers,
+          notify(),
+        }
+      : {
+          curator!.couriers = couriers,
+          curator!.shownCouriers = couriers,
+          notify(),
+        };
+
+  List<SimpleCourier> get shownCouriers => role == Role.Administrator
+      ? administrator!.shownCouriers
+      : curator!.shownCouriers;
+
+  set restaurants(List<Restaurant> restaurants) => role == Role.Administrator
+      ? {
+          administrator!.restaurants = restaurants,
+          administrator!.shownRestaurants = restaurants,
+          notify(),
+        }
+      : {
+          curator!.restaurants = restaurants,
+          curator!.shownRestaurants = restaurants,
+          notify(),
+        };
+
+  List<Restaurant> get shownRestaurants => role == Role.Administrator
+      ? administrator!.shownRestaurants
+      : curator!.shownRestaurants;
 }

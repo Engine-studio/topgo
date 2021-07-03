@@ -30,7 +30,7 @@ class CourierProfileCard extends StatelessWidget {
                   Spacer(flex: 3),
                   Text(context.read<User>().phone, style: TxtStyle.smallText),
                   Spacer(flex: 2),
-                  StarHolder(rating: context.read<User>().courier.rating),
+                  StarHolder(rating: context.read<User>().courier!.rating),
                 ],
               ),
             ),

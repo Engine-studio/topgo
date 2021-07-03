@@ -102,7 +102,7 @@ class GrdStyle {
   );
 
   LinearGradient panelGradient(BuildContext context) {
-    switch (context.read<User>().role) {
+    switch (context.read<User>().role!) {
       case Role.Administrator:
         return wave;
       case Role.Courier:
@@ -113,7 +113,7 @@ class GrdStyle {
   }
 
   LinearGradient lightPanelGradient(BuildContext context) {
-    switch (context.read<User>().role) {
+    switch (context.read<User>().role!) {
       case Role.Administrator:
         return LinearGradient(
             colors: wave.colors.map((clr) => clr.withOpacity(0.15)).toList());

@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           User user = User();
           return ChangeNotifierProvider<User>(
             create: (context) => user,
-            child: user.authorized ? MenuPage() : LoginPage(),
+            child: user.logined! ? MenuPage() : LoginPage(),
           );
         },
       ),

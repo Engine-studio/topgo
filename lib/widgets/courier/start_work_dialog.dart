@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:topgo/models/work_shift.dart';
+import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
@@ -62,11 +62,13 @@ class StartWorkDialog extends StatelessWidget {
                 (end[0] - begin[0] == 2 && end[1] >= begin[1]) ||
                 (end[0] - begin[0] == 10 && end[1] <= begin[1]))
               {
-                context.read<User>().courier.startWork(
-                      shift: WorkShift(
+                // TODO: implement host func
+                context.read<User>().courier!.startWorkShift(
+                      shift: WorkShift.create(
                         movement: movement,
                         begin: begin,
                         end: end,
+                        hasTerminal: terminal,
                       ),
                     ),
                 Navigator.pop(context),
