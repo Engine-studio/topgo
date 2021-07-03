@@ -3,7 +3,7 @@ import 'package:topgo/functions/time_string.dart';
 import 'package:topgo/models/courier_history.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
-import 'package:topgo/widgets/courier/address_holder.dart';
+import 'package:topgo/widgets/address_holder.dart';
 import 'package:topgo/widgets/courier/order_info_holder.dart';
 import 'package:topgo/widgets/courier/star_holder.dart';
 

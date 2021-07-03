@@ -1,4 +1,5 @@
 import 'package:topgo/models/report.dart';
+import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/simple_curator.dart';
 
@@ -10,6 +11,7 @@ class Administrator {
   List<SimpleCourier> couriers, shownCouriers;
   List<Report> reports;
   List<SimpleCurator> curators, shownCurators;
+  List<Restaurant> restaurants, shownRestaurants;
 
   Administrator({
     required this.notify,
@@ -21,7 +23,26 @@ class Administrator {
         this.shownCouriers = [],
         this.curators = [],
         this.shownCurators = [],
-        this.reports = [] {
+        this.reports = [],
+        this.restaurants = [],
+        this.shownRestaurants = [] {
+    this.restaurants = [
+      Restaurant(
+        'Restoran1',
+        'Addressline  as as das da sd Saint-Petersburg das da das d as das das d ',
+        [10, 0],
+        [22, 30],
+        '+7 (977) 270-23-21',
+      ),
+      Restaurant(
+        'CrustyCrabs',
+        'Addressline  as as das da sd asd as das da das MOSCOW das das d asd asd as das das d as ads as das d as da sad s',
+        [12, 45],
+        [20, 0],
+        '+7 (900) 44-00-12',
+      ),
+    ];
+    this.shownRestaurants = this.restaurants;
     this.couriers = [
       SimpleCourier(
         'Alex asdasdasdsadf sadfasfasdf',
@@ -92,6 +113,7 @@ class Administrator {
     if (key == '') {
       this.shownCouriers = this.couriers;
       this.shownCurators = this.curators;
+      this.shownRestaurants = this.restaurants;
     } else {
       List<SimpleCourier> resCouriers = [];
       for (SimpleCourier item in this.couriers) {
@@ -107,6 +129,14 @@ class Administrator {
             item.phone.toLowerCase().contains(key)) resCurators.add(item);
       }
       this.shownCurators = resCurators;
+
+      List<Restaurant> resRestaurants = [];
+      for (Restaurant item in this.restaurants) {
+        if (item.name.toLowerCase().contains(key) ||
+            item.address.toLowerCase().contains(key) ||
+            item.phone.toLowerCase().contains(key)) resRestaurants.add(item);
+      }
+      this.shownRestaurants = resRestaurants;
     }
   }
 }

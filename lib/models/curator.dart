@@ -1,4 +1,5 @@
 import 'package:topgo/models/report.dart';
+import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
 
 class Curator {
@@ -8,6 +9,7 @@ class Curator {
 
   List<SimpleCourier> couriers, shownCouriers;
   List<Report> reports;
+  List<Restaurant> restaurants, shownRestaurants;
 
   Curator({
     required this.notify,
@@ -17,12 +19,26 @@ class Curator {
     required this.phone,
   })  : this.couriers = [],
         this.shownCouriers = [],
-        reports = [
-          Report(date: '14.05.21'),
-          Report(date: '13.05.21'),
-          Report(date: '12.05.21'),
-          Report(date: '11.05.21'),
-        ] {
+        this.reports = [],
+        this.restaurants = [],
+        this.shownRestaurants = [] {
+    this.restaurants = [
+      Restaurant(
+        'Restoran1',
+        'Addressline  as as das da sd Saint-Petersburg das da das d as das das d ',
+        [10, 0],
+        [22, 30],
+        '+7 (977) 270-23-21',
+      ),
+      Restaurant(
+        'CrustyCrabs',
+        'Addressline  as as das da sd asd as das da das MOSCOW ',
+        [12, 45],
+        [20, 0],
+        '+7 (900) 44-00-12',
+      ),
+    ];
+    this.shownRestaurants = this.restaurants;
     this.couriers = [
       SimpleCourier(
         'Alex asdasdasdsadf sadfasfasdf',
@@ -59,20 +75,35 @@ class Curator {
       ),
     ];
     this.shownCouriers = this.couriers;
+    reports = [
+      Report(date: '14.05.21'),
+      Report(date: '13.05.21'),
+      Report(date: '12.05.21'),
+      Report(date: '11.05.21'),
+    ];
   }
 
   void updateView(String key) {
     key = key.toLowerCase();
     if (key == '') {
       this.shownCouriers = this.couriers;
+      this.shownRestaurants = this.shownRestaurants;
     } else {
-      List<SimpleCourier> res = [];
+      List<SimpleCourier> resCouriers = [];
       for (SimpleCourier item in this.couriers) {
         if (item.action.toLowerCase().contains(key) ||
             item.fullName.toLowerCase().contains(key) ||
-            item.phone.toLowerCase().contains(key)) res.add(item);
+            item.phone.toLowerCase().contains(key)) resCouriers.add(item);
       }
-      this.shownCouriers = res;
+      this.shownCouriers = resCouriers;
+
+      List<Restaurant> resRestaurants = [];
+      for (Restaurant item in this.restaurants) {
+        if (item.name.toLowerCase().contains(key) ||
+            item.address.toLowerCase().contains(key) ||
+            item.phone.toLowerCase().contains(key)) resRestaurants.add(item);
+      }
+      this.shownRestaurants = resRestaurants;
     }
   }
 }
