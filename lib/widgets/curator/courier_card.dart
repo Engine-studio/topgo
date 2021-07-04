@@ -9,17 +9,28 @@ import 'package:topgo/widgets/courier/star_holder.dart';
 import 'package:topgo/widgets/curator/action_icon.dart';
 import 'package:topgo/widgets/curator/courier_blocking_dialog.dart';
 import 'package:topgo/widgets/curator/courier_deleting_dialog.dart';
-import 'package:topgo/widgets/curator/flag.dart';
+import 'package:topgo/widgets/flag.dart';
 
 class CourierCard extends StatelessWidget {
   final SimpleCourier courier;
-  const CourierCard({Key? key, required this.courier}) : super(key: key);
+  final bool forMap;
+  const CourierCard({
+    Key? key,
+    required this.courier,
+    this.forMap = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Widget _flag = this.forMap
+        ? Flag(
+            text: courier.action!,
+            gradient: GrdStyle.select,
+          )
+        : Flag(text: courier.action!);
     return Column(
       children: [
-        Flag(text: courier.action!),
+        _flag,
         SizedBox(height: 8),
         BorderBox(
           height: 112,

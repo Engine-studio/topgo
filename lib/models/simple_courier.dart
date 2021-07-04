@@ -58,12 +58,19 @@ class SimpleCourier {
         x = json['x'],
         y = json['y'];
 
+  //TODO: remove useless
   SimpleCourier.create({
     required this.surname,
     required this.name,
     required this.patronymic,
     required this.phoneSource,
     required this.password,
+    this.x,
+    this.y,
+    this.action,
+    this.image,
+    this.movement,
+    this.rating,
   });
 
   String get json => jsonEncode({

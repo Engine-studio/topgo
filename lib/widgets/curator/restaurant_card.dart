@@ -8,18 +8,29 @@ import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/address_holder.dart';
 import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/curator/action_icon.dart';
-import 'package:topgo/widgets/curator/flag.dart';
+import 'package:topgo/widgets/flag.dart';
 import 'package:topgo/widgets/curator/restaurant_deleting_dialog.dart';
 
 class RestaurantCard extends StatelessWidget {
   final Restaurant restaurant;
-  const RestaurantCard({Key? key, required this.restaurant}) : super(key: key);
+  final bool forMap;
+  const RestaurantCard({
+    Key? key,
+    required this.restaurant,
+    this.forMap = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Widget _flag = this.forMap
+        ? Flag(
+            text: restaurant.name!,
+            gradient: GrdStyle.select,
+          )
+        : Flag(text: restaurant.name!, gradient: GrdStyle.button);
     return Column(
       children: [
-        Flag(text: restaurant.name!, gradient: GrdStyle.button),
+        _flag,
         SizedBox(height: 8),
         BorderBox(
           height: 111,

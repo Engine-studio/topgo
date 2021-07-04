@@ -13,13 +13,18 @@ enum Role {
 }
 
 class User with ChangeNotifier {
-  bool? logined;
+  bool logined;
   String? token, surname, name, patronymic, _phone, image, password;
   Role? role;
 
   Courier? courier;
   Administrator? administrator;
   Curator? curator;
+
+  //TODO: remove role
+  User()
+      : logined = false,
+        role = Role.Administrator;
 
   void updateView(String key) {
     role == Role.Administrator

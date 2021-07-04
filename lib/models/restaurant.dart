@@ -1,7 +1,8 @@
 import 'dart:convert' show jsonEncode;
 
 class Restaurant {
-  int? id, x, y;
+  int? id;
+  double? x, y;
   String? name, address, phone, password;
   List<int>? open, close;
   Map<String, List<List<int>>>? schedule;
@@ -16,12 +17,17 @@ class Restaurant {
         x = json['x'],
         y = json['y'];
 
+  //TODO: remove useless
   Restaurant.create({
     required this.name,
     required this.address,
     required this.phone,
     required this.password,
     required this.schedule,
+    this.x,
+    this.y,
+    this.open,
+    this.close,
   });
 
   String get json => jsonEncode({

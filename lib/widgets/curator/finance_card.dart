@@ -8,7 +8,7 @@ import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/curator/courier_discard_dialog.dart';
 import 'package:topgo/widgets/money_holder.dart';
-import 'package:topgo/widgets/curator/flag.dart';
+import 'package:topgo/widgets/flag.dart';
 
 class FinanceCard extends StatelessWidget {
   final SimpleCourier courier;
