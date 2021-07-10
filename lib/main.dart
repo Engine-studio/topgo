@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
-import 'package:topgo/functions/phone_string.dart';
-import 'package:topgo/models/restaurant.dart';
-import 'package:topgo/models/simple_courier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topgo/api/general.dart';
 import 'package:topgo/pages/login.dart';
 import 'package:topgo/pages/menu.dart';
 import 'package:topgo/styles.dart';
-import 'package:topgo/widgets/map/map.dart';
-import 'package:topgo/widgets/map/map_card.dart';
-import 'package:topgo/widgets/map/map_marker.dart';
 
 import 'models/user.dart';
 
@@ -73,7 +69,10 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               screenFunction: () async {
-                User user = User();
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? phone = prefs.getString('phone');
+                String? password = prefs.getString('password');
+                User user = await firstLogIn(phone, password);
 
                 Location location = Location();
                 PermissionStatus permissionStatus = PermissionStatus.granted;
@@ -85,51 +84,12 @@ class _MyAppState extends State<MyApp> {
                   }
                 }
 
+                // TODO: delete this
+                user.copy(User.shadow());
+
                 return ChangeNotifierProvider<User>(
                   create: (context) => user,
-                  //TODO: implement normal thing
-                  child: user.logined ? MenuPage() : Scaffold(),
-                  // Scaffold(
-                  //     body: SafeArea(
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.only(
-                  //             left: 16, right: 16, top: 200),
-                  //         child: MapCard(
-                  //           markers: [
-                  //             MapMarker.restaurant(
-                  //               restaurant: Restaurant.create(
-                  //                 name: 'name',
-                  //                 address: 'address',
-                  //                 phone: phoneString('79772702321'),
-                  //                 password: '',
-                  //                 schedule: {},
-                  //                 x: 55.982427,
-                  //                 y: 37.134834,
-                  //                 open: [8, 0],
-                  //                 close: [20, 0],
-                  //               ),
-                  //             ),
-                  //             MapMarker.courier(
-                  //               courier: SimpleCourier.create(
-                  //                 surname: 'surname',
-                  //                 name: 'name',
-                  //                 patronymic: 'patronymic',
-                  //                 phoneSource: '79772702321',
-                  //                 password: '',
-                  //                 x: 55.986927,
-                  //                 y: 37.138034,
-                  //                 action: 'Забирает заказ №11412312312',
-                  //                 image:
-                  //                     'https://thumbs.dreamstime.com/b/cargo-delivery-service-male-courier-unload-truck-uniform-box-hand-unloads-cardboard-parcels-empty-container-97837453.jpg',
-                  //                 movement: 1,
-                  //                 rating: 3.6,
-                  //               ),
-                  //             )
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
+                  child: user.logined ? MenuPage() : LoginPage(),
                 );
               },
             ),

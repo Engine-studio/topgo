@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:location/location.dart';
+import 'package:topgo/functions/send_notification.dart';
 import 'package:topgo/models/items.dart';
+import 'package:topgo/models/notification.dart' as notif;
 import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/appbar.dart';
 import 'package:topgo/widgets/bottom_navbar.dart';
@@ -15,6 +19,23 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   int currentIndex = 0;
+  Timer? timer;
+  final Location _location = Location();
+  List<notif.Notification> Function(LocationData)? notify;
+
+  // TODO: implement polling
+  void polling() async {
+    print('polling');
+    if (notify != null)
+      notify!(await _location.getLocation())
+          .map((not) => pushNotification(not));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(Duration(minutes: 1), (Timer t) => polling());
+  }
 
   @override
   Widget build(BuildContext context) {

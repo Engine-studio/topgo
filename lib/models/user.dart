@@ -5,6 +5,7 @@ import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/curator.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum Role {
   Administrator,
@@ -21,10 +22,37 @@ class User with ChangeNotifier {
   Administrator? administrator;
   Curator? curator;
 
-  //TODO: remove role
-  User()
-      : logined = false,
+  User() : logined = false;
+
+  User.fromJson(Map<String, dynamic> json)
+      : logined = true,
         role = Role.Administrator;
+
+  User.shadow()
+      : logined = true,
+        token = 'zxc',
+        surname = 'Surname',
+        name = 'Name',
+        patronymic = 'Patronymic',
+        _phone = '79990001234',
+        password = '111',
+        role = Role.Administrator {
+    this.administrator = Administrator(notify: notify);
+  }
+
+  void copy(User other) {
+    this.logined = other.logined;
+    this.token = other.token;
+    this.surname = other.surname;
+    this.name = other.name;
+    this.patronymic = other.patronymic;
+    this._phone = other._phone;
+    this.image = other.password;
+    this.role = other.role;
+    this.courier = other.courier;
+    this.administrator = other.administrator;
+    this.curator = other.curator;
+  }
 
   void updateView(String key) {
     role == Role.Administrator
@@ -39,6 +67,8 @@ class User with ChangeNotifier {
 
   String get fullName => '${surname!} ${name!} ${patronymic!}';
   String get phone => phoneString(_phone!);
+
+  List<String> get loginData => [_phone ?? '', password ?? ''];
 
   set couriers(List<SimpleCourier> couriers) => role == Role.Administrator
       ? {
