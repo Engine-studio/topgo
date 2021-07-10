@@ -34,11 +34,7 @@ class FinanceCard extends StatelessWidget {
                       height: 74,
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       clipBehavior: Clip.hardEdge,
-                      child: Image.network(
-                        // TODO: implement host link
-                        courier.image!,
-                        fit: BoxFit.fill,
-                      ),
+                      child: Image.network(courier.photo, fit: BoxFit.fill),
                     ),
                     SizedBox(width: 12),
                     Expanded(

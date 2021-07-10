@@ -30,9 +30,9 @@ void showNotification(not.Notification not) async {
       iOS: iOSPlatformChannelSpecifics);
 
   await flutterLocalNotificationsPlugin.show(
-    not.id!,
+    not.message.hashCode,
     not.title,
-    not.text,
+    not.message,
     platformChannelSpecifics,
   );
 }
@@ -130,9 +130,6 @@ class _MyAppState extends State<MyApp> {
                 while (
                     await location.hasPermission() != PermissionStatus.granted)
                   await location.requestPermission();
-
-                // TODO: delete this
-                user.copy(User.shadow());
 
                 return ChangeNotifierProvider<User>(
                   create: (context) => user,

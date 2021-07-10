@@ -1,33 +1,47 @@
 import 'dart:convert' show jsonEncode;
 
+import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
+import 'package:topgo/functions/naive_time.dart';
+
+class OrderRequest {
+  int courierId;
+  LocationData locationData;
+
+  OrderRequest.create({
+    required this.courierId,
+    required this.locationData,
+  });
+
+  String get json => jsonEncode({
+        'courier_id': courierId,
+        'lat': locationData.latitude,
+        'lng': locationData.longitude,
+      });
+}
+
 class Order {
-  int? id, total;
-  String? from, to;
-  double? appearance, behavior, sum, x, y;
+  int? id, restaurantId, sessionId, total;
+  String? fromAddress, toAddress;
+  LatLng? fromLatLng, toLatLng;
+  double? appearance, behavior, sum;
   List<int>? start, stop;
   bool? withCash;
 
-  Order.historyFromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        from = json['address']['from'],
-        to = json['address']['to'],
-        total = json['time']['total'],
-        start = json['time']['start'],
-        stop = json['time']['stop'],
-        sum = json['payment']['sum'],
-        withCash = json['payment']['withCash'],
-        appearance = json['points']['appearance'],
-        behavior = json['points']['behavior'];
-
   Order.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        from = json['address']['from'],
-        to = json['address']['to'],
-        x = json['address']['x'],
-        y = json['address']['y'],
-        total = json['time'],
-        sum = json['payment']['sum'],
-        withCash = json['payment']['withCash'];
+        restaurantId = json['restaurant_id'],
+        sessionId = json['session_id'],
+        total = json['coocking_time'],
+        //fromAddress = json['']
+        toAddress = json['delivery_address'],
+        //fromLatLng = json['']
+        toLatLng = LatLng(json['address_lat'], json['address_lng']),
+        withCash = json['method'] == 'Cash',
+        //appearance, behavior
+        start = parseNaiveDateTime(json['take_datetime']),
+        stop = parseNaiveDateTime(json['delivery_datetime']),
+        sum = json['courier_share'] / 100;
 
   String get jsonID => jsonEncode({"id": id});
 }

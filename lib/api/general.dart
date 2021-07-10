@@ -9,6 +9,7 @@ import 'package:topgo/models/report.dart';
 import 'package:topgo/models/user.dart';
 
 const host = "topgo.club";
+const default_photo = '';
 
 Map<String, String> jsonHeader(BuildContext context) =>
     {'Content-Type': 'application/json', 'jwt': context.read<User>().token!};
@@ -38,17 +39,14 @@ Future<String> apiRequest({
   }
 }
 
-// TODO: Change route
 Future<dynamic> logIn(
   BuildContext? context, {
   String? phone,
   String? password,
 }) async {
-  // TODO: remove it
-  if (1 < 2) return User();
   if (phone != null && password != null) {
     http.Response response = await http.post(
-      Uri.https(host, '/api/shit'),
+      Uri.https(host, '/api/users/login'),
       body: jsonEncode({
         'phone': phone,
         'password': password,
@@ -63,6 +61,8 @@ Future<dynamic> logIn(
         jsonDecode(
           utf8.decode(response.body.codeUnits),
         ).cast<Map<String, dynamic>>(),
+        phoneSource: phone,
+        password: password,
       );
     } else
       await prefs.clear();
@@ -72,20 +72,24 @@ Future<dynamic> logIn(
 
   String _json = await apiRequest(
     context: context!,
-    route: '/api/login',
+    route: '/api/users/login',
     headers: {},
     body: jsonEncode(context.read<User>().loginData),
   );
 
   Map<String, dynamic> json = jsonDecode(_json).cast<Map<String, dynamic>>();
 
-  User user = User.fromJson(json);
+  User user = User.fromJson(
+    json,
+    phoneSource: phone,
+    password: password,
+  );
   context.read<User>().copy(user);
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (user.logined) {
-    await prefs.setString('phone', user.loginData['phone'] ?? '');
-    await prefs.setString('password', user.loginData['password'] ?? '');
+    await prefs.setString('phone', user.loginData['phone']!);
+    await prefs.setString('password', user.loginData['password']!);
     return Future.value(true);
   } else
     await prefs.clear();

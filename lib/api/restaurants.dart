@@ -4,33 +4,39 @@ import 'package:topgo/api/general.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/restaurant.dart';
 
-// TODO: Change route
 Future<List<Restaurant>> getRestaurants(BuildContext context) async {
-  String json = await apiRequest(context: context, route: '/api/shit');
+  String json = await apiRequest(
+    context: context,
+    route: '/api/users/restaurants/get_all',
+  );
 
   return jsonDecode(json)
       .cast<List<Map<String, dynamic>>>()
-      .map<Restaurant>((json) => Restaurant.fromJson(json))
+      .filter<List<Map<String, dynamic>>>((json) => !json['is_deleted'])
+      .map<Restaurant>(
+        (json) => Restaurant.fromJson(json),
+      )
       .toList();
 }
 
-// TODO: Change route
-Future<void> newRestaurant(BuildContext context, Restaurant restaurant) async {
+Future<void> newRestaurant(
+  BuildContext context,
+  Restaurant restaurant,
+) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/users/restaurants/new',
     body: restaurant.json,
   );
 }
 
-// TODO: Change route
-Future<bool> deleteRestaurant(
-    BuildContext context, Restaurant restaurant) async {
+Future<void> deleteRestaurant(
+  BuildContext context,
+  Restaurant restaurant,
+) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
-    body: restaurant.json,
+    route: '/api/users/restaurants/delete',
+    body: restaurant.jsonID,
   );
-
-  return Future.value(true);
 }

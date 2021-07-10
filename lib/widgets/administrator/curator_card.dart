@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:topgo/api/curators.dart';
 import 'package:topgo/functions/call.dart';
 import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
-import 'package:topgo/widgets/administrator/curator_blocking_dialog.dart';
 import 'package:topgo/widgets/administrator/curator_deleting_dialog.dart';
 import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/curator/action_icon.dart';
@@ -50,30 +48,6 @@ class CuratorCard extends StatelessWidget {
                       Text(phoneString(curator.phone),
                           style: TxtStyle.smallText),
                       Spacer(),
-                      curator.blocked!
-                          ? ActionIcon(
-                              iconName: 'lock-alt',
-                              accept: false,
-                              onTap: () async => await unblockCurator(
-                                context,
-                                curator,
-                              ),
-                            )
-                          : ActionIcon(
-                              iconName: 'lock-open-alt',
-                              onTap: () => showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return ChangeNotifierProvider.value(
-                                    value: Provider.of<User>(context,
-                                        listen: false),
-                                    child: CuratorBlockingDialog(
-                                      curator: curator,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
                       SizedBox(width: 4),
                       ActionIcon(
                         iconName: 'trash-alt',

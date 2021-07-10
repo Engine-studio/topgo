@@ -45,11 +45,7 @@ class CourierCard extends StatelessWidget {
                   height: 74,
                   decoration: BoxDecoration(shape: BoxShape.circle),
                   clipBehavior: Clip.hardEdge,
-                  child: Image.network(
-                    // TODO: implement host link
-                    courier.image!,
-                    fit: BoxFit.fill,
-                  ),
+                  child: Image.network(courier.photo, fit: BoxFit.fill),
                 ),
                 SizedBox(width: 15),
                 Expanded(
@@ -91,7 +87,7 @@ class CourierCard extends StatelessWidget {
                               ? ActionIcon(
                                   iconName: 'lock-alt',
                                   accept: false,
-                                  onTap: () async => await unblockCourier(
+                                  onTap: () async => await blockUnblockCourier(
                                     context,
                                     courier,
                                   ),

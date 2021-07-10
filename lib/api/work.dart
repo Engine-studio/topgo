@@ -5,27 +5,29 @@ import 'package:flutter/widgets.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/simple_curator.dart';
 
-// TODO: Change route
-Future<void> startWorkShift(BuildContext context, WorkShift shift) async {
+Future<void> startWorkShift(
+  BuildContext context,
+  WorkShift shift,
+) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/ordering/create_session',
     body: shift.json,
   );
 }
 
-// TODO: Change route
 Future<void> stopWorkShift(BuildContext context) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/ordering/cancel_session',
   );
 }
 
-// TODO: Change route
 Future<SimpleCurator> callHelper(BuildContext context) async {
-  String json = await apiRequest(context: context, route: '/api/shit');
+  String json = await apiRequest(
+    context: context,
+    route: '/api/users/curators/get_random',
+  );
 
-  return SimpleCurator.helperFromJson(
-      jsonDecode(json).cast<Map<String, dynamic>>());
+  return SimpleCurator.fromJson(jsonDecode(json).cast<Map<String, dynamic>>());
 }

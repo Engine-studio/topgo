@@ -19,9 +19,9 @@ class OrderHistoryCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
-            AddressHolder(dist: 'Откуда:', address: order.from!),
+            AddressHolder(dist: 'Откуда:', address: order.fromAddress!),
             SizedBox(height: 8),
-            AddressHolder(dist: 'Куда:', address: order.to!),
+            AddressHolder(dist: 'Куда:', address: order.toAddress!),
             SizedBox(height: 18),
             OrderInfoHolder(
               time: order.total!,

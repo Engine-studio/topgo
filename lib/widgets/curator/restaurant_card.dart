@@ -46,9 +46,10 @@ class RestaurantCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        timeString(restaurant.open!) +
+                        // TODO: implement current day of the week
+                        timeString(restaurant.open![0]) +
                             '  -  ' +
-                            timeString(restaurant.close!),
+                            timeString(restaurant.close![0]),
                         style: TxtStyle.smallText,
                       ),
                       Spacer(),

@@ -4,68 +4,68 @@ import 'package:topgo/api/general.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/simple_courier.dart';
 
-// TODO: Change route
 Future<List<SimpleCourier>> getCouriers(BuildContext context) async {
-  String json = await apiRequest(context: context, route: '/api/shit');
-  return jsonDecode(json)
+  String json = await apiRequest(
+    context: context,
+    route: '/api/users/couriers/couriers_for_administration',
+  );
+
+  Map<String, dynamic> parsedJson =
+      jsonDecode(json).cast<Map<String, dynamic>>();
+
+  return parsedJson['couriers']
       .cast<List<Map<String, dynamic>>>()
-      .map<SimpleCourier>((json) => SimpleCourier.fromJson(json))
+      .filter<List<Map<String, dynamic>>>((json) => !json['is_deleted'])
+      .map<SimpleCourier>(
+        (json) => SimpleCourier.fromJson(
+          json,
+          parsedJson['coords'].cast<List<Map<String, dynamic>>>(),
+        ),
+      )
       .toList();
 }
 
-// TODO: Change route
-Future<void> newCourier(BuildContext context, SimpleCourier courier) async {
+Future<void> newCourier(
+  BuildContext context,
+  SimpleCourier courier,
+) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/users/couriers/new',
     body: courier.json,
   );
 }
 
-// TODO: Change route
-Future<bool> blockCourier(BuildContext context, SimpleCourier courier) async {
+Future<void> blockUnblockCourier(
+  BuildContext context,
+  SimpleCourier courier,
+) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/users/couriers/toggle_ban',
     body: courier.jsonID,
   );
-
-  return Future.value(true);
 }
 
-// TODO: Change route
-Future<bool> unblockCourier(BuildContext context, SimpleCourier courier) async {
+Future<void> deleteCourier(
+  BuildContext context,
+  SimpleCourier courier,
+) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/users/couriers/delete',
     body: courier.jsonID,
   );
-
-  return Future.value(true);
 }
 
-// TODO: Change route
-Future<bool> deleteCourier(BuildContext context, SimpleCourier courier) async {
-  await apiRequest(
-    context: context,
-    route: '/api/shit',
-    body: courier.jsonID,
-  );
-
-  return Future.value(true);
-}
-
-// TODO: Change route
-Future<bool> discardCourier(
+Future<void> discardCourier(
   BuildContext context,
   SimpleCourier courier,
   DiscardType type,
 ) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/users/couriers/null_money',
     body: courier.jsonDiscard(type),
   );
-
-  return Future.value(true);
 }

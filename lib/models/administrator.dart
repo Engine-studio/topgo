@@ -9,7 +9,7 @@ class Administrator {
   List<SimpleCurator> curators, shownCurators;
   List<Restaurant> restaurants, shownRestaurants;
 
-  Administrator({required this.notify})
+  Administrator.fromJson(Map<String, dynamic> json, {required this.notify})
       : this.couriers = [],
         this.shownCouriers = [],
         this.curators = [],

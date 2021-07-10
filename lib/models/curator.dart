@@ -4,14 +4,17 @@ import 'package:topgo/models/simple_courier.dart';
 class Curator {
   void Function() notify;
 
+  bool deleted;
+
   List<SimpleCourier> couriers, shownCouriers;
   List<Restaurant> restaurants, shownRestaurants;
 
-  Curator({required this.notify})
-      : this.couriers = [],
-        this.shownCouriers = [],
-        this.restaurants = [],
-        this.shownRestaurants = [];
+  Curator(Map<String, dynamic> json, {required this.notify})
+      : deleted = json['is_deleted'],
+        couriers = [],
+        shownCouriers = [],
+        restaurants = [],
+        shownRestaurants = [];
 
   void updateView(String key) {
     key = key.toLowerCase();

@@ -4,19 +4,11 @@ import 'package:topgo/api/general.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/order.dart';
 
-// TODO: Change route
 Future<List<Order>> getOrdersHistory(BuildContext context) async {
-  String json = await apiRequest(context: context, route: '/api/shit');
-
-  return jsonDecode(json)
-      .cast<List<Map<String, dynamic>>>()
-      .map<Order>((json) => Order.historyFromJson(json))
-      .toList();
-}
-
-// TODO: Change route
-Future<List<Order>> getCurrentOrders(BuildContext context) async {
-  String json = await apiRequest(context: context, route: '/api/shit');
+  String json = await apiRequest(
+    context: context,
+    route: '/api/ordering/get_orders_by_courier_id',
+  );
 
   return jsonDecode(json)
       .cast<List<Map<String, dynamic>>>()
@@ -24,12 +16,31 @@ Future<List<Order>> getCurrentOrders(BuildContext context) async {
       .toList();
 }
 
-// TODO: Change route
-Future<Order> getNewOrders(BuildContext context, int count) async {
+Future<List<Order>> getCurrentOrders(
+  BuildContext context,
+  int sessionId,
+) async {
   String json = await apiRequest(
     context: context,
-    route: '/api/shit',
-    body: jsonEncode({'count': count}),
+    route: '/api/ordering/get_orders_by_session_id',
+    body: jsonEncode({'id': sessionId}),
+  );
+
+  return jsonDecode(json)
+      .cast<List<Map<String, dynamic>>>()
+      .map<Order>((json) => Order.fromJson(json))
+      .toList();
+}
+
+// TODO: implement polling if no others - momentally, else - every 30 minutes
+Future<Order> getNewOrder(
+  BuildContext context,
+  OrderRequest orderRequest,
+) async {
+  String json = await apiRequest(
+    context: context,
+    route: '/api/ordering/get_orders',
+    body: orderRequest.json,
   );
 
   return Order.fromJson(
@@ -37,40 +48,35 @@ Future<Order> getNewOrders(BuildContext context, int count) async {
   );
 }
 
-// TODO: Change route
-Future<bool> acceptOrder(BuildContext context, Order order) async {
+Future<void> acceptOrder(BuildContext context, Order order) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/ordering/take_order',
     body: order.jsonID,
   );
-
-  return Future.value(true);
 }
 
-// TODO: Change route
 Future<void> declineOrder(BuildContext context, Order order) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/ordering/refuse_order',
     body: order.jsonID,
   );
 }
 
-// TODO: Change route
-Future<void> getOrder(BuildContext context, Order order) async {
+// TODO: implement of order status checking
+Future<void> pickOrder(BuildContext context, Order order) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/ordering/pick_order',
     body: order.jsonID,
   );
 }
 
-// TODO: Change route
 Future<void> deliverOrder(BuildContext context, Order order) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/ordering/set_delivered_order',
     body: order.jsonID,
   );
 }

@@ -11,7 +11,7 @@ class NotificationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController title = TextEditingController();
-    TextEditingController text = TextEditingController();
+    TextEditingController message = TextEditingController();
     return Center(
       child: SingleChildScrollView(
         child: DialogBox(
@@ -20,7 +20,7 @@ class NotificationDialog extends StatelessWidget {
           children: [
             Input(text: 'Заголовок', controller: title),
             SizedBox(height: 24),
-            Input(text: 'Введите текст', controller: text, multilined: true),
+            Input(text: 'Введите текст', controller: message, multilined: true),
             SizedBox(height: 24),
             Button(
               text: 'Отправить',
@@ -30,7 +30,7 @@ class NotificationDialog extends StatelessWidget {
                   context,
                   topgo.Notification.create(
                     title: title.text,
-                    text: text.text,
+                    message: message.text,
                   ),
                 ),
                 Navigator.pop(context),

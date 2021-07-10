@@ -5,6 +5,7 @@ import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/curator.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
+import 'package:topgo/api/general.dart';
 
 enum Role {
   Administrator,
@@ -14,6 +15,7 @@ enum Role {
 
 class User with ChangeNotifier {
   bool logined;
+  int? id;
   String? token, surname, name, patronymic, phoneSource, image, password;
   Role? role;
 
@@ -23,20 +25,33 @@ class User with ChangeNotifier {
 
   User() : logined = false;
 
-  User.fromJson(Map<String, dynamic> json)
-      : logined = true,
-        role = Role.Administrator;
-
-  User.shadow()
-      : logined = true,
-        token = 'zxc',
-        surname = 'Surname',
-        name = 'Name',
-        patronymic = 'Patronymic',
-        phoneSource = '79990001234',
-        password = '111',
-        role = Role.Administrator {
-    this.administrator = Administrator(notify: notify);
+  User.fromJson(
+    Map<String, dynamic> json, {
+    this.phoneSource,
+    this.password,
+  })  : logined = true,
+        token = json['jwt'] {
+    if (json.containsKey('admin')) {
+      role = Role.Administrator;
+      json = json['admin'].cast < Map<String, dynamic>();
+      administrator = Administrator.fromJson(json, notify: notify);
+    } else if (json.containsKey('curator')) {
+      role = Role.Curator;
+      json = json['curator'].cast < Map<String, dynamic>();
+      curator = Curator(json, notify: notify);
+    } else if (json.containsKey('courier')) {
+      role = Role.Courier;
+      Map<String, dynamic>? session =
+          json['session'].cast<Map<String, dynamic>>();
+      json = json['courier'].cast < Map<String, dynamic>();
+      courier = Courier.fromJson(json, session, notify: notify);
+    }
+    id = json['id'];
+    surname = json['surname'];
+    name = json['name'];
+    patronymic = json['patronymic'];
+    phoneSource = json['phone'];
+    image = json['picture'];
   }
 
   void copy(User other) {
@@ -46,6 +61,7 @@ class User with ChangeNotifier {
     this.name = other.name;
     this.patronymic = other.patronymic;
     this.phoneSource = other.phoneSource;
+    this.password = other.password;
     this.image = other.password;
     this.role = other.role;
     this.courier = other.courier;
@@ -62,10 +78,16 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
+  void updatePhoto(String? image) {
+    this.image = image ?? this.image;
+    notifyListeners();
+  }
+
   void notify() => notifyListeners();
 
   String get fullName => '${surname!} ${name!} ${patronymic!}';
   String get phone => phoneString(phoneSource!);
+  String get photo => image != null ? 'https://$host/${image!}' : default_photo;
 
   Map<String, String> get loginData => {
         'phone': phoneSource ?? '',

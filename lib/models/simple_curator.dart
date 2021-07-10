@@ -1,11 +1,11 @@
 import 'dart:convert' show jsonEncode;
 
+import 'package:topgo/api/general.dart';
 import 'package:topgo/functions/phone_string.dart';
 
 class SimpleCurator {
   int? id;
   String? surname, name, patronymic, phoneSource, image, password;
-  bool? blocked;
 
   SimpleCurator.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -13,16 +13,7 @@ class SimpleCurator {
         name = json['name'],
         patronymic = json['patronymic'],
         phoneSource = json['phone'],
-        image = json['image'],
-        blocked = json['blocked'];
-
-  SimpleCurator.helperFromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        surname = json['surname'],
-        name = json['name'],
-        patronymic = json['patronymic'],
-        phoneSource = json['phone'],
-        image = json['image'];
+        image = json['picture'];
 
   SimpleCurator.create({
     required this.surname,
@@ -43,4 +34,5 @@ class SimpleCurator {
   String get jsonID => jsonEncode({"id": id});
   String get fullName => '$surname $name $patronymic';
   String get phone => phoneString(phoneSource!);
+  String get photo => image != null ? 'https://$host/${image!}' : default_photo;
 }

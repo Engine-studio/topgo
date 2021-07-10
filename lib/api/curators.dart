@@ -4,54 +4,29 @@ import 'package:topgo/api/general.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/simple_curator.dart';
 
-// TODO: Change route
 Future<List<SimpleCurator>> getCurators(BuildContext context) async {
-  String json = await apiRequest(context: context, route: '/api/shit');
+  String json =
+      await apiRequest(context: context, route: '/api/users/curators/get_all');
 
   return jsonDecode(json)
       .cast<List<Map<String, dynamic>>>()
+      .filter<List<Map<String, dynamic>>>((json) => !json['is_deleted'])
       .map<SimpleCurator>((json) => SimpleCurator.fromJson(json))
       .toList();
 }
 
-// TODO: Change route
 Future<void> newCurator(BuildContext context, SimpleCurator curator) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/users/curators/new',
     body: curator.json,
   );
 }
 
-// TODO: Change route
-Future<bool> blockCurator(BuildContext context, SimpleCurator curator) async {
+Future<void> deleteCurator(BuildContext context, SimpleCurator curator) async {
   await apiRequest(
     context: context,
-    route: '/api/shit',
+    route: '/api/users/curators/delete',
     body: curator.jsonID,
   );
-
-  return Future.value(true);
-}
-
-// TODO: Change route
-Future<bool> unblockCurator(BuildContext context, SimpleCurator curator) async {
-  await apiRequest(
-    context: context,
-    route: '/api/shit',
-    body: curator.jsonID,
-  );
-
-  return Future.value(true);
-}
-
-// TODO: Change route
-Future<bool> deleteCurator(BuildContext context, SimpleCurator curator) async {
-  await apiRequest(
-    context: context,
-    route: '/api/shit',
-    body: curator.jsonID,
-  );
-
-  return Future.value(true);
 }
