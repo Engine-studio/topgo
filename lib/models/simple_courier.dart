@@ -74,7 +74,7 @@ class SimpleCourier {
         ordering = json['is_in_order'],
         blocked = json['is_blocked'],
         cash = json['cash'] / 100,
-        terminal = json['terminal'] / 100,
+        terminal = json['term'] / 100,
         salary = json['salary'] / 100,
         rating = double.parse(
           (json['current_rate_count'] / json['current_rate_amount'])

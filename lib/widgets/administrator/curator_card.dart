@@ -65,7 +65,7 @@ class CuratorCard extends StatelessWidget {
                       SizedBox(width: 4),
                       ActionIcon(
                         iconName: 'call',
-                        onTap: () async => call(curator.phoneSource),
+                        onTap: () async => call(curator.phoneSource!),
                       ),
                     ],
                   ),

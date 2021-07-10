@@ -12,6 +12,7 @@ import 'package:topgo/pages/curator/finances.dart';
 import 'package:topgo/pages/curator/profile.dart';
 import 'package:topgo/pages/curator/restaurants.dart';
 import 'package:topgo/styles.dart';
+import 'package:topgo/widgets/curator/courier_addition_dialog.dart';
 
 class Items {
   List<String> bottomNavBarIcons(BuildContext context) {
@@ -116,6 +117,26 @@ class Items {
             name: 'users-alt',
             title: 'Курьеры',
             withSearch: true,
+            button: GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) {
+                  return ChangeNotifierProvider.value(
+                    value: Provider.of<User>(context, listen: false),
+                    child: CourierAdditionDialog(),
+                  );
+                },
+              ),
+              child: Container(
+                margin: const EdgeInsets.only(right: 28),
+                child: Image.asset(
+                  'assets/icons/plus.png',
+                  width: 24,
+                  height: 24,
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+            ),
           ),
           AppBarItem(
             name: 'store',

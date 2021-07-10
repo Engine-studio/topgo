@@ -45,13 +45,17 @@ class LoginPage extends StatelessWidget {
                 onPressed: () async {
                   if (loginController.text != '' &&
                       passwordController.text != '') {
-                    User user = await logIn(context);
+                    User user = await logInFirst(
+                        loginController.text, passwordController.text);
                     if (user.logined) {
-                      context.read<User>().copy(user);
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => MenuPage(),
+                          builder: (BuildContext context) =>
+                              ChangeNotifierProvider<User>(
+                            create: (context) => user,
+                            child: MenuPage(),
+                          ),
                         ),
                       );
                     }

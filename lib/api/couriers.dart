@@ -10,16 +10,15 @@ Future<List<SimpleCourier>> getCouriers(BuildContext context) async {
     route: '/api/users/couriers/couriers_for_administration',
   );
 
-  Map<String, dynamic> parsedJson =
-      jsonDecode(json).cast<Map<String, dynamic>>();
+  Map<String, dynamic> parsedJson = jsonDecode(json);
 
   return parsedJson['couriers']
-      .cast<List<Map<String, dynamic>>>()
-      .filter<List<Map<String, dynamic>>>((json) => !json['is_deleted'])
+      .cast<Map<String, dynamic>>()
+      .where((json) => !json['is_deleted'])
       .map<SimpleCourier>(
         (json) => SimpleCourier.fromJson(
           json,
-          parsedJson['coords'].cast<List<Map<String, dynamic>>>(),
+          parsedJson['coords'].cast<Map<String, dynamic>>(),
         ),
       )
       .toList();

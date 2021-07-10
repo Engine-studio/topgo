@@ -30,59 +30,32 @@ Future<String> apiRequest({
       headers: headers ?? jsonHeader(context),
       body: body,
     );
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200)
       return utf8.decode(response.body.codeUnits);
-    else if (response.statusCode == 401) if (!await logIn(context))
+    else if (response.statusCode == 401) if (!await logInAgain(context))
       throw Exception('Unable to log in');
     else
       throw Exception('Unable to connect to the server');
   }
 }
 
-Future<dynamic> logIn(
-  BuildContext? context, {
-  String? phone,
-  String? password,
-}) async {
-  if (phone != null && password != null) {
-    http.Response response = await http.post(
-      Uri.https(host, '/api/users/login'),
-      body: jsonEncode({
-        'phone': phone,
-        'password': password,
-      }),
-    );
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (response.statusCode == 200) {
-      await prefs.setString('phone', phone);
-      await prefs.setString('password', password);
-      return User.fromJson(
-        jsonDecode(
-          utf8.decode(response.body.codeUnits),
-        ).cast<Map<String, dynamic>>(),
-        phoneSource: phone,
-        password: password,
-      );
-    } else
-      await prefs.clear();
-
-    return User();
-  }
-
+Future<bool> logInAgain(BuildContext context) async {
+  Map<String, dynamic> data = context.read<User>().loginData;
   String _json = await apiRequest(
-    context: context!,
+    context: context,
     route: '/api/users/login',
     headers: {},
-    body: jsonEncode(context.read<User>().loginData),
+    body: jsonEncode(data),
   );
 
   Map<String, dynamic> json = jsonDecode(_json).cast<Map<String, dynamic>>();
 
   User user = User.fromJson(
     json,
-    phoneSource: phone,
-    password: password,
+    phoneSource: data['phone'],
+    password: data['password'],
   );
   context.read<User>().copy(user);
 
@@ -93,7 +66,43 @@ Future<dynamic> logIn(
     return Future.value(true);
   } else
     await prefs.clear();
+
+  context.read<User>().copy(User());
   return Future.value(false);
+}
+
+Future<User> logInFirst(
+  String? phone,
+  String? password,
+) async {
+  print(phone);
+  print(password);
+  http.Response response = await http.post(
+    Uri.https(host, '/api/users/login'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({
+      'phone': phone,
+      'password': password,
+    }),
+  );
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (response.statusCode == 200) {
+    print('success');
+    await prefs.setString('phone', phone!);
+    await prefs.setString('password', password!);
+
+    return User.fromJson(
+      jsonDecode(
+        utf8.decode(response.body.codeUnits),
+      ),
+      phoneSource: phone,
+      password: password,
+    );
+  } else
+    await prefs.clear();
+
+  return User();
 }
 
 // TODO: Change route

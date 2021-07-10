@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String? phone = prefs.getString('phone');
                 String? password = prefs.getString('password');
-                User user = await logIn(null, phone: phone, password: password);
+                User user = await logInFirst(phone, password);
 
                 Location location = Location();
 

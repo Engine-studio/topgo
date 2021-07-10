@@ -5,16 +5,32 @@ import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
 
-class CourierAdditionDialog extends StatelessWidget {
+class CourierAdditionDialog extends StatefulWidget {
   const CourierAdditionDialog({Key? key}) : super(key: key);
 
   @override
+  _CourierAdditionDialogState createState() => _CourierAdditionDialogState();
+}
+
+class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
+  late TextEditingController name;
+  late TextEditingController surname;
+  late TextEditingController patronymic;
+  late TextEditingController phone;
+  late TextEditingController password;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    name = TextEditingController();
+    surname = TextEditingController();
+    patronymic = TextEditingController();
+    phone = TextEditingController();
+    password = TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TextEditingController name = TextEditingController();
-    TextEditingController surname = TextEditingController();
-    TextEditingController patronymic = TextEditingController();
-    TextEditingController phone = TextEditingController();
-    TextEditingController password = TextEditingController();
     return Center(
       child: SingleChildScrollView(
         child: DialogBox(

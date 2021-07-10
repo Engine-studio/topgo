@@ -33,17 +33,16 @@ class User with ChangeNotifier {
         token = json['jwt'] {
     if (json.containsKey('admin')) {
       role = Role.Administrator;
-      json = json['admin'].cast < Map<String, dynamic>();
+      json = json['admin'];
       administrator = Administrator.fromJson(json, notify: notify);
     } else if (json.containsKey('curator')) {
       role = Role.Curator;
-      json = json['curator'].cast < Map<String, dynamic>();
+      json = json['curator'];
       curator = Curator(json, notify: notify);
     } else if (json.containsKey('courier')) {
       role = Role.Courier;
-      Map<String, dynamic>? session =
-          json['session'].cast<Map<String, dynamic>>();
-      json = json['courier'].cast < Map<String, dynamic>();
+      Map<String, dynamic>? session = json['session'];
+      json = json['courier'];
       courier = Courier.fromJson(json, session, notify: notify);
     }
     id = json['id'];

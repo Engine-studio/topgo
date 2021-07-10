@@ -127,7 +127,7 @@ class CourierCard extends StatelessWidget {
                           SizedBox(width: 4),
                           ActionIcon(
                             iconName: 'call',
-                            onTap: () async => call(courier.phoneSource),
+                            onTap: () async => call(courier.phoneSource!),
                           ),
                         ],
                       ),

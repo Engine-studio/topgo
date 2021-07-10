@@ -9,7 +9,6 @@ import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/appbar.dart';
 import 'package:topgo/widgets/bottom_navbar.dart';
 import 'package:provider/provider.dart';
-//import 'package:topgo/notifications/service.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);

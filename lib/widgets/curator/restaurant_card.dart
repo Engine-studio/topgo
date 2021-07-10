@@ -76,7 +76,7 @@ class RestaurantCard extends StatelessWidget {
                       SizedBox(width: 4),
                       ActionIcon(
                         iconName: 'call',
-                        onTap: () async => call(restaurant.phone),
+                        onTap: () async => call(restaurant.phone!),
                       ),
                     ],
                   ),

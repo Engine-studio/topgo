@@ -75,7 +75,7 @@ class _MapState extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
-    _getCurrentLocation();
+    //_getCurrentLocation();
     return AspectRatio(
       aspectRatio: 7 / 6,
       child: FlutterMap(
