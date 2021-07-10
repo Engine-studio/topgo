@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:topgo/functions/call.dart';
 import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/functions/time_string.dart';
 import 'package:topgo/models/restaurant.dart';
@@ -70,106 +71,15 @@ class RestaurantCard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 4),
-                      // TODO: implement calling
-                      ActionIcon(iconName: 'call', onTap: () => {}),
+                      ActionIcon(
+                        iconName: 'call',
+                        onTap: () => call(restaurant.phone),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-            // Row(
-            //   children: [
-            //     Container(
-            //       width: 74,
-            //       height: 74,
-            //       decoration: BoxDecoration(shape: BoxShape.circle),
-            //       clipBehavior: Clip.hardEdge,
-            //       child: Image.network(
-            //         courier.image,
-            //         fit: BoxFit.fill,
-            //       ),
-            //     ),
-            //     SizedBox(width: 15),
-            //     Expanded(
-            //       child: Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Text(
-            //             courier.fullName,
-            //             style: TxtStyle.selectedMainText,
-            //           ),
-            //           Spacer(),
-            //           Row(
-            //             crossAxisAlignment: CrossAxisAlignment.end,
-            //             children: [
-            //               Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Text(courier.phone, style: TxtStyle.smallText),
-            //                   SizedBox(height: 8),
-            //                   Row(
-            //                     children: [
-            //                       StarHolder(rating: courier.rating),
-            //                       SizedBox(width: 16),
-            //                       Image.asset(
-            //                         courier.movement == 0
-            //                             ? 'assets/icons/pedestrian.png'
-            //                             : courier.movement == 1
-            //                                 ? 'assets/icons/bicycle.png'
-            //                                 : 'assets/icons/car.png',
-            //                         height: 15,
-            //                         color: ClrStyle.icons,
-            //                       ),
-            //                     ],
-            //                   ),
-            //                 ],
-            //               ),
-            //               Spacer(),
-            //               //TODO: implement functions
-            //               courier.action.contains('Заблокирован')
-            //                   ? ActionIcon(
-            //                       iconName: 'lock-alt',
-            //                       accept: false,
-            //                       onTap: () => {},
-            //                     )
-            //                   : ActionIcon(
-            //                       iconName: 'lock-open-alt',
-            //                       onTap: () => showDialog(
-            //                         context: context,
-            //                         builder: (_) {
-            //                           return ChangeNotifierProvider.value(
-            //                             value: Provider.of<User>(context,
-            //                                 listen: false),
-            //                             child: CourierBlockingDialog(),
-            //                           );
-            //                         },
-            //                       ),
-            //                     ),
-            //               SizedBox(width: 4),
-            //               ActionIcon(
-            //                 iconName: 'trash-alt',
-            //                 accept: false,
-            //                 onTap: () => showDialog(
-            //                   context: context,
-            //                   builder: (_) {
-            //                     return ChangeNotifierProvider.value(
-            //                       value:
-            //                           Provider.of<User>(context, listen: false),
-            //                       child: CourierDeletingDialog(),
-            //                     );
-            //                   },
-            //                 ),
-            //               ),
-            //               SizedBox(width: 4),
-            //               // TODO: implement calling
-            //               ActionIcon(iconName: 'call', onTap: () => {}),
-            //             ],
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ),
         ),
       ],

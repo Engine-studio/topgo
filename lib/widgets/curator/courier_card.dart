@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:topgo/functions/call.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
@@ -121,8 +122,10 @@ class CourierCard extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 4),
-                          // TODO: implement calling
-                          ActionIcon(iconName: 'call', onTap: () => {}),
+                          ActionIcon(
+                            iconName: 'call',
+                            onTap: () => call(courier.phoneSource),
+                          ),
                         ],
                       ),
                     ],

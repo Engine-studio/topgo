@@ -5,6 +5,8 @@ import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/curator/restaurant_card.dart';
 import 'package:topgo/widgets/error.dart';
 import 'package:topgo/widgets/loading.dart';
+import 'package:topgo/widgets/map/map_card.dart';
+import 'package:topgo/widgets/map/map_marker.dart';
 
 class CuratorAndAdminRestaurantsTab extends StatelessWidget {
   const CuratorAndAdminRestaurantsTab({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class CuratorAndAdminRestaurantsTab extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 16),
+            SizedBox(height: 20),
             FutureBuilder<List<Restaurant>>(
               future: restaurants,
               builder: (context, snapshot) {
@@ -29,12 +31,22 @@ class CuratorAndAdminRestaurantsTab extends StatelessWidget {
                   return Wrap(
                     direction: Axis.vertical,
                     runSpacing: 8,
-                    children: context
-                        .watch<User>()
-                        .shownRestaurants
-                        .map((restaurant) =>
-                            RestaurantCard(restaurant: restaurant))
-                        .toList(),
+                    children: [
+                      MapCard(
+                        markers: context
+                            .watch<User>()
+                            .shownRestaurants
+                            .map((restaurant) =>
+                                MapMarker.restaurant(restaurant: restaurant))
+                            .toList(),
+                      ),
+                      ...context
+                          .watch<User>()
+                          .shownRestaurants
+                          .map((restaurant) =>
+                              RestaurantCard(restaurant: restaurant))
+                          .toList(),
+                    ],
                   );
                 } else
                   return Loading();

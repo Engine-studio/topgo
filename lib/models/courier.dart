@@ -19,7 +19,6 @@ class Courier {
         history = [],
         shownHistory = [];
 
-// TODO: change .MD and response
   Courier.fromJson(Map<String, dynamic> json, {required this.notify})
       : rating = json['rating'],
         cash = json['cash'],

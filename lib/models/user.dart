@@ -5,7 +5,6 @@ import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/curator.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum Role {
   Administrator,

@@ -5,6 +5,8 @@ import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/curator/courier_card.dart';
 import 'package:topgo/widgets/error.dart';
 import 'package:topgo/widgets/loading.dart';
+import 'package:topgo/widgets/map/map_card.dart';
+import 'package:topgo/widgets/map/map_marker.dart';
 
 class CuratorAndAdminCouriersTab extends StatelessWidget {
   const CuratorAndAdminCouriersTab({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class CuratorAndAdminCouriersTab extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 16),
+            SizedBox(height: 20),
             FutureBuilder<List<SimpleCourier>>(
               future: couriers,
               builder: (context, snapshot) {
@@ -29,11 +31,21 @@ class CuratorAndAdminCouriersTab extends StatelessWidget {
                   return Wrap(
                     direction: Axis.vertical,
                     runSpacing: 8,
-                    children: context
-                        .watch<User>()
-                        .shownCouriers
-                        .map((courier) => CourierCard(courier: courier))
-                        .toList(),
+                    children: [
+                      MapCard(
+                        markers: context
+                            .watch<User>()
+                            .shownCouriers
+                            .map((courier) =>
+                                MapMarker.courier(courier: courier))
+                            .toList(),
+                      ),
+                      ...context
+                          .watch<User>()
+                          .shownCouriers
+                          .map((courier) => CourierCard(courier: courier))
+                          .toList(),
+                    ],
                   );
                 } else
                   return Loading();
