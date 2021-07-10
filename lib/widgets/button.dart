@@ -12,7 +12,7 @@ enum ButtonType {
 class Button extends StatefulWidget {
   final String text;
   final ButtonType buttonType;
-  final void Function() onPressed;
+  final Future<void> Function() onPressed;
   final bool filled;
 
   const Button({

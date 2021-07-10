@@ -4,7 +4,7 @@ import 'package:topgo/styles.dart';
 class ActionIcon extends StatelessWidget {
   final bool accept;
   final String iconName;
-  final void Function() onTap;
+  final Future<void> Function() onTap;
   const ActionIcon({
     Key? key,
     this.accept = true,

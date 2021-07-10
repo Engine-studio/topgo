@@ -1,10 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/curators.dart';
+import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 
 class CuratorDeletingDialog extends StatelessWidget {
-  const CuratorDeletingDialog({Key? key}) : super(key: key);
+  final SimpleCurator curator;
+  const CuratorDeletingDialog({
+    Key? key,
+    required this.curator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +28,8 @@ class CuratorDeletingDialog extends StatelessWidget {
         Button(
           text: 'Принять',
           buttonType: ButtonType.Accept,
-          onPressed: () => {
-            //TODO: implement deleting function
+          onPressed: () async => {
+            await deleteCurator(context, curator),
             Navigator.pop(context),
           },
         ),
@@ -32,7 +38,7 @@ class CuratorDeletingDialog extends StatelessWidget {
           text: 'Отказаться',
           buttonType: ButtonType.Decline,
           filled: false,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async => Navigator.pop(context),
         ),
       ],
     );

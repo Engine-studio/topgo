@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:topgo/api/curators.dart';
 import 'package:topgo/functions/call.dart';
 import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/models/simple_curator.dart';
@@ -48,14 +49,15 @@ class CuratorCard extends StatelessWidget {
                     children: [
                       Text(phoneString(curator.phone),
                           style: TxtStyle.smallText),
-
                       Spacer(),
-                      //TODO: implement functions
                       curator.blocked!
                           ? ActionIcon(
                               iconName: 'lock-alt',
                               accept: false,
-                              onTap: () => {},
+                              onTap: () async => await unblockCurator(
+                                context,
+                                curator,
+                              ),
                             )
                           : ActionIcon(
                               iconName: 'lock-open-alt',
@@ -65,7 +67,9 @@ class CuratorCard extends StatelessWidget {
                                   return ChangeNotifierProvider.value(
                                     value: Provider.of<User>(context,
                                         listen: false),
-                                    child: CuratorBlockingDialog(),
+                                    child: CuratorBlockingDialog(
+                                      curator: curator,
+                                    ),
                                   );
                                 },
                               ),
@@ -79,7 +83,7 @@ class CuratorCard extends StatelessWidget {
                           builder: (_) {
                             return ChangeNotifierProvider.value(
                               value: Provider.of<User>(context, listen: false),
-                              child: CuratorDeletingDialog(),
+                              child: CuratorDeletingDialog(curator: curator),
                             );
                           },
                         ),
@@ -87,7 +91,7 @@ class CuratorCard extends StatelessWidget {
                       SizedBox(width: 4),
                       ActionIcon(
                         iconName: 'call',
-                        onTap: () => call(curator.phoneSource),
+                        onTap: () async => call(curator.phoneSource),
                       ),
                     ],
                   ),

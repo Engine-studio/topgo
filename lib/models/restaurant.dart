@@ -17,19 +17,6 @@ class Restaurant {
         x = json['x'],
         y = json['y'];
 
-  //TODO: remove useless
-  Restaurant.create({
-    required this.name,
-    required this.address,
-    required this.phone,
-    required this.password,
-    required this.schedule,
-    this.x,
-    this.y,
-    this.open,
-    this.close,
-  });
-
   String get json => jsonEncode({
         "name": name,
         "address": address,

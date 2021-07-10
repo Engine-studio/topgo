@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:topgo/api/couriers.dart';
 import 'package:topgo/functions/call.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
@@ -86,12 +87,14 @@ class CourierCard extends StatelessWidget {
                             ],
                           ),
                           Spacer(),
-                          //TODO: implement functions
                           courier.action!.contains('Заблокирован')
                               ? ActionIcon(
                                   iconName: 'lock-alt',
                                   accept: false,
-                                  onTap: () => {},
+                                  onTap: () async => await unblockCourier(
+                                    context,
+                                    courier,
+                                  ),
                                 )
                               : ActionIcon(
                                   iconName: 'lock-open-alt',
@@ -101,7 +104,9 @@ class CourierCard extends StatelessWidget {
                                       return ChangeNotifierProvider.value(
                                         value: Provider.of<User>(context,
                                             listen: false),
-                                        child: CourierBlockingDialog(),
+                                        child: CourierBlockingDialog(
+                                          courier: courier,
+                                        ),
                                       );
                                     },
                                   ),
@@ -116,7 +121,9 @@ class CourierCard extends StatelessWidget {
                                 return ChangeNotifierProvider.value(
                                   value:
                                       Provider.of<User>(context, listen: false),
-                                  child: CourierDeletingDialog(),
+                                  child: CourierDeletingDialog(
+                                    courier: courier,
+                                  ),
                                 );
                               },
                             ),
@@ -124,7 +131,7 @@ class CourierCard extends StatelessWidget {
                           SizedBox(width: 4),
                           ActionIcon(
                             iconName: 'call',
-                            onTap: () => call(courier.phoneSource),
+                            onTap: () async => call(courier.phoneSource),
                           ),
                         ],
                       ),

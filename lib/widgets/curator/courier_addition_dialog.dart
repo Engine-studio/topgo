@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/couriers.dart';
+import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
@@ -32,10 +34,25 @@ class CourierAdditionDialog extends StatelessWidget {
             Button(
               text: 'Добавить',
               buttonType: ButtonType.Accept,
-              onPressed: () => {
-                //TODO: implement for curators and couriers
-                //TODO: implement addition function
-                Navigator.pop(context),
+              onPressed: () async => {
+                if (name.text != '' &&
+                    surname.text != '' &&
+                    patronymic.text != '' &&
+                    phone.text != '' &&
+                    password.text != '')
+                  {
+                    await newCourier(
+                      context,
+                      SimpleCourier.create(
+                        name: name.text,
+                        surname: surname.text,
+                        patronymic: patronymic.text,
+                        phoneSource: phone.text,
+                        password: password.text,
+                      ),
+                    ),
+                    Navigator.pop(context),
+                  }
               },
             ),
             SizedBox(height: 8),
@@ -43,7 +60,7 @@ class CourierAdditionDialog extends StatelessWidget {
               text: 'Отказать',
               buttonType: ButtonType.Decline,
               filled: false,
-              onPressed: () => Navigator.pop(context),
+              onPressed: () async => Navigator.pop(context),
             ),
           ],
         ),

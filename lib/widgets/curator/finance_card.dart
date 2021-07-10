@@ -80,7 +80,7 @@ class FinanceCard extends StatelessWidget {
                     builder: (_) {
                       return ChangeNotifierProvider.value(
                         value: Provider.of<User>(context, listen: false),
-                        child: CourierDiscardDialog(),
+                        child: CourierDiscardDialog(courier: courier),
                       );
                     },
                   ),

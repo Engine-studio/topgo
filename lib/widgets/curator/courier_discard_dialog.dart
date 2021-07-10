@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:topgo/api/couriers.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 
 class CourierDiscardDialog extends StatefulWidget {
-  const CourierDiscardDialog({Key? key}) : super(key: key);
+  final SimpleCourier courier;
+  const CourierDiscardDialog({
+    Key? key,
+    required this.courier,
+  }) : super(key: key);
 
   @override
   _CourierDiscardDialogState createState() => _CourierDiscardDialogState();
@@ -72,8 +77,8 @@ class _CourierDiscardDialogState extends State<CourierDiscardDialog> {
           Button(
             text: 'Сбросить',
             buttonType: ButtonType.Accept,
-            onPressed: () => {
-              //TODO: implement discard function
+            onPressed: () async => {
+              await discardCourier(context, widget.courier, discard!),
               Navigator.pop(context),
             },
           ),
@@ -82,7 +87,7 @@ class _CourierDiscardDialogState extends State<CourierDiscardDialog> {
             text: 'Отказаться',
             buttonType: ButtonType.Decline,
             filled: false,
-            onPressed: () => Navigator.pop(context),
+            onPressed: () async => Navigator.pop(context),
           ),
         ],
       ),

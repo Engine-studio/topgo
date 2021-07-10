@@ -1,10 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/curators.dart';
+import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 
 class CuratorBlockingDialog extends StatelessWidget {
-  const CuratorBlockingDialog({Key? key}) : super(key: key);
+  final SimpleCurator curator;
+  const CuratorBlockingDialog({
+    Key? key,
+    required this.curator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +29,8 @@ class CuratorBlockingDialog extends StatelessWidget {
         Button(
           text: 'Принять',
           buttonType: ButtonType.Accept,
-          onPressed: () => {
-            //TODO: implement blocking function
+          onPressed: () async => {
+            await blockCurator(context, curator),
             Navigator.pop(context),
           },
         ),
@@ -33,7 +39,7 @@ class CuratorBlockingDialog extends StatelessWidget {
           text: 'Отказаться',
           buttonType: ButtonType.Decline,
           filled: false,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async => Navigator.pop(context),
         ),
       ],
     );

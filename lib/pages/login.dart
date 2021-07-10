@@ -38,7 +38,7 @@ class LoginPage extends StatelessWidget {
               Button(
                 text: 'Вход',
                 buttonType: ButtonType.Select,
-                onPressed: () {},
+                onPressed: () async {},
               ),
             ],
           ),

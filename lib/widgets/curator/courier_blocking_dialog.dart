@@ -1,10 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/couriers.dart';
+import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 
 class CourierBlockingDialog extends StatelessWidget {
-  const CourierBlockingDialog({Key? key}) : super(key: key);
+  final SimpleCourier courier;
+  const CourierBlockingDialog({
+    Key? key,
+    required this.courier,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +29,8 @@ class CourierBlockingDialog extends StatelessWidget {
         Button(
           text: 'Принять',
           buttonType: ButtonType.Accept,
-          onPressed: () => {
-            //TODO: implement blocking function
+          onPressed: () async => {
+            await blockCourier(context, courier),
             Navigator.pop(context),
           },
         ),
@@ -33,7 +39,7 @@ class CourierBlockingDialog extends StatelessWidget {
           text: 'Отказать',
           buttonType: ButtonType.Decline,
           filled: false,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async => Navigator.pop(context),
         ),
       ],
     );

@@ -14,7 +14,7 @@ enum Role {
 
 class User with ChangeNotifier {
   bool logined;
-  String? token, surname, name, patronymic, _phone, image, password;
+  String? token, surname, name, patronymic, phoneSource, image, password;
   Role? role;
 
   Courier? courier;
@@ -33,7 +33,7 @@ class User with ChangeNotifier {
         surname = 'Surname',
         name = 'Name',
         patronymic = 'Patronymic',
-        _phone = '79990001234',
+        phoneSource = '79990001234',
         password = '111',
         role = Role.Administrator {
     this.administrator = Administrator(notify: notify);
@@ -45,7 +45,7 @@ class User with ChangeNotifier {
     this.surname = other.surname;
     this.name = other.name;
     this.patronymic = other.patronymic;
-    this._phone = other._phone;
+    this.phoneSource = other.phoneSource;
     this.image = other.password;
     this.role = other.role;
     this.courier = other.courier;
@@ -65,9 +65,12 @@ class User with ChangeNotifier {
   void notify() => notifyListeners();
 
   String get fullName => '${surname!} ${name!} ${patronymic!}';
-  String get phone => phoneString(_phone!);
+  String get phone => phoneString(phoneSource!);
 
-  List<String> get loginData => [_phone ?? '', password ?? ''];
+  Map<String, String> get loginData => {
+        'phone': phoneSource ?? '',
+        'password': password ?? '',
+      };
 
   set couriers(List<SimpleCourier> couriers) => role == Role.Administrator
       ? {

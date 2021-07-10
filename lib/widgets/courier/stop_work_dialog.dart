@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:topgo/api/work.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
@@ -23,15 +24,15 @@ class StopWorkDialog extends StatelessWidget {
         Button(
           text: 'Продолжить смену',
           buttonType: ButtonType.Accept,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async => Navigator.pop(context),
         ),
         SizedBox(height: 8),
         Button(
           text: 'Закончить смену',
           buttonType: ButtonType.Decline,
           filled: false,
-          onPressed: () => {
-            // TODO: implement server func
+          onPressed: () async => {
+            await stopWorkShift(context),
             context.read<User>().courier!.stopWorkShift(),
             Navigator.pop(context),
           },

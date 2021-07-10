@@ -30,7 +30,7 @@ void showNotification(not.Notification not) async {
       iOS: iOSPlatformChannelSpecifics);
 
   await flutterLocalNotificationsPlugin.show(
-    not.id,
+    not.id!,
     not.title,
     not.text,
     platformChannelSpecifics,
@@ -123,17 +123,13 @@ class _MyAppState extends State<MyApp> {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String? phone = prefs.getString('phone');
                 String? password = prefs.getString('password');
-                User user = await firstLogIn(phone, password);
+                User user = await logIn(null, phone: phone, password: password);
 
                 Location location = Location();
-                PermissionStatus permissionStatus = PermissionStatus.granted;
 
-                while (permissionStatus != PermissionStatus.granted) {
-                  permissionStatus = await location.hasPermission();
-                  if (permissionStatus != PermissionStatus.granted) {
-                    permissionStatus = await location.requestPermission();
-                  }
-                }
+                while (
+                    await location.hasPermission() != PermissionStatus.granted)
+                  await location.requestPermission();
 
                 // TODO: delete this
                 user.copy(User.shadow());

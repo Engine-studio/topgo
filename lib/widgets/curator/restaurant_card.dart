@@ -65,7 +65,9 @@ class RestaurantCard extends StatelessWidget {
                           builder: (_) {
                             return ChangeNotifierProvider.value(
                               value: Provider.of<User>(context, listen: false),
-                              child: RestaurantDeletingDialog(),
+                              child: RestaurantDeletingDialog(
+                                restaurant: restaurant,
+                              ),
                             );
                           },
                         ),
@@ -73,7 +75,7 @@ class RestaurantCard extends StatelessWidget {
                       SizedBox(width: 4),
                       ActionIcon(
                         iconName: 'call',
-                        onTap: () => call(restaurant.phone),
+                        onTap: () async => call(restaurant.phone),
                       ),
                     ],
                   ),

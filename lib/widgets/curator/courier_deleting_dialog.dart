@@ -1,10 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/couriers.dart';
+import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 
 class CourierDeletingDialog extends StatelessWidget {
-  const CourierDeletingDialog({Key? key}) : super(key: key);
+  final SimpleCourier courier;
+  const CourierDeletingDialog({
+    Key? key,
+    required this.courier,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +28,8 @@ class CourierDeletingDialog extends StatelessWidget {
         Button(
           text: 'Принять',
           buttonType: ButtonType.Accept,
-          onPressed: () => {
-            //TODO: implement deleting function
+          onPressed: () async => {
+            await deleteCourier(context, courier),
             Navigator.pop(context),
           },
         ),
@@ -32,7 +38,7 @@ class CourierDeletingDialog extends StatelessWidget {
           text: 'Отказать',
           buttonType: ButtonType.Decline,
           filled: false,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async => Navigator.pop(context),
         ),
       ],
     );

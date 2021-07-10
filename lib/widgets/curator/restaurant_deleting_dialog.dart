@@ -1,10 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/restaurants.dart';
+import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 
 class RestaurantDeletingDialog extends StatelessWidget {
-  const RestaurantDeletingDialog({Key? key}) : super(key: key);
+  final Restaurant restaurant;
+  const RestaurantDeletingDialog({
+    Key? key,
+    required this.restaurant,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +28,8 @@ class RestaurantDeletingDialog extends StatelessWidget {
         Button(
           text: 'Принять',
           buttonType: ButtonType.Accept,
-          onPressed: () => {
-            //TODO: implement deleting function
+          onPressed: () async => {
+            await deleteRestaurant(context, restaurant),
             Navigator.pop(context),
           },
         ),
@@ -32,7 +38,7 @@ class RestaurantDeletingDialog extends StatelessWidget {
           text: 'Отказаться',
           buttonType: ButtonType.Decline,
           filled: false,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async => Navigator.pop(context),
         ),
       ],
     );

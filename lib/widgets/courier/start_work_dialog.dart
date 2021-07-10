@@ -57,7 +57,7 @@ class StartWorkDialog extends StatelessWidget {
         Button(
           text: 'Начать',
           buttonType: ButtonType.Accept,
-          onPressed: () => {
+          onPressed: () async => {
             if ((2 < end[0] - begin[0] && end[0] - begin[0] < 10) ||
                 (end[0] - begin[0] == 2 && end[1] >= begin[1]) ||
                 (end[0] - begin[0] == 10 && end[1] <= begin[1]))

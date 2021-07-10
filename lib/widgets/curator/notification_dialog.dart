@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/notifications.dart';
+import 'package:topgo/models/notification.dart' as topgo;
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
@@ -23,8 +25,14 @@ class NotificationDialog extends StatelessWidget {
             Button(
               text: 'Отправить',
               buttonType: ButtonType.Accept,
-              onPressed: () => {
-                //TODO: implement send function
+              onPressed: () async => {
+                await createNotification(
+                  context,
+                  topgo.Notification.create(
+                    title: title.text,
+                    text: text.text,
+                  ),
+                ),
                 Navigator.pop(context),
               },
             ),
@@ -33,7 +41,7 @@ class NotificationDialog extends StatelessWidget {
               text: 'Назад',
               buttonType: ButtonType.Decline,
               filled: false,
-              onPressed: () => Navigator.pop(context),
+              onPressed: () async => Navigator.pop(context),
             ),
           ],
         ),
