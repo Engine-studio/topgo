@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/couriers.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/curator/finance_card.dart';
@@ -11,38 +12,32 @@ class CuratorAndAdminFinancesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<SimpleCourier>> couriers = Future.value([]);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 16),
-            FutureBuilder<List<SimpleCourier>>(
-              future: couriers,
-              builder: (context, snapshot) {
-                if (snapshot.hasError)
-                  return Error(text: snapshot.error!.toString());
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData) {
-                  context.read<User>().couriers = snapshot.data!;
-                  return Wrap(
-                    direction: Axis.vertical,
-                    runSpacing: 8,
-                    children: context
-                        .watch<User>()
-                        .shownCouriers
-                        .map((courier) => FinanceCard(courier: courier))
-                        .toList(),
-                  );
-                } else
-                  return Loading();
-              },
+    return FutureBuilder<List<SimpleCourier>>(
+      future: getCouriers(context),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) return Error(text: snapshot.error!.toString());
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData)
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Wrap(
+                runSpacing: 8,
+                children: [
+                  SizedBox(width: 12),
+                  ...context
+                      .watch<User>()
+                      .shownCouriers
+                      .map((courier) => FinanceCard(courier: courier))
+                      .toList(),
+                  SizedBox(width: 8),
+                ],
+              ),
             ),
-            SizedBox(height: 16),
-          ],
-        ),
-      ),
+          );
+        else
+          return Loading();
+      },
     );
   }
 }

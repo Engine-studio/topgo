@@ -1,21 +1,23 @@
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/couriers.dart';
+import 'package:topgo/api/curators.dart';
 import 'package:topgo/models/simple_courier.dart';
+import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
 import 'package:provider/provider.dart';
 
-class CourierAdditionDialog extends StatefulWidget {
-  const CourierAdditionDialog({Key? key}) : super(key: key);
+class CuratorAdditionDialog extends StatefulWidget {
+  const CuratorAdditionDialog({Key? key}) : super(key: key);
 
   @override
   _CourierAdditionDialogState createState() => _CourierAdditionDialogState();
 }
 
-class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
+class _CourierAdditionDialogState extends State<CuratorAdditionDialog> {
   late TextEditingController name;
   late TextEditingController surname;
   late TextEditingController patronymic;
@@ -23,7 +25,6 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
   late TextEditingController password;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     name = TextEditingController();
     surname = TextEditingController();
@@ -34,12 +35,12 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    SimpleCourier courier;
+    SimpleCurator curator;
     String number;
     return Center(
       child: SingleChildScrollView(
         child: DialogBox(
-          title: 'Добавление курьера',
+          title: 'Добавление куратора',
           height: 451,
           children: [
             Input(text: 'Имя', controller: name),
@@ -65,15 +66,15 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
                     number.length == 11 &&
                     password.text != '')
                   {
-                    courier = SimpleCourier.create(
+                    curator = SimpleCurator.create(
                       name: name.text,
                       surname: surname.text,
                       patronymic: patronymic.text,
                       phoneSource: number,
                       password: password.text,
                     ),
-                    await newCourier(context, courier),
-                    context.read<User>().addCourier(courier),
+                    await newCurator(context, curator),
+                    context.read<User>().addCurator(curator),
                     Navigator.pop(context),
                   }
               },

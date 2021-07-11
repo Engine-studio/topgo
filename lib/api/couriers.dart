@@ -3,16 +3,17 @@ import 'dart:convert' show jsonDecode;
 import 'package:topgo/api/general.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/simple_courier.dart';
+import 'package:provider/provider.dart';
+import 'package:topgo/models/user.dart';
 
 Future<List<SimpleCourier>> getCouriers(BuildContext context) async {
   String json = await apiRequest(
     context: context,
     route: '/api/users/couriers/couriers_for_administration',
   );
-
   Map<String, dynamic> parsedJson = jsonDecode(json);
 
-  return parsedJson['couriers']
+  context.read<User>().couriers = parsedJson['couriers']
       .cast<Map<String, dynamic>>()
       .where((json) => !json['is_deleted'])
       .map<SimpleCourier>(
@@ -22,6 +23,8 @@ Future<List<SimpleCourier>> getCouriers(BuildContext context) async {
         ),
       )
       .toList();
+
+  return Future.value([]);
 }
 
 Future<void> newCourier(

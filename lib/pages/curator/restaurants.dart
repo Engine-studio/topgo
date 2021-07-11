@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:topgo/api/restaurants.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/curator/restaurant_card.dart';
@@ -13,49 +14,38 @@ class CuratorAndAdminRestaurantsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Restaurant>> restaurants = Future.value([]);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            FutureBuilder<List<Restaurant>>(
-              future: restaurants,
-              builder: (context, snapshot) {
-                if (snapshot.hasError)
-                  return Error(text: snapshot.error!.toString());
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData) {
-                  context.read<User>().restaurants = snapshot.data!;
-                  return Wrap(
-                    direction: Axis.vertical,
-                    runSpacing: 8,
-                    children: [
-                      MapCard(
-                        markers: context
-                            .watch<User>()
-                            .shownRestaurants
-                            .map((restaurant) =>
-                                MapMarker.restaurant(restaurant: restaurant))
-                            .toList(),
-                      ),
-                      ...context
-                          .watch<User>()
-                          .shownRestaurants
-                          .map((restaurant) =>
-                              RestaurantCard(restaurant: restaurant))
-                          .toList(),
-                    ],
-                  );
-                } else
-                  return Loading();
-              },
+    return FutureBuilder<List<Restaurant>>(
+      future: getRestaurants(context),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) return Error(text: snapshot.error!.toString());
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          List<Restaurant> shown = context.watch<User>().shownRestaurants;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Wrap(
+                runSpacing: 8,
+                children: [
+                  SizedBox(width: 12),
+                  MapCard(
+                    markers: shown
+                        .map((restaurant) =>
+                            MapMarker.restaurant(restaurant: restaurant))
+                        .toList(),
+                  ),
+                  ...shown
+                      .map((restaurant) =>
+                          RestaurantCard(restaurant: restaurant))
+                      .toList(),
+                  SizedBox(width: 8),
+                ],
+              ),
             ),
-            SizedBox(height: 16),
-          ],
-        ),
-      ),
+          );
+        } else
+          return Loading();
+      },
     );
   }
 }

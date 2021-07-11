@@ -14,39 +14,35 @@ class CuratorAndAdminCouriersTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: FutureBuilder<List<SimpleCourier>>(
-        future: getCouriers(context),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) return Error(text: snapshot.error!.toString());
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.hasData) {
-            context.read<User>().couriers = snapshot.data!;
-            return Wrap(
-              direction: Axis.horizontal,
-              runSpacing: 8,
-              children: [
-                SizedBox(width: 12),
-                MapCard(
-                  markers: context
-                      .watch<User>()
-                      .shownCouriers
-                      .map((courier) => MapMarker.courier(courier: courier))
+    return FutureBuilder<List<SimpleCourier>>(
+      future: getCouriers(context),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) return Error(text: snapshot.error!.toString());
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          List<SimpleCourier> shown = context.watch<User>().shownCouriers;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Wrap(
+                runSpacing: 8,
+                children: [
+                  SizedBox(width: 12),
+                  MapCard(
+                      markers: shown
+                          .map((courier) => MapMarker.courier(courier: courier))
+                          .toList()),
+                  ...shown
+                      .map((courier) => CourierCard(courier: courier))
                       .toList(),
-                ),
-                ...context
-                    .watch<User>()
-                    .shownCouriers
-                    .map((courier) => CourierCard(courier: courier))
-                    .toList(),
-                SizedBox(width: 8),
-              ],
-            );
-          } else
-            return Loading();
-        },
-      ),
+                  SizedBox(width: 8),
+                ],
+              ),
+            ),
+          );
+        } else
+          return Loading();
+      },
     );
   }
 }

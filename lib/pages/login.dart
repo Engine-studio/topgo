@@ -1,3 +1,4 @@
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/general.dart';
@@ -9,15 +10,17 @@ import 'package:topgo/widgets/input.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
-  final TextEditingController loginController, passwordController;
+  final MaskedTextController phone;
+  final TextEditingController password;
 
   LoginPage({Key? key})
-      : loginController = TextEditingController(),
-        passwordController = TextEditingController(),
+      : phone = MaskedTextController(mask: '+0 (000) 000-00-00'),
+        password = TextEditingController(),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String number;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -35,18 +38,19 @@ class LoginPage extends StatelessWidget {
                 height: 50,
               ),
               SizedBox(height: 40),
-              Input(text: 'Логин', controller: this.loginController),
+              Input(text: 'Логин', controller: phone),
               SizedBox(height: 24),
-              Input(text: 'Пароль', controller: this.passwordController),
+              Input(text: 'Пароль', controller: password),
               SizedBox(height: 40),
               Button(
                 text: 'Вход',
                 buttonType: ButtonType.Select,
                 onPressed: () async {
-                  if (loginController.text != '' &&
-                      passwordController.text != '') {
-                    User user = await logInFirst(
-                        loginController.text, passwordController.text);
+                  number = phone.text;
+                  for (String str in ['+', '(', ')', '-', ' '])
+                    number = number.replaceAll(str, '');
+                  if (number.length == 11 && password.text != '') {
+                    User user = await logInFirst(number, password.text);
                     if (user.logined) {
                       Navigator.pushReplacement(
                         context,

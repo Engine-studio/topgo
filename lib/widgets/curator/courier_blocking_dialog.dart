@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/couriers.dart';
 import 'package:topgo/models/simple_courier.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
+import 'package:provider/provider.dart';
 
 class CourierBlockingDialog extends StatelessWidget {
   final SimpleCourier courier;
@@ -31,6 +33,7 @@ class CourierBlockingDialog extends StatelessWidget {
           buttonType: ButtonType.Accept,
           onPressed: () async => {
             await blockUnblockCourier(context, courier),
+            context.read<User>().blockUnblockCourier(courier),
             Navigator.pop(context),
           },
         ),

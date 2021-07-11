@@ -1,16 +1,20 @@
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:topgo/styles.dart';
 
 // TODO: implement phone masked text input controller
 class Input extends StatelessWidget {
   final String text;
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final MaskedTextController? maskedController;
   final bool multilined;
 
   const Input({
     Key? key,
     required this.text,
-    required this.controller,
+    this.controller,
+    this.maskedController,
     this.multilined = false,
   }) : super(key: key);
 
@@ -29,7 +33,7 @@ class Input extends StatelessWidget {
         ],
       ),
       child: TextField(
-        controller: this.controller,
+        controller: controller ?? maskedController,
         obscureText: this.text == 'Пароль',
         style: TxtStyle.selectedMainText,
         cursorColor: Colors.black,

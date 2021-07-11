@@ -26,10 +26,10 @@ class CourierCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget _flag = this.forMap
         ? Flag(
-            text: courier.action!,
+            text: courier.action ?? '',
             gradient: GrdStyle.select,
           )
-        : Flag(text: courier.action!);
+        : Flag(text: courier.action ?? '');
     return Column(
       children: [
         _flag,
@@ -83,14 +83,16 @@ class CourierCard extends StatelessWidget {
                             ],
                           ),
                           Spacer(),
-                          courier.action!.contains('Заблокирован')
+                          courier.blocked ?? false
                               ? ActionIcon(
                                   iconName: 'lock-alt',
                                   accept: false,
-                                  onTap: () async => await blockUnblockCourier(
-                                    context,
-                                    courier,
-                                  ),
+                                  onTap: () async => {
+                                    await blockUnblockCourier(context, courier),
+                                    context
+                                        .read<User>()
+                                        .blockUnblockCourier(courier),
+                                  },
                                 )
                               : ActionIcon(
                                   iconName: 'lock-open-alt',
@@ -117,9 +119,8 @@ class CourierCard extends StatelessWidget {
                                 return ChangeNotifierProvider.value(
                                   value:
                                       Provider.of<User>(context, listen: false),
-                                  child: CourierDeletingDialog(
-                                    courier: courier,
-                                  ),
+                                  child:
+                                      CourierDeletingDialog(courier: courier),
                                 );
                               },
                             ),

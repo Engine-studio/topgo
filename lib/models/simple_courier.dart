@@ -60,7 +60,8 @@ class SimpleCourier {
     required this.patronymic,
     required this.phoneSource,
     required this.password,
-  });
+  })  : action = '',
+        rating = 0 / 0;
 
   SimpleCourier.fromJson(
     Map<String, dynamic> json,

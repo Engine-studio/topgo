@@ -6,6 +6,7 @@ import 'package:topgo/models/curator.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/api/general.dart';
+import 'package:topgo/models/simple_curator.dart';
 
 enum Role {
   Administrator,
@@ -124,4 +125,50 @@ class User with ChangeNotifier {
   List<Restaurant> get shownRestaurants => role == Role.Administrator
       ? administrator!.shownRestaurants
       : curator!.shownRestaurants;
+
+  void addCourier(SimpleCourier courier) {
+    if (role == Role.Administrator) {
+      administrator!.couriers.add(courier);
+      administrator!.shownCouriers.add(courier);
+      administrator!.notify();
+    } else {
+      curator!.couriers.add(courier);
+      curator!.shownCouriers.add(courier);
+      curator!.notify();
+    }
+  }
+
+  void deleteCourier(SimpleCourier courier) {
+    if (role == Role.Administrator) {
+      print(administrator!.couriers.remove(courier));
+      administrator!.shownCouriers.remove(courier);
+      administrator!.notify();
+    } else {
+      curator!.couriers.remove(courier);
+      curator!.shownCouriers.remove(courier);
+      curator!.notify();
+    }
+  }
+
+  void blockUnblockCourier(SimpleCourier courier) {
+    if (role == Role.Administrator) {
+      int index = administrator!.couriers.indexOf(courier);
+      print(index);
+      administrator!.couriers[index].blocked = !courier.blocked!;
+      index = administrator!.shownCouriers.indexOf(courier);
+      if (index != -1)
+        administrator!.shownCouriers[index].blocked = !courier.blocked!;
+      administrator!.notify();
+    } else {
+      int index = administrator!.couriers.indexOf(courier);
+      curator!.couriers[index].blocked = !courier.blocked!;
+      index = curator!.shownCouriers.indexOf(courier);
+      if (index != -1)
+        curator!.shownCouriers[index].blocked = !courier.blocked!;
+      curator!.notify();
+    }
+  }
+
+  //TODO: implement this
+  addCurator(SimpleCurator curator) {}
 }

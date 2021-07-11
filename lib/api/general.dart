@@ -9,7 +9,8 @@ import 'package:topgo/models/report.dart';
 import 'package:topgo/models/user.dart';
 
 const host = "topgo.club";
-const default_photo = '';
+const default_photo =
+    'https://$host/static/2021/7/11/s_mP3ygZETXwYHPFH3MbwHvXzDFuAydczWJsIRVeV8E=.jpeg';
 
 Map<String, String> jsonHeader(BuildContext context) =>
     {'Content-Type': 'application/json', 'jwt': context.read<User>().token!};

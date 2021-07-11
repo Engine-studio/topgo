@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/couriers.dart';
 import 'package:topgo/models/simple_courier.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
+import 'package:provider/provider.dart';
 
 class CourierDeletingDialog extends StatelessWidget {
   final SimpleCourier courier;
@@ -30,6 +32,7 @@ class CourierDeletingDialog extends StatelessWidget {
           buttonType: ButtonType.Accept,
           onPressed: () async => {
             await deleteCourier(context, courier),
+            context.read<User>().deleteCourier(courier),
             Navigator.pop(context),
           },
         ),
