@@ -32,8 +32,8 @@ class StopWorkDialog extends StatelessWidget {
           buttonType: ButtonType.Decline,
           filled: false,
           onPressed: () async => {
-            await stopWorkShift(context),
-            context.read<User>().courier!.stopWorkShift(),
+            if (await stopWorkShift(context))
+              context.read<User>().courier!.stopWorkShift(),
             Navigator.pop(context),
           },
         ),

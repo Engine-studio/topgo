@@ -9,14 +9,31 @@ import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/input.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
-  final MaskedTextController phone;
-  final TextEditingController password;
+class LoginPage extends StatefulWidget {
+  final bool init;
+  const LoginPage({Key? key, this.init = true}) : super(key: key);
 
-  LoginPage({Key? key})
-      : phone = MaskedTextController(mask: '+0 (000) 000-00-00'),
-        password = TextEditingController(),
-        super(key: key);
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late MaskedTextController phone;
+  late TextEditingController password;
+
+  @override
+  void initState() {
+    super.initState();
+    phone = MaskedTextController(mask: '+0 (000) 000-00-00');
+    password = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    phone.dispose();
+    password.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,18 +68,19 @@ class LoginPage extends StatelessWidget {
                     number = number.replaceAll(str, '');
                   if (number.length == 11 && password.text != '') {
                     User user = await logInFirst(number, password.text);
-                    if (user.logined) {
+                    if (user.logined)
                       Navigator.pushReplacement(
                         context,
+                        // TODO: relogin bug fix
                         MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              ChangeNotifierProvider<User>(
-                            create: (context) => user,
-                            child: MenuPage(),
-                          ),
+                          builder: (_) => widget.init
+                              ? ChangeNotifierProvider<User>(
+                                  create: (context) => user,
+                                  child: MenuPage(),
+                                )
+                              : MenuPage(),
                         ),
                       );
-                    }
                   }
                 },
               ),

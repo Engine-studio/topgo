@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/models/administrator.dart';
 import 'package:topgo/models/courier.dart';
@@ -7,6 +8,7 @@ import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/api/general.dart';
 import 'package:topgo/models/simple_curator.dart';
+import 'package:topgo/pages/login.dart';
 
 enum Role {
   Administrator,
@@ -25,6 +27,17 @@ class User with ChangeNotifier {
   Curator? curator;
 
   User() : logined = false;
+
+  Future<void> logOut(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    this.copy(User());
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (BuildContext context) => LoginPage(init: false)),
+    );
+  }
 
   User.fromJson(
     Map<String, dynamic> json, {
@@ -198,6 +211,30 @@ class User with ChangeNotifier {
       curator!.couriers[index] = _courier;
       index = curator!.shownCouriers.indexOf(courier);
       if (index != -1) curator!.shownCouriers[index] = _courier;
+      curator!.notify();
+    }
+  }
+
+  void addRestaurant(Restaurant restaurant) {
+    if (role == Role.Administrator) {
+      administrator!.restaurants.add(restaurant);
+      administrator!.shownRestaurants.add(restaurant);
+      administrator!.notify();
+    } else {
+      curator!.restaurants.add(restaurant);
+      curator!.shownRestaurants.add(restaurant);
+      curator!.notify();
+    }
+  }
+
+  void deleteRestaurant(Restaurant restaurant) {
+    if (role == Role.Administrator) {
+      administrator!.restaurants.remove(restaurant);
+      administrator!.shownRestaurants.remove(restaurant);
+      administrator!.notify();
+    } else {
+      curator!.restaurants.remove(restaurant);
+      curator!.shownRestaurants.remove(restaurant);
       curator!.notify();
     }
   }

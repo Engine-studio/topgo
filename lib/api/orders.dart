@@ -3,6 +3,8 @@ import 'dart:convert' show jsonDecode, jsonEncode;
 import 'package:topgo/api/general.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/order.dart';
+import 'package:provider/provider.dart';
+import 'package:topgo/models/user.dart';
 
 Future<List<Order>> getOrdersHistory(BuildContext context) async {
   String json = await apiRequest(
@@ -32,8 +34,7 @@ Future<List<Order>> getCurrentOrders(
       .toList();
 }
 
-// TODO: implement polling if no others - momentally, else - every 30 minutes
-Future<Order> getNewOrder(
+Future<void> getNewOrder(
   BuildContext context,
   OrderRequest orderRequest,
 ) async {
@@ -43,9 +44,11 @@ Future<Order> getNewOrder(
     body: orderRequest.json,
   );
 
-  return Order.fromJson(
-    jsonDecode(json).cast<Map<String, dynamic>>(),
-  );
+  context.read<User>().courier!.ordersRequest.add(Order.fromJson(
+        jsonDecode(json).cast<Map<String, dynamic>>(),
+      ));
+
+  context.read<User>().courier!.notify();
 }
 
 Future<void> acceptOrder(BuildContext context, Order order) async {

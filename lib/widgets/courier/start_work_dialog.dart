@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:topgo/api/work.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
@@ -19,6 +20,7 @@ class StartWorkDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WorkShift shift;
     return DialogBox(
       title: 'Начало смены',
       height: 476,
@@ -62,15 +64,14 @@ class StartWorkDialog extends StatelessWidget {
                 (end[0] - begin[0] == 2 && end[1] >= begin[1]) ||
                 (end[0] - begin[0] == 10 && end[1] <= begin[1]))
               {
-                // TODO: implement host func
-                context.read<User>().courier!.startWorkShift(
-                      shift: WorkShift.create(
-                        movement: movement,
-                        begin: begin,
-                        end: end,
-                        hasTerminal: terminal,
-                      ),
-                    ),
+                shift = WorkShift.create(
+                  movement: movement,
+                  begin: begin,
+                  end: end,
+                  hasTerminal: terminal,
+                ),
+                if (await startWorkShift(context, shift))
+                  context.read<User>().courier!.startWorkShift(shift: shift),
                 Navigator.pop(context),
               },
           },

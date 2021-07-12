@@ -40,7 +40,12 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
               SizedBox(height: appBarItem.withSearch ? 4 : 0),
               Row(
                 children: [
-                  Spacer(),
+                  Flexible(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: appBarItem.leftButton,
+                    ),
+                  ),
                   Text(
                     appBarItem.title,
                     style: TxtStyle.mainHeader
@@ -49,10 +54,7 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
                   Flexible(
                     child: Container(
                       alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () => onPressed(),
-                        child: appBarItem.button,
-                      ),
+                      child: appBarItem.rightButton,
                     ),
                   ),
                 ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:topgo/functions/call.dart';
+import 'package:topgo/functions/launcher.dart';
 import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/functions/time_string.dart';
 import 'package:topgo/models/restaurant.dart';
@@ -46,7 +46,6 @@ class RestaurantCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        // TODO: implement current day of the week
                         timeString(restaurant.open![0]) +
                             '  -  ' +
                             timeString(restaurant.close![0]),

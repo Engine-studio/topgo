@@ -23,7 +23,6 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
   late TextEditingController password;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     name = TextEditingController();
     surname = TextEditingController();

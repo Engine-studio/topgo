@@ -14,17 +14,13 @@ import 'package:topgo/pages/curator/restaurants.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/administrator/curator_addition_dialog.dart';
 import 'package:topgo/widgets/curator/courier_addition_dialog.dart';
+import 'package:topgo/widgets/curator/restaurant_addition_dialog.dart';
 
 class Items {
   List<String> bottomNavBarIcons(BuildContext context) {
     switch (context.read<User>().role!) {
       case Role.Courier:
-        return [
-          'history',
-          'rocket',
-          'user',
-          'documents',
-        ];
+        return ['history', 'rocket', 'user', 'documents'];
       case Role.Administrator:
         return [
           'users-alt',
@@ -88,7 +84,19 @@ class Items {
           AppBarItem(
             name: 'user',
             title: 'Профиль',
-            button: Container(
+            leftButton: GestureDetector(
+              onTap: () async => await context.read<User>().logOut(context),
+              child: Container(
+                margin: const EdgeInsets.only(left: 28),
+                child: Image.asset(
+                  'assets/icons/log-out.png',
+                  width: 24,
+                  height: 24,
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+            ),
+            rightButton: Container(
               margin: const EdgeInsets.only(right: 28),
               child: Image.asset(
                 'assets/icons/file-text.png',
@@ -101,7 +109,7 @@ class Items {
           AppBarItem(
             name: 'documents',
             title: 'Отчеты',
-            button: Container(
+            rightButton: Container(
               margin: const EdgeInsets.only(right: 28),
               child: Image.asset(
                 'assets/icons/file-text.png',
@@ -118,7 +126,7 @@ class Items {
             name: 'users-alt',
             title: 'Курьеры',
             withSearch: true,
-            button: GestureDetector(
+            rightButton: GestureDetector(
               onTap: () => showDialog(
                 context: context,
                 builder: (_) {
@@ -143,14 +151,13 @@ class Items {
             name: 'store',
             title: 'Рестораны',
             withSearch: true,
-            button: GestureDetector(
+            rightButton: GestureDetector(
               onTap: () => showDialog(
                 context: context,
                 builder: (_) {
                   return ChangeNotifierProvider.value(
                     value: Provider.of<User>(context, listen: false),
-                    // TODO: implement restaurant addition dialog
-                    child: Container(),
+                    child: RestaurantAdditionDialog(),
                   );
                 },
               ),
@@ -174,7 +181,7 @@ class Items {
             name: 'suitcase-alt',
             title: 'Кураторы',
             withSearch: true,
-            button: GestureDetector(
+            rightButton: GestureDetector(
               onTap: () => showDialog(
                 context: context,
                 builder: (_) {
@@ -198,7 +205,19 @@ class Items {
           AppBarItem(
             name: 'user-circle',
             title: 'Профиль',
-            button: Container(
+            leftButton: GestureDetector(
+              onTap: () async => await context.read<User>().logOut(context),
+              child: Container(
+                margin: const EdgeInsets.only(left: 28),
+                child: Image.asset(
+                  'assets/icons/log-out.png',
+                  width: 24,
+                  height: 24,
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+            ),
+            rightButton: Container(
               margin: const EdgeInsets.only(right: 28),
               child: Image.asset(
                 'assets/icons/file-text.png',
@@ -211,7 +230,7 @@ class Items {
           AppBarItem(
             name: 'documents',
             title: 'Отчеты',
-            button: Container(
+            rightButton: Container(
               margin: const EdgeInsets.only(right: 28),
               child: Image.asset(
                 'assets/icons/file-text.png',
@@ -228,13 +247,24 @@ class Items {
             name: 'users-alt',
             title: 'Курьеры',
             withSearch: true,
-            button: Container(
-              margin: const EdgeInsets.only(right: 28),
-              child: Image.asset(
-                'assets/icons/plus.png',
-                width: 24,
-                height: 24,
-                color: ClrStyle.lightBackground,
+            rightButton: GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) {
+                  return ChangeNotifierProvider.value(
+                    value: Provider.of<User>(context, listen: false),
+                    child: CourierAdditionDialog(),
+                  );
+                },
+              ),
+              child: Container(
+                margin: const EdgeInsets.only(right: 28),
+                child: Image.asset(
+                  'assets/icons/plus.png',
+                  width: 24,
+                  height: 24,
+                  color: ClrStyle.lightBackground,
+                ),
               ),
             ),
           ),
@@ -242,6 +272,26 @@ class Items {
             name: 'store',
             title: 'Рестораны',
             withSearch: true,
+            rightButton: GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) {
+                  return ChangeNotifierProvider.value(
+                    value: Provider.of<User>(context, listen: false),
+                    child: RestaurantAdditionDialog(),
+                  );
+                },
+              ),
+              child: Container(
+                margin: const EdgeInsets.only(right: 28),
+                child: Image.asset(
+                  'assets/icons/plus.png',
+                  width: 24,
+                  height: 24,
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+            ),
           ),
           AppBarItem(
             name: 'usd-circle',
@@ -251,7 +301,19 @@ class Items {
           AppBarItem(
             name: 'user-circle',
             title: 'Профиль',
-            button: Container(
+            leftButton: GestureDetector(
+              onTap: () async => await context.read<User>().logOut(context),
+              child: Container(
+                margin: const EdgeInsets.only(left: 28),
+                child: Image.asset(
+                  'assets/icons/log-out.png',
+                  width: 24,
+                  height: 24,
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+            ),
+            rightButton: Container(
               margin: const EdgeInsets.only(right: 28),
               child: Image.asset(
                 'assets/icons/file-text.png',
@@ -264,7 +326,7 @@ class Items {
           AppBarItem(
             name: 'documents',
             title: 'Отчеты',
-            button: Container(
+            rightButton: Container(
               margin: const EdgeInsets.only(right: 28),
               child: Image.asset(
                 'assets/icons/file-text.png',
@@ -284,13 +346,14 @@ class AppBarItem {
   String title;
   bool withSearch;
   List<String> searchHelpers;
-  Widget button;
+  Widget? rightButton, leftButton;
 
   AppBarItem({
     required this.name,
     required this.title,
     this.withSearch = false,
     this.searchHelpers = const [],
-    this.button = const SizedBox(),
+    this.rightButton,
+    this.leftButton,
   });
 }

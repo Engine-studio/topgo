@@ -6,7 +6,7 @@ class Courier {
 
   bool blocked, warned, deleted;
   double rating, cash, terminal, salary;
-  List<Order> orders;
+  List<Order> orders, ordersRequest;
 
   List<Order> history, shownHistory;
   WorkShift? shift;
@@ -26,11 +26,11 @@ class Courier {
         terminal = json['term'],
         salary = json['salary'],
         orders = [],
+        ordersRequest = [],
         history = [],
         shownHistory = [],
         shift = session != null ? WorkShift.fromJson(session) : null;
 
-  // TODO: impelement both usage
   void startWorkShift({required WorkShift shift}) {
     this.shift = shift;
     notify();

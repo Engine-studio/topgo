@@ -42,14 +42,14 @@ class _MapState extends State<Map> {
     }
   }
 
-  Future<void> _getCurrentLocation() async {
-    if (_permissionGranted == PermissionStatus.granted) {
-      final LocationData locationData = await _location.getLocation();
-      setState(() {
-        _locationData = LatLng(locationData.latitude!, locationData.longitude!);
-      });
-    }
-  }
+  // Future<void> _getCurrentLocation() async {
+  //   if (_permissionGranted == PermissionStatus.granted) {
+  //     final LocationData locationData = await _location.getLocation();
+  //     setState(() {
+  //       _locationData = LatLng(locationData.latitude!, locationData.longitude!);
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {

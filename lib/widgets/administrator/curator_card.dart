@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:topgo/functions/call.dart';
-import 'package:topgo/functions/phone_string.dart';
+import 'package:topgo/functions/launcher.dart';
 import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';

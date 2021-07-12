@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:topgo/api/couriers.dart';
-import 'package:topgo/functions/call.dart';
+import 'package:topgo/functions/launcher.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
@@ -88,7 +88,9 @@ class CourierCard extends StatelessWidget {
                                   iconName: 'lock-alt',
                                   accept: false,
                                   onTap: () async => {
-                                    await blockUnblockCourier(context, courier),
+                                    if (courier.id != null)
+                                      await blockUnblockCourier(
+                                          context, courier),
                                     context
                                         .read<User>()
                                         .blockUnblockCourier(courier),

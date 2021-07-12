@@ -1,56 +1,72 @@
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/widgets.dart';
-import 'package:topgo/api/curators.dart';
-import 'package:topgo/models/simple_curator.dart';
+import 'package:topgo/api/restaurants.dart';
+import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/button.dart';
+import 'package:topgo/widgets/courier/time_holder.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
 import 'package:provider/provider.dart';
 
-class CuratorAdditionDialog extends StatefulWidget {
-  const CuratorAdditionDialog({Key? key}) : super(key: key);
+class RestaurantAdditionDialog extends StatefulWidget {
+  const RestaurantAdditionDialog({Key? key}) : super(key: key);
 
   @override
-  _CourierAdditionDialogState createState() => _CourierAdditionDialogState();
+  _RestaurantAdditionDialogState createState() =>
+      _RestaurantAdditionDialogState();
 }
 
-class _CourierAdditionDialogState extends State<CuratorAdditionDialog> {
-  late TextEditingController name;
-  late TextEditingController surname;
-  late TextEditingController patronymic;
+class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
+  late TextEditingController name, address, password;
   late MaskedTextController phone;
-  late TextEditingController password;
+  List<int> open = [8, 0], close = [23, 0];
+
   @override
   void initState() {
     super.initState();
     name = TextEditingController();
-    surname = TextEditingController();
-    patronymic = TextEditingController();
+    address = TextEditingController();
     phone = MaskedTextController(mask: '+0 (000) 000-00-00');
     password = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
-    SimpleCurator curator;
+    Restaurant restaurant;
     String number;
     return Center(
       child: SingleChildScrollView(
         child: DialogBox(
-          title: 'Добавление куратора',
-          height: 451,
+          title: 'Добавление ресторана',
+          height: 484,
           children: [
-            Input(text: 'Имя', controller: name),
+            Input(text: 'Название', controller: name),
             SizedBox(height: 8),
-            Input(text: 'Фамилия', controller: surname),
-            SizedBox(height: 8),
-            Input(text: 'Отчество', controller: patronymic),
+            Input(text: 'Адрес', controller: address),
             SizedBox(height: 8),
             Input(text: 'Телефон', maskedController: phone),
             SizedBox(height: 8),
             Input(text: 'Пароль', controller: password),
             SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TimeHolder(
+                  text: 'Открытие',
+                  time: this.open,
+                  disabled: false,
+                  onChange: (time) => {this.open = time},
+                ),
+                TimeHolder(
+                  text: 'Закрытие',
+                  time: this.open,
+                  disabled: false,
+                  onChange: (time) => {this.open = time},
+                ),
+              ],
+            ),
+            Spacer(),
             Button(
               text: 'Добавить',
               buttonType: ButtonType.Accept,
@@ -59,20 +75,20 @@ class _CourierAdditionDialogState extends State<CuratorAdditionDialog> {
                 for (String str in ['+', '(', ')', '-', ' '])
                   number = number.replaceAll(str, ''),
                 if (name.text != '' &&
-                    surname.text != '' &&
-                    patronymic.text != '' &&
+                    address.text != '' &&
                     number.length == 11 &&
                     password.text != '')
                   {
-                    curator = SimpleCurator.create(
+                    restaurant = Restaurant.create(
                       name: name.text,
-                      surname: surname.text,
-                      patronymic: patronymic.text,
-                      phoneSource: number,
+                      address: address.text,
+                      phone: number,
                       password: password.text,
+                      open: [open],
+                      close: [close],
                     ),
-                    await newCurator(context, curator),
-                    context.read<User>().addCurator(curator),
+                    await newRestaurant(context, restaurant),
+                    context.read<User>().addRestaurant(restaurant),
                     Navigator.pop(context),
                   }
               },

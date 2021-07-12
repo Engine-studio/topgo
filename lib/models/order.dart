@@ -20,12 +20,59 @@ class OrderRequest {
       });
 }
 
+class OrderStatus {
+  int id;
+  String status;
+
+  OrderStatus({required this.id, required this.status});
+
+  String toAction() {
+    switch (status) {
+      case 'CourierFinding':
+        return '';
+      case 'CourierConfirmation':
+        return '';
+      case 'Cooking':
+        return '';
+      case 'ReadyForDelivery':
+        return 'Забирает заказ #$id';
+      case 'Delivering':
+        return 'Доставляет заказ #$id';
+      case 'Delivered':
+        return '';
+      case 'FailureByCourier':
+        return '';
+      case 'FailureByRestaurant':
+        return '';
+      case 'Success':
+        return '';
+      default:
+        return '';
+    }
+  }
+
+  // {switch (v) {
+  // case 'CourierFinding': return '';
+  // default: return '';
+  // case 'asd':
+  // CourierConfirmation,
+  // Cooking,
+  // ReadyForDelivery,
+  // Delivering,
+  // Delivered,
+  // FailureByCourier,
+  // FailureByRestaurant,
+  // Success,
+  // }}
+}
+
 class Order {
   int? id, restaurantId, sessionId, total;
   String? fromAddress, toAddress;
   LatLng? fromLatLng, toLatLng;
   double? appearance, behavior, sum;
   List<int>? start, stop;
+  OrderStatus? status;
   bool? withCash;
 
   Order.fromJson(Map<String, dynamic> json)

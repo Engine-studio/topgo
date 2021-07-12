@@ -1,9 +1,7 @@
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:topgo/styles.dart';
 
-// TODO: implement phone masked text input controller
 class Input extends StatelessWidget {
   final String text;
   final TextEditingController? controller;

@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/restaurants.dart';
 import 'package:topgo/models/restaurant.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantDeletingDialog extends StatelessWidget {
   final Restaurant restaurant;
@@ -29,7 +31,9 @@ class RestaurantDeletingDialog extends StatelessWidget {
           text: 'Принять',
           buttonType: ButtonType.Accept,
           onPressed: () async => {
-            await deleteRestaurant(context, restaurant),
+            if (restaurant.id != null)
+              await deleteRestaurant(context, restaurant),
+            context.read<User>().deleteRestaurant(restaurant),
             Navigator.pop(context),
           },
         ),

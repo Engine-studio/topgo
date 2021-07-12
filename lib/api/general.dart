@@ -108,7 +108,7 @@ Future<User> logInFirst(
   return User();
 }
 
-// TODO: Change route
+// TODO: ARTEM reports
 Future<List<Report>> getReports(BuildContext context) async {
   String json = await apiRequest(context: context, route: '/api/shit');
 
