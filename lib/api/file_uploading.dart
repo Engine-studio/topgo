@@ -9,14 +9,17 @@ import 'package:topgo/api/general.dart';
 
 final ImagePicker _picker = ImagePicker();
 
-Future<PickedFile?> pickPhoto() async {
+PickedFile? _pickedFile;
+
+void pickPhoto() async {
   print('start picking');
-  PickedFile? pickedFile = await _picker.getImage(
+
+  _pickedFile = await _picker.getImage(
     source: ImageSource.gallery,
     imageQuality: 50,
   );
+
   print('pick photo');
-  return pickedFile;
 }
 
 Future<String> uploadFile(File file) async {
@@ -39,13 +42,11 @@ Future<String> uploadFile(File file) async {
 }
 
 Future<String?> pickAndUploadFile() async {
-  PickedFile? file = await pickPhoto();
+  pickPhoto();
 
-  print('a');
+  if (_pickedFile == null) return Future.value(null);
 
-  if (file == null) return Future.value(null);
-
-  File foundFile = File(file.path);
+  File foundFile = File(_pickedFile!.path);
 
   return await uploadFile(foundFile);
 }

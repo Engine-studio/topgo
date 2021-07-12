@@ -12,10 +12,12 @@ import 'package:topgo/widgets/flag.dart';
 
 class FinanceCard extends StatelessWidget {
   final SimpleCourier courier;
+
   const FinanceCard({Key? key, required this.courier}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    SimpleCourier cour = courier;
     return Column(
       children: [
         Flag(
@@ -71,15 +73,20 @@ class FinanceCard extends StatelessWidget {
                   text: 'Сбросить показатели',
                   buttonType: ButtonType.Accept,
                   filled: false,
-                  onPressed: () => showDialog(
-                    context: context,
-                    builder: (_) {
-                      return ChangeNotifierProvider.value(
-                        value: Provider.of<User>(context, listen: false),
-                        child: CourierDiscardDialog(courier: courier),
-                      );
-                    },
-                  ),
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        for (SimpleCourier c
+                            in context.read<User>().shownCouriers)
+                          if ("[<'${c.id!}'>]" == this.key.toString()) cour = c;
+                        return ChangeNotifierProvider.value(
+                          value: Provider.of<User>(context, listen: false),
+                          child: CourierDiscardDialog(courier: cour),
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),

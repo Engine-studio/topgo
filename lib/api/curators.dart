@@ -16,6 +16,8 @@ Future<List<SimpleCurator>> getCurators(BuildContext context) async {
       .map<SimpleCurator>((json) => SimpleCurator.fromJson(json))
       .toList();
 
+  context.read<User>().administrator!.notify();
+
   return Future.value([]);
 }
 

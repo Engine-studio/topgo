@@ -35,9 +35,11 @@ Future<String> apiRequest({
     print(response.body);
     if (response.statusCode == 200)
       return utf8.decode(response.body.codeUnits);
-    else if (response.statusCode == 401) if (!await logInAgain(context))
-      throw Exception('Unable to log in');
-    else
+    else if (response.statusCode == 500 &&
+        jsonDecode(utf8.decode(response.body.codeUnits))['message'] ==
+            'ExpiredSignature') {
+      if (!await logInAgain(context)) throw Exception('Unable to log in');
+    } else
       throw Exception('Unable to connect to the server');
   }
 }
@@ -47,11 +49,11 @@ Future<bool> logInAgain(BuildContext context) async {
   String _json = await apiRequest(
     context: context,
     route: '/api/users/login',
-    headers: {},
+    headers: {'Content-Type': 'application/json'},
     body: jsonEncode(data),
   );
 
-  Map<String, dynamic> json = jsonDecode(_json).cast<Map<String, dynamic>>();
+  Map<String, dynamic> json = jsonDecode(_json).cast<String, dynamic>();
 
   User user = User.fromJson(
     json,

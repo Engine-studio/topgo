@@ -17,7 +17,8 @@ class CuratorAndAdminFinancesTab extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) return Error(text: snapshot.error!.toString());
         if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData)
+            snapshot.hasData) {
+          List<SimpleCourier> shown = context.watch<User>().shownCouriers;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SingleChildScrollView(
@@ -25,17 +26,18 @@ class CuratorAndAdminFinancesTab extends StatelessWidget {
                 runSpacing: 8,
                 children: [
                   SizedBox(width: 12),
-                  ...context
-                      .watch<User>()
-                      .shownCouriers
-                      .map((courier) => FinanceCard(courier: courier))
+                  ...shown
+                      .map(
+                        (courier) => FinanceCard(
+                            key: Key(courier.id!.toString()), courier: courier),
+                      )
                       .toList(),
                   SizedBox(width: 8),
                 ],
               ),
             ),
           );
-        else
+        } else
           return Loading();
       },
     );

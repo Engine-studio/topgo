@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/curators.dart';
 import 'package:topgo/models/simple_curator.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
+import 'package:provider/provider.dart';
 
 class CuratorDeletingDialog extends StatelessWidget {
   final SimpleCurator curator;
@@ -29,7 +31,9 @@ class CuratorDeletingDialog extends StatelessWidget {
           text: 'Принять',
           buttonType: ButtonType.Accept,
           onPressed: () async => {
-            await deleteCurator(context, curator),
+            if (curator.id != null) await deleteCurator(context, curator),
+            // TODO: remove this bug
+            context.read<User>().deleteCurator(curator),
             Navigator.pop(context),
           },
         ),

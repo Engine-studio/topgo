@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:topgo/api/couriers.dart';
 import 'package:topgo/models/simple_courier.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
+import 'package:provider/provider.dart';
 
 class CourierDiscardDialog extends StatefulWidget {
   final SimpleCourier courier;
@@ -79,6 +81,7 @@ class _CourierDiscardDialogState extends State<CourierDiscardDialog> {
             buttonType: ButtonType.Accept,
             onPressed: () async => {
               await discardCourier(context, widget.courier, discard!),
+              context.read<User>().discardCourier(widget.courier, discard!),
               Navigator.pop(context),
             },
           ),

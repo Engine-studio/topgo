@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>I need it too</string>
+  	<string>Upload images for profile photo</string>
+  	<key>NSCameraUsageDescription</key>
+  	<string>Upload image from camera for profile photo</string>
 	<key>NSLocationAlwaysUsageDescription</key>	
 	<string>I need it </string>	
 	<key>NSLocationWhenInUseUsageDescription</key>	

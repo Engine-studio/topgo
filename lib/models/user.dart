@@ -138,9 +138,15 @@ class User with ChangeNotifier {
     }
   }
 
+  void addCurator(SimpleCurator curator) {
+    administrator!.curators.add(curator);
+    administrator!.shownCurators.add(curator);
+    administrator!.notify();
+  }
+
   void deleteCourier(SimpleCourier courier) {
     if (role == Role.Administrator) {
-      print(administrator!.couriers.remove(courier));
+      administrator!.couriers.remove(courier);
       administrator!.shownCouriers.remove(courier);
       administrator!.notify();
     } else {
@@ -150,25 +156,49 @@ class User with ChangeNotifier {
     }
   }
 
+  void deleteCurator(SimpleCurator curator) {
+    administrator!.curators.remove(curator);
+    administrator!.shownCurators.remove(curator);
+    administrator!.notify();
+  }
+
   void blockUnblockCourier(SimpleCourier courier) {
+    SimpleCourier _courier = courier;
+    _courier.blocked = !courier.blocked!;
+    _courier.action = _courier.blocked! ? 'Заблокирован' : '';
     if (role == Role.Administrator) {
       int index = administrator!.couriers.indexOf(courier);
-      print(index);
-      administrator!.couriers[index].blocked = !courier.blocked!;
+      administrator!.couriers[index] = _courier;
       index = administrator!.shownCouriers.indexOf(courier);
-      if (index != -1)
-        administrator!.shownCouriers[index].blocked = !courier.blocked!;
+      if (index != -1) administrator!.shownCouriers[index] = _courier;
       administrator!.notify();
     } else {
-      int index = administrator!.couriers.indexOf(courier);
-      curator!.couriers[index].blocked = !courier.blocked!;
+      int index = curator!.couriers.indexOf(courier);
+      curator!.couriers[index] = _courier;
       index = curator!.shownCouriers.indexOf(courier);
-      if (index != -1)
-        curator!.shownCouriers[index].blocked = !courier.blocked!;
+      if (index != -1) curator!.shownCouriers[index] = _courier;
       curator!.notify();
     }
   }
 
-  //TODO: implement this
-  addCurator(SimpleCurator curator) {}
+  void discardCourier(SimpleCourier courier, DiscardType type) {
+    print('from ${courier.fullName} and term ${courier.terminal}');
+    SimpleCourier _courier = courier;
+    _courier.discard(type);
+    print('toto ${_courier.fullName} and term ${_courier.terminal}');
+    print('from ${courier.fullName} and term ${courier.cash}');
+    if (role == Role.Administrator) {
+      int index = administrator!.couriers.indexOf(courier);
+      administrator!.couriers[index] = _courier;
+      index = administrator!.shownCouriers.indexOf(courier);
+      if (index != -1) administrator!.shownCouriers[index] = _courier;
+      administrator!.notify();
+    } else {
+      int index = curator!.couriers.indexOf(courier);
+      curator!.couriers[index] = _courier;
+      index = curator!.shownCouriers.indexOf(courier);
+      if (index != -1) curator!.shownCouriers[index] = _courier;
+      curator!.notify();
+    }
+  }
 }

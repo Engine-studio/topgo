@@ -113,6 +113,17 @@ class SimpleCourier {
         "all": type == DiscardType.Full,
       });
 
+  void discard(DiscardType type) {
+    this.cash =
+        type == DiscardType.Cash || type == DiscardType.Full ? 0 : this.cash;
+    this.terminal = type == DiscardType.Terminal || type == DiscardType.Full
+        ? 0
+        : this.terminal;
+    this.salary = type == DiscardType.Salary || type == DiscardType.Full
+        ? 0
+        : this.salary;
+  }
+
   String get jsonID => jsonEncode({"id": id!});
   String get fullName => '${surname!} ${name!} ${patronymic!}';
   String get phone => phoneString(phoneSource!);

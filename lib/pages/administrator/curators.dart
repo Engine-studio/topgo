@@ -21,7 +21,6 @@ class AdministratorCouratorsTab extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Wrap(
-              direction: Axis.vertical,
               runSpacing: 8,
               children: [
                 SizedBox(width: 12),

@@ -28,7 +28,7 @@ class CuratorCard extends StatelessWidget {
               decoration: BoxDecoration(shape: BoxShape.circle),
               clipBehavior: Clip.hardEdge,
               child: Image.network(
-                curator.image!,
+                curator.photo,
                 fit: BoxFit.fill,
               ),
             ),
@@ -45,8 +45,7 @@ class CuratorCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(phoneString(curator.phone),
-                          style: TxtStyle.smallText),
+                      Text(curator.phone, style: TxtStyle.smallText),
                       Spacer(),
                       SizedBox(width: 4),
                       ActionIcon(

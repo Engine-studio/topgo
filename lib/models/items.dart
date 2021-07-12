@@ -12,6 +12,7 @@ import 'package:topgo/pages/curator/finances.dart';
 import 'package:topgo/pages/curator/profile.dart';
 import 'package:topgo/pages/curator/restaurants.dart';
 import 'package:topgo/styles.dart';
+import 'package:topgo/widgets/administrator/curator_addition_dialog.dart';
 import 'package:topgo/widgets/curator/courier_addition_dialog.dart';
 
 class Items {
@@ -142,6 +143,27 @@ class Items {
             name: 'store',
             title: 'Рестораны',
             withSearch: true,
+            button: GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) {
+                  return ChangeNotifierProvider.value(
+                    value: Provider.of<User>(context, listen: false),
+                    // TODO: implement restaurant addition dialog
+                    child: Container(),
+                  );
+                },
+              ),
+              child: Container(
+                margin: const EdgeInsets.only(right: 28),
+                child: Image.asset(
+                  'assets/icons/plus.png',
+                  width: 24,
+                  height: 24,
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+            ),
           ),
           AppBarItem(
             name: 'usd-circle',
@@ -152,6 +174,26 @@ class Items {
             name: 'suitcase-alt',
             title: 'Кураторы',
             withSearch: true,
+            button: GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) {
+                  return ChangeNotifierProvider.value(
+                    value: Provider.of<User>(context, listen: false),
+                    child: CuratorAdditionDialog(),
+                  );
+                },
+              ),
+              child: Container(
+                margin: const EdgeInsets.only(right: 28),
+                child: Image.asset(
+                  'assets/icons/plus.png',
+                  width: 24,
+                  height: 24,
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+            ),
           ),
           AppBarItem(
             name: 'user-circle',

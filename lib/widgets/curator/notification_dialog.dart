@@ -5,13 +5,27 @@ import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
 
-class NotificationDialog extends StatelessWidget {
+class NotificationDialog extends StatefulWidget {
   const NotificationDialog({Key? key}) : super(key: key);
 
   @override
+  _NotificationDialogState createState() => _NotificationDialogState();
+}
+
+class _NotificationDialogState extends State<NotificationDialog> {
+  late TextEditingController title;
+  late TextEditingController message;
+
+  @override
+  void initState() {
+    super.initState();
+    title = TextEditingController();
+    message = TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TextEditingController title = TextEditingController();
-    TextEditingController message = TextEditingController();
+    topgo.Notification not;
     return Center(
       child: SingleChildScrollView(
         child: DialogBox(
@@ -26,14 +40,15 @@ class NotificationDialog extends StatelessWidget {
               text: 'Отправить',
               buttonType: ButtonType.Accept,
               onPressed: () async => {
-                await createNotification(
-                  context,
-                  topgo.Notification.create(
-                    title: title.text,
-                    message: message.text,
-                  ),
-                ),
-                Navigator.pop(context),
+                if (title.text != '' && message.text != '')
+                  {
+                    not = topgo.Notification.create(
+                      title: title.text,
+                      message: message.text,
+                    ),
+                    await createNotification(context, not),
+                    Navigator.pop(context),
+                  },
               },
             ),
             SizedBox(height: 8),

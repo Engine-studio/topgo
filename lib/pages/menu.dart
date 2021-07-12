@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:topgo/api/notifications.dart';
 import 'package:topgo/main.dart';
 import 'package:topgo/models/items.dart';
 import 'package:topgo/models/notification.dart' as notif;
@@ -21,27 +22,32 @@ class _MenuPageState extends State<MenuPage> {
   int currentIndex = 0;
   Timer? timer;
   final Location _location = Location();
-  List<notif.Notification> Function(LocationData)? notify;
+  BuildContext? thisContext;
+  Role? role;
 
   // TODO: implement polling
   void polling() async {
     print('polling');
-    LocationData locationData = await _location.getLocation();
-    List<notif.Notification> notifs =
-        notify != null ? notify!(locationData) : [];
-    for (notif.Notification n in notifs) {
-      showNotification(n);
-    }
+    // TODO: implement sharing location
+    // if (role == Role.Courier)
+    //   sendLocation(context, await _location.getLocation());
+    // TODO: wait Artem to bug fix
+    // List<notif.Notification> notifications =
+    //     thisContext != null ? await getNotifications(thisContext!) : [];
+    // for (notif.Notification notification in notifications)
+    //   showNotification(notification);
   }
 
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(minutes: 1), (Timer t) => polling());
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) => polling());
   }
 
   @override
   Widget build(BuildContext context) {
+    role = context.read<User>().role;
+    thisContext = context;
     List<String> icons = Items().bottomNavBarIcons(context);
     List<Widget> tabs = Items().bottomNavBarTabs(context);
     List<AppBarItem> appBarItems = Items().appBarItems(context);
