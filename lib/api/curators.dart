@@ -21,18 +21,16 @@ Future<List<SimpleCurator>> getCurators(BuildContext context) async {
   return Future.value([]);
 }
 
-Future<void> newCurator(BuildContext context, SimpleCurator curator) async {
-  await apiRequest(
-    context: context,
-    route: '/api/users/curators/new',
-    body: curator.json,
-  );
-}
+Future<void> newCurator(BuildContext context, SimpleCurator curator) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/users/curators/new',
+      body: curator.json,
+    );
 
-Future<void> deleteCurator(BuildContext context, SimpleCurator curator) async {
-  await apiRequest(
-    context: context,
-    route: '/api/users/curators/delete',
-    body: curator.jsonID,
-  );
-}
+Future<void> deleteCurator(BuildContext context, SimpleCurator curator) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/users/curators/delete',
+      body: curator.jsonID,
+    );

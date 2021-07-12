@@ -26,21 +26,19 @@ Future<List<Restaurant>> getRestaurants(BuildContext context) async {
 Future<void> newRestaurant(
   BuildContext context,
   Restaurant restaurant,
-) async {
-  await apiRequest(
-    context: context,
-    route: '/api/users/restaurants/new',
-    body: restaurant.json,
-  );
-}
+) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/users/restaurants/new',
+      body: restaurant.json,
+    );
 
 Future<void> deleteRestaurant(
   BuildContext context,
   Restaurant restaurant,
-) async {
-  await apiRequest(
-    context: context,
-    route: '/api/users/restaurants/delete',
-    body: restaurant.jsonID,
-  );
-}
+) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/users/restaurants/delete',
+      body: restaurant.jsonID,
+    );

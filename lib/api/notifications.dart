@@ -19,10 +19,9 @@ Future<List<topgo.Notification>> getNotifications(BuildContext context) async {
 Future<void> createNotification(
   BuildContext context,
   topgo.Notification notification,
-) async {
-  await apiRequest(
-    context: context,
-    route: '/api/ordering/send_notification',
-    body: notification.json,
-  );
-}
+) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/ordering/send_notification',
+      body: notification.json,
+    );

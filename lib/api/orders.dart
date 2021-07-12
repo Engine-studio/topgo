@@ -51,35 +51,31 @@ Future<void> getNewOrder(
   context.read<User>().courier!.notify();
 }
 
-Future<void> acceptOrder(BuildContext context, Order order) async {
-  await apiRequest(
-    context: context,
-    route: '/api/ordering/take_order',
-    body: order.jsonID,
-  );
-}
+Future<void> acceptOrder(BuildContext context, Order order) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/ordering/take_order',
+      body: order.jsonID,
+    );
 
-Future<void> declineOrder(BuildContext context, Order order) async {
-  await apiRequest(
-    context: context,
-    route: '/api/ordering/refuse_order',
-    body: order.jsonID,
-  );
-}
+Future<void> declineOrder(BuildContext context, Order order) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/ordering/refuse_order',
+      body: order.jsonID,
+    );
 
 // TODO: implement of order status checking
-Future<void> pickOrder(BuildContext context, Order order) async {
-  await apiRequest(
-    context: context,
-    route: '/api/ordering/pick_order',
-    body: order.jsonID,
-  );
-}
+Future<void> pickOrder(BuildContext context, Order order) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/ordering/pick_order',
+      body: order.jsonID,
+    );
 
-Future<void> deliverOrder(BuildContext context, Order order) async {
-  await apiRequest(
-    context: context,
-    route: '/api/ordering/set_delivered_order',
-    body: order.jsonID,
-  );
-}
+Future<void> deliverOrder(BuildContext context, Order order) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/ordering/set_delivered_order',
+      body: order.jsonID,
+    );

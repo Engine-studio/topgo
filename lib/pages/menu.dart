@@ -44,7 +44,8 @@ class _MenuPageState extends State<MenuPage> {
         );
         if (thisContext!.read<User>().courier!.orders.length == 0)
           await getNewOrder(thisContext!, orderRequest);
-      }
+      } else
+        await clearLocation(context);
     }
   }
 

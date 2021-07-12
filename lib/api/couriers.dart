@@ -30,44 +30,40 @@ Future<List<SimpleCourier>> getCouriers(BuildContext context) async {
 Future<void> newCourier(
   BuildContext context,
   SimpleCourier courier,
-) async {
-  await apiRequest(
-    context: context,
-    route: '/api/users/couriers/new',
-    body: courier.json,
-  );
-}
+) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/users/couriers/new',
+      body: courier.json,
+    );
 
 Future<void> blockUnblockCourier(
   BuildContext context,
   SimpleCourier courier,
-) async {
-  await apiRequest(
-    context: context,
-    route: '/api/users/couriers/toggle_ban',
-    body: courier.jsonID,
-  );
-}
+) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/users/couriers/toggle_ban',
+      body: courier.jsonID,
+    );
 
 Future<void> deleteCourier(
   BuildContext context,
   SimpleCourier courier,
-) async {
-  await apiRequest(
-    context: context,
-    route: '/api/users/couriers/delete',
-    body: courier.jsonID,
-  );
-}
+) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/users/couriers/delete',
+      body: courier.jsonID,
+    );
 
 Future<void> discardCourier(
   BuildContext context,
   SimpleCourier courier,
   DiscardType type,
-) async {
-  await apiRequest(
-    context: context,
-    route: '/api/users/couriers/null_money',
-    body: courier.jsonDiscard(type),
-  );
-}
+) async =>
+    await apiRequest(
+      context: context,
+      route: '/api/users/couriers/null_money',
+      body: courier.jsonDiscard(type),
+    );
