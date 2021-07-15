@@ -178,7 +178,7 @@ class User with ChangeNotifier {
   void blockUnblockCourier(SimpleCourier courier) {
     SimpleCourier _courier = courier;
     _courier.blocked = !courier.blocked!;
-    _courier.action = _courier.blocked! ? 'Заблокирован' : '';
+    _courier.action = _courier.blocked! ? 'Заблокирован' : 'Обновите данные';
     if (role == Role.Administrator) {
       int index = administrator!.couriers.indexOf(courier);
       administrator!.couriers[index] = _courier;

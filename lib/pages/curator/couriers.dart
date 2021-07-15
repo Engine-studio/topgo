@@ -9,13 +9,28 @@ import 'package:topgo/widgets/loading.dart';
 import 'package:topgo/widgets/map/map_card.dart';
 import 'package:topgo/widgets/map/map_marker.dart';
 
-class CuratorAndAdminCouriersTab extends StatelessWidget {
+class CuratorAndAdminCouriersTab extends StatefulWidget {
   const CuratorAndAdminCouriersTab({Key? key}) : super(key: key);
+
+  @override
+  _CuratorAndAdminCouriersTabState createState() =>
+      _CuratorAndAdminCouriersTabState();
+}
+
+class _CuratorAndAdminCouriersTabState
+    extends State<CuratorAndAdminCouriersTab> {
+  late Future<List<SimpleCourier>> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = getCouriers(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<SimpleCourier>>(
-      future: getCouriers(context),
+      future: _future,
       builder: (context, snapshot) {
         if (snapshot.hasError) return Error(text: snapshot.error!.toString());
         if (snapshot.connectionState == ConnectionState.done &&

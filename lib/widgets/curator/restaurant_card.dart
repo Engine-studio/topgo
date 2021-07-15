@@ -34,7 +34,7 @@ class RestaurantCard extends StatelessWidget {
         _flag,
         SizedBox(height: 8),
         BorderBox(
-          height: 111,
+          height: 101,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
             child: Column(

@@ -78,7 +78,6 @@ class Items {
             name: 'history',
             title: 'История',
             withSearch: true,
-            searchHelpers: ['По дате', 'По адресу'],
           ),
           AppBarItem(name: 'rocket', title: 'Заказы'),
           AppBarItem(

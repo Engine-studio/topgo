@@ -39,7 +39,7 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
       child: SingleChildScrollView(
         child: DialogBox(
           title: 'Добавление ресторана',
-          height: 484,
+          height: 494,
           children: [
             Input(text: 'Название', controller: name),
             SizedBox(height: 8),
@@ -50,7 +50,7 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
             Input(text: 'Пароль', controller: password),
             SizedBox(height: 24),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 TimeHolder(
                   text: 'Открытие',
@@ -60,9 +60,9 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
                 ),
                 TimeHolder(
                   text: 'Закрытие',
-                  time: this.open,
+                  time: this.close,
                   disabled: false,
-                  onChange: (time) => {this.open = time},
+                  onChange: (time) => {this.close = time},
                 ),
               ],
             ),
@@ -77,7 +77,9 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
                 if (name.text != '' &&
                     address.text != '' &&
                     number.length == 11 &&
-                    password.text != '')
+                    password.text != '' &&
+                    (open[0] < close[0] ||
+                        ((open[0] == close[0]) && open[1] < close[1])))
                   {
                     restaurant = Restaurant.create(
                       name: name.text,

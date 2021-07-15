@@ -8,12 +8,17 @@ class Restaurant {
   String? name, address, phone, password;
   List<List<int>>? open, close;
 
+  static List<List<int>>? castJson(dynamic j) {
+    if (j == null) return [];
+    return [parseNaiveTime(j.first)!];
+  }
+
   Restaurant.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
         address = json['address'],
-        open = json['working_from'],
-        close = json['working_till'],
+        open = castJson(json['working_from']),
+        close = castJson(json['working_till']),
         phone = json['phone'],
         x = json['location_lat'] ?? 0,
         y = json['location_lng'] ?? 0;

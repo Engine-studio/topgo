@@ -36,8 +36,8 @@ Future<String> apiRequest({
     if (response.statusCode == 200)
       return utf8.decode(response.body.codeUnits);
     else if (response.statusCode == 500 &&
-        jsonDecode(utf8.decode(response.body.codeUnits))['message'] ==
-            'ExpiredSignature') {
+        jsonDecode(utf8.decode(response.body.codeUnits))['message']
+            .contains('Signature')) {
       if (!await logInAgain(context)) throw Exception('Unable to log in');
     } else
       throw Exception('Unable to connect to the server');

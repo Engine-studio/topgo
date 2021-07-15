@@ -15,16 +15,16 @@ class Courier {
     Map<String, dynamic> json,
     Map<String, dynamic>? session, {
     required this.notify,
-  })  : blocked = json['is_bloked'],
+  })  : blocked = json['is_bloked'] ?? false,
         warned = json['is_warned'],
         deleted = json['is_deleted'],
         rating = double.parse(
-          (json['current_rate_count'] / json['current_rate_amount'])
+          (json['current_rate_count'] ?? 0 / json['current_rate_amount'] ?? 1)
               .toStringAsFixed(1),
         ),
-        cash = json['cash'],
-        terminal = json['term'],
-        salary = json['salary'],
+        cash = json['cash'] / 100,
+        terminal = json['term'] / 100,
+        salary = json['salary'] / 100,
         orders = [],
         ordersRequest = [],
         history = [],

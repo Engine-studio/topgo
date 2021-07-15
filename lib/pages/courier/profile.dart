@@ -28,12 +28,18 @@ class CourierProfileTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MoneyHolder(text: 'Оплата наличными', sum: 10000),
-              MoneyHolder(text: 'Оплата\nпо терминалу', sum: 100000),
-              MoneyHolder(text: 'Заработная плата', sum: 1000000),
+              MoneyHolder(
+                  text: 'Оплата наличными',
+                  sum: context.read<User>().courier!.cash),
+              MoneyHolder(
+                  text: 'Оплата\nпо терминалу',
+                  sum: context.read<User>().courier!.terminal),
+              MoneyHolder(
+                  text: 'Заработная плата',
+                  sum: context.read<User>().courier!.salary),
             ],
           ),
-          ...shift != null
+          ...shift == null
               ? [
                   SizedBox(height: 40),
                   Button(
@@ -82,7 +88,7 @@ class CourierProfileTab extends StatelessWidget {
                             children: [
                               TimeHolder(
                                 text: 'Начало смены',
-                                time: shift!.begin!,
+                                time: shift.begin!,
                                 disabled: true,
                                 onChange: (time) => {},
                               ),
