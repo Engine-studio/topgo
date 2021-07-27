@@ -68,19 +68,17 @@ class _LoginPageState extends State<LoginPage> {
                     number = number.replaceAll(str, '');
                   if (number.length == 11 && password.text != '') {
                     User user = await logInFirst(number, password.text);
+                    context.read<User>().copy(user);
+
                     if (user.logined)
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
-                        // TODO: relogin bug fix
                         MaterialPageRoute(
-                          builder: (_) => widget.init
-                              ? ChangeNotifierProvider<User>(
-                                  create: (context) => user,
-                                  child: MenuPage(),
-                                )
-                              : MenuPage(),
+                          builder: (context) => const MenuPage(),
                         ),
                       );
+                    else
+                      password.text = '';
                   }
                 },
               ),

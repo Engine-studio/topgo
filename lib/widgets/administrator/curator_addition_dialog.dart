@@ -1,6 +1,6 @@
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/widgets.dart';
-import 'package:topgo/api/curators.dart';
+import 'package:topgo/api/curators.dart' as api;
 import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/button.dart';
@@ -71,8 +71,8 @@ class _CourierAdditionDialogState extends State<CuratorAdditionDialog> {
                       phoneSource: number,
                       password: password.text,
                     ),
-                    await newCurator(context, curator),
-                    context.read<User>().addCurator(curator),
+                    if (await api.newCurator(context, curator))
+                      await api.getCurators(context),
                     Navigator.pop(context),
                   }
               },

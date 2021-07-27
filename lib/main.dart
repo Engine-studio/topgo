@@ -94,49 +94,54 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     _checkPermissions();
-    return MaterialApp(
-      title: 'TopGo',
-      debugShowCheckedModeBanner: false,
-      home: _permissionGranted != PermissionStatus.granted
-          ? Container(
-              decoration: BoxDecoration(
-                gradient: GrdStyle.splash,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 75),
-                child: Image.asset('assets/images/logo.png'),
-              ),
-            )
-          : AnimatedSplashScreen.withScreenFunction(
-              splashIconSize: double.infinity,
-              backgroundColor: Color(0xFF16A7D8),
-              splash: Container(
-                decoration: BoxDecoration(
-                  gradient: GrdStyle.splash,
+    return ChangeNotifierProvider<User>(
+      create: (_) => User(),
+      builder: (context, _) {
+        return MaterialApp(
+          title: 'TopGo',
+          debugShowCheckedModeBanner: false,
+          home: _permissionGranted != PermissionStatus.granted
+              ? Container(
+                  decoration: BoxDecoration(
+                    gradient: GrdStyle.splash,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 75),
+                    child: Image.asset('assets/images/logo.png'),
+                  ),
+                )
+              : AnimatedSplashScreen.withScreenFunction(
+                  splashIconSize: double.infinity,
+                  backgroundColor: Color(0xFF16A7D8),
+                  splash: Container(
+                    decoration: BoxDecoration(
+                      gradient: GrdStyle.splash,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 75),
+                      child: Image.asset('assets/images/logo.png'),
+                    ),
+                  ),
+                  screenFunction: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    String? phone = prefs.getString('phone');
+                    String? password = prefs.getString('password');
+                    User user = await logInFirst(phone, password);
+
+                    Location location = Location();
+
+                    while (await location.hasPermission() !=
+                        PermissionStatus.granted)
+                      await location.requestPermission();
+
+                    context.read<User>().copy(user);
+
+                    return user.logined ? MenuPage() : LoginPage();
+                  },
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 75),
-                  child: Image.asset('assets/images/logo.png'),
-                ),
-              ),
-              screenFunction: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                String? phone = prefs.getString('phone');
-                String? password = prefs.getString('password');
-                User user = await logInFirst(phone, password);
-
-                Location location = Location();
-
-                while (
-                    await location.hasPermission() != PermissionStatus.granted)
-                  await location.requestPermission();
-
-                return ChangeNotifierProvider<User>(
-                  create: (context) => user,
-                  child: user.logined ? MenuPage() : LoginPage(),
-                );
-              },
-            ),
+        );
+      },
     );
   }
 }

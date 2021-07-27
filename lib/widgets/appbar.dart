@@ -34,6 +34,7 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(6)),
         child: AppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: appBarItem.withSearch ? 124 : 50,
           title: Column(
             children: [

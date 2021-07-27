@@ -7,10 +7,14 @@ import 'package:topgo/widgets/map/map.dart';
 import 'package:topgo/widgets/map/map_marker.dart';
 
 class MapCard extends StatefulWidget {
+  final String text;
+  final bool expanded;
   final List<MapMarker> markers;
   const MapCard({
     Key? key,
+    this.text = 'Карта',
     required this.markers,
+    this.expanded = true,
   }) : super(key: key);
 
   @override
@@ -35,7 +39,7 @@ class _MapCardState extends State<MapCard> {
           gradient: GrdStyle.select,
           child: DropDown(
             child: Flag(
-              text: 'Карта',
+              text: widget.text,
               gradient: GrdStyle.select,
             ),
             icon: Image.asset(
@@ -45,16 +49,24 @@ class _MapCardState extends State<MapCard> {
             toShow: Map(
               markers: _markers,
               onTap: (marker) => {
-                if (marker.build != null)
-                  setState(() {
-                    card = marker.build!();
-                  })
+                if (widget.expanded)
+                  if (marker.build != null)
+                    setState(
+                      () {
+                        card = marker.build!();
+                      },
+                    ),
               },
             ),
-            onClosed: () => setState(() {
-              card = null;
-              for (MapMarker marker in _markers) marker.picked = false;
-            }),
+            onClosed: () => {
+              if (widget.expanded)
+                setState(
+                  () {
+                    card = null;
+                    for (MapMarker marker in _markers) marker.picked = false;
+                  },
+                ),
+            },
           ),
         ),
         card != null

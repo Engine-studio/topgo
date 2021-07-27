@@ -31,9 +31,8 @@ class RestaurantDeletingDialog extends StatelessWidget {
           text: 'Принять',
           buttonType: ButtonType.Accept,
           onPressed: () async => {
-            if (restaurant.id != null)
-              await deleteRestaurant(context, restaurant),
-            context.read<User>().deleteRestaurant(restaurant),
+            if (await deleteRestaurant(context, restaurant))
+              context.read<User>().deleteRestaurant(restaurant),
             Navigator.pop(context),
           },
         ),

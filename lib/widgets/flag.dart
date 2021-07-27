@@ -15,15 +15,15 @@ class Flag extends StatelessWidget {
   Widget build(BuildContext context) {
     LinearGradient? grad = this.gradient != null
         ? this.gradient
-        : text.contains('Забирает')
-            ? GrdStyle.accept
-            : text.contains('Доставляет')
-                ? GrdStyle.button
-                : text.contains('Заблокирован')
+        : text.contains('заказ')
+            ? GrdStyle.button
+            : text.contains('Активен')
+                ? GrdStyle.accept
+                : text.contains('Неактивен')
                     ? LinearGradient(
                         colors: [
                           ClrStyle.darkBackground,
-                          ClrStyle.darkBackground
+                          ClrStyle.darkBackground,
                         ],
                       )
                     : GrdStyle.decline;

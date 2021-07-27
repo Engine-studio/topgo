@@ -18,15 +18,18 @@ class Courier {
   })  : blocked = json['is_bloked'] ?? false,
         warned = json['is_warned'],
         deleted = json['is_deleted'],
-        rating = double.parse(
-          (json['current_rate_count'] ?? 0 / json['current_rate_amount'] ?? 1)
-              .toStringAsFixed(1),
-        ),
+        rating = double.parse(((json['current_rate_ammount'] ?? 0) /
+                (json['current_rate_count'] ?? 1))
+            .toStringAsFixed(2)),
         cash = json['cash'] / 100,
         terminal = json['term'] / 100,
         salary = json['salary'] / 100,
-        orders = [],
-        ordersRequest = [],
+        // TODO: remove it
+        orders = [Order.create()],
+        ordersRequest = [
+          Order.create(),
+          Order.create(),
+        ],
         history = [],
         shownHistory = [],
         shift = session != null ? WorkShift.fromJson(session) : null;

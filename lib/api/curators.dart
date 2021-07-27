@@ -10,27 +10,45 @@ Future<List<SimpleCurator>> getCurators(BuildContext context) async {
   String json =
       await apiRequest(context: context, route: '/api/users/curators/get_all');
 
-  context.read<User>().administrator!.curators = jsonDecode(json)
+  context.read<User>().curators = jsonDecode(json)
       .cast<Map<String, dynamic>>()
       .where((json) => !json['is_deleted'])
       .map<SimpleCurator>((json) => SimpleCurator.fromJson(json))
       .toList();
 
-  context.read<User>().administrator!.notify();
-
   return Future.value([]);
 }
 
-Future<void> newCurator(BuildContext context, SimpleCurator curator) async =>
+Future<bool> newCurator(
+  BuildContext context,
+  SimpleCurator curator,
+) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/users/curators/new',
       body: curator.json,
     );
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
 
-Future<void> deleteCurator(BuildContext context, SimpleCurator curator) async =>
+Future<bool> deleteCurator(
+  BuildContext context,
+  SimpleCurator curator,
+) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/users/curators/delete',
       body: curator.jsonID,
     );
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}

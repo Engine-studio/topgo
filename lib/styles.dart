@@ -102,12 +102,14 @@ class GrdStyle {
   );
 
   LinearGradient panelGradient(BuildContext context) {
-    switch (context.read<User>().role!) {
+    switch (context.read<User>().role) {
       case Role.Administrator:
         return wave;
       case Role.Courier:
         return panel;
       case Role.Curator:
+        return button;
+      case null:
         return button;
     }
   }

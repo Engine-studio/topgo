@@ -88,19 +88,18 @@ class CourierCard extends StatelessWidget {
                                   iconName: 'lock-alt',
                                   accept: false,
                                   onTap: () async => {
-                                    if (courier.id != null)
-                                      await blockUnblockCourier(
-                                          context, courier),
-                                    context
-                                        .read<User>()
-                                        .blockUnblockCourier(courier),
+                                    if (await blockUnblockCourier(
+                                        context, courier))
+                                      context
+                                          .read<User>()
+                                          .blockUnblockCourier(courier),
                                   },
                                 )
                               : ActionIcon(
                                   iconName: 'lock-open-alt',
                                   onTap: () => showDialog(
                                     context: context,
-                                    builder: (_) {
+                                    builder: (context) {
                                       return ChangeNotifierProvider.value(
                                         value: Provider.of<User>(context,
                                             listen: false),
@@ -117,7 +116,7 @@ class CourierCard extends StatelessWidget {
                             accept: false,
                             onTap: () => showDialog(
                               context: context,
-                              builder: (_) {
+                              builder: (context) {
                                 return ChangeNotifierProvider.value(
                                   value:
                                       Provider.of<User>(context, listen: false),

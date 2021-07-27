@@ -15,30 +15,42 @@ Future<List<Restaurant>> getRestaurants(BuildContext context) async {
   context.read<User>().restaurants = jsonDecode(json)
       .cast<Map<String, dynamic>>()
       .where((json) => !json['is_deleted'])
-      .map<Restaurant>(
-        (json) => Restaurant.fromJson(json),
-      )
+      .map<Restaurant>((json) => Restaurant.fromJson(json))
       .toList();
 
   return Future.value([]);
 }
 
-Future<void> newRestaurant(
+Future<bool> newRestaurant(
   BuildContext context,
   Restaurant restaurant,
-) async =>
+) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/users/restaurants/new',
       body: restaurant.json,
     );
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
 
-Future<void> deleteRestaurant(
+Future<bool> deleteRestaurant(
   BuildContext context,
   Restaurant restaurant,
-) async =>
+) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/users/restaurants/delete',
       body: restaurant.jsonID,
     );
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}

@@ -20,59 +20,12 @@ class OrderRequest {
       });
 }
 
-class OrderStatus {
-  int id;
-  String status;
-
-  OrderStatus({required this.id, required this.status});
-
-  String toAction() {
-    switch (status) {
-      case 'CourierFinding':
-        return '';
-      case 'CourierConfirmation':
-        return '';
-      case 'Cooking':
-        return '';
-      case 'ReadyForDelivery':
-        return 'Забирает заказ #$id';
-      case 'Delivering':
-        return 'Доставляет заказ #$id';
-      case 'Delivered':
-        return '';
-      case 'FailureByCourier':
-        return '';
-      case 'FailureByRestaurant':
-        return '';
-      case 'Success':
-        return '';
-      default:
-        return '';
-    }
-  }
-
-  // {switch (v) {
-  // case 'CourierFinding': return '';
-  // default: return '';
-  // case 'asd':
-  // CourierConfirmation,
-  // Cooking,
-  // ReadyForDelivery,
-  // Delivering,
-  // Delivered,
-  // FailureByCourier,
-  // FailureByRestaurant,
-  // Success,
-  // }}
-}
-
 class Order {
   int? id, restaurantId, sessionId, total;
   String? fromAddress, toAddress;
   LatLng? fromLatLng, toLatLng;
   double? appearance, behavior, sum;
   List<int>? start, stop;
-  OrderStatus? status;
   bool? withCash;
 
   Order.fromJson(Map<String, dynamic> json)
@@ -89,6 +42,21 @@ class Order {
         start = parseNaiveDateTime(json['take_datetime']),
         stop = parseNaiveDateTime(json['delivery_datetime']),
         sum = json['courier_share'] / 100;
+
+  Order.create()
+      : id = 123,
+        restaurantId = 124124,
+        sessionId = 1,
+        total = 15,
+        fromAddress = 'from ' * 10,
+        toAddress = 'to ' * 12,
+        fromLatLng = LatLng(55.756063, 37.627903),
+        toLatLng = LatLng(55.786063, 37.647903),
+        withCash = true,
+        //appearance, behavior
+        start = [15, 0],
+        stop = [16, 0],
+        sum = 14124;
 
   String get jsonID => jsonEncode({"id": id});
 }

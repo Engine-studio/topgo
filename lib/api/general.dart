@@ -4,8 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topgo/models/order.dart';
-import 'package:topgo/models/report.dart';
 import 'package:topgo/models/user.dart';
 
 const host = "topgo.club";
@@ -31,8 +29,13 @@ Future<String> apiRequest({
       headers: headers ?? jsonHeader(context),
       body: body,
     );
-    print(response.statusCode);
-    print(response.body);
+
+    print('');
+    print('route: $route');
+    print('code: ${response.statusCode}');
+    print('body: ${response.body}');
+    print('');
+
     if (response.statusCode == 200)
       return utf8.decode(response.body.codeUnits);
     else if (response.statusCode == 500 &&
@@ -89,6 +92,12 @@ Future<User> logInFirst(
     }),
   );
 
+  print('');
+  print('route: loginFirst');
+  print('code: ${response.statusCode}');
+  print('body: ${response.body}');
+  print('');
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (response.statusCode == 200) {
     print('success');
@@ -106,14 +115,4 @@ Future<User> logInFirst(
     await prefs.clear();
 
   return User();
-}
-
-// TODO: ARTEM reports
-Future<List<Report>> getReports(BuildContext context) async {
-  String json = await apiRequest(context: context, route: '/api/shit');
-
-  return jsonDecode(json)
-      .cast<List<Map<String, dynamic>>>()
-      .map<Order>((json) => Order.fromJson(json))
-      .toList();
 }

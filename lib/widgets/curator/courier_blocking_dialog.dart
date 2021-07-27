@@ -32,8 +32,8 @@ class CourierBlockingDialog extends StatelessWidget {
           text: 'Принять',
           buttonType: ButtonType.Accept,
           onPressed: () async => {
-            await blockUnblockCourier(context, courier),
-            context.read<User>().blockUnblockCourier(courier),
+            if (await blockUnblockCourier(context, courier))
+              context.read<User>().blockUnblockCourier(courier),
             Navigator.pop(context),
           },
         ),

@@ -48,7 +48,6 @@ class _CourierDiscardDialogState extends State<CourierDiscardDialog> {
                         child: Radio<DiscardType>(
                           activeColor: Colors.white,
                           splashRadius: 0,
-                          //title: Text('Сбросить все', style: TxtStyle.mainText),
                           value: value,
                           groupValue: discard,
                           onChanged: (DiscardType? value) {
@@ -80,8 +79,8 @@ class _CourierDiscardDialogState extends State<CourierDiscardDialog> {
             text: 'Сбросить',
             buttonType: ButtonType.Accept,
             onPressed: () async => {
-              await discardCourier(context, widget.courier, discard!),
-              context.read<User>().discardCourier(widget.courier, discard!),
+              if (await discardCourier(context, widget.courier, discard!))
+                context.read<User>().discardCourier(widget.courier, discard!),
               Navigator.pop(context),
             },
           ),

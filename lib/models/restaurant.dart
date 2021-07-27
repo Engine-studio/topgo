@@ -23,6 +23,8 @@ class Restaurant {
         x = json['location_lat'] ?? 0,
         y = json['location_lng'] ?? 0;
 
+  Restaurant.simple({required this.x, required this.y});
+
   Restaurant.create({
     required this.name,
     required this.address,

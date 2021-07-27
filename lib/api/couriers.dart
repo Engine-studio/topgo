@@ -16,54 +16,80 @@ Future<List<SimpleCourier>> getCouriers(BuildContext context) async {
   context.read<User>().couriers = parsedJson['couriers']
       .cast<Map<String, dynamic>>()
       .where((json) => !json['is_deleted'])
-      .map<SimpleCourier>(
-        (json) => SimpleCourier.fromJson(
-          json,
-          parsedJson['coords'].cast<Map<String, dynamic>>(),
-        ),
-      )
+      .map<SimpleCourier>((json) => SimpleCourier.fromJson(
+            json,
+            parsedJson['coords'].cast<Map<String, dynamic>>(),
+          ))
       .toList();
 
   return Future.value([]);
 }
 
-Future<void> newCourier(
+Future<bool> newCourier(
   BuildContext context,
   SimpleCourier courier,
-) async =>
+) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/users/couriers/new',
       body: courier.json,
     );
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
 
-Future<void> blockUnblockCourier(
+Future<bool> blockUnblockCourier(
   BuildContext context,
   SimpleCourier courier,
-) async =>
+) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/users/couriers/toggle_ban',
       body: courier.jsonID,
     );
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
 
-Future<void> deleteCourier(
+Future<bool> deleteCourier(
   BuildContext context,
   SimpleCourier courier,
-) async =>
+) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/users/couriers/delete',
       body: courier.jsonID,
     );
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
 
-Future<void> discardCourier(
+Future<bool> discardCourier(
   BuildContext context,
   SimpleCourier courier,
   DiscardType type,
-) async =>
+) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/users/couriers/null_money',
       body: courier.jsonDiscard(type),
     );
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}

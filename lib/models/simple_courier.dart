@@ -48,11 +48,23 @@ class WorkShift {
       });
 }
 
+enum OrderStatus {
+  CourierFinding,
+  CourierConfirmation,
+  Cooking,
+  ReadyForDelivery,
+  Delivering,
+  Delivered,
+  FailureByCourier,
+  FailureByRestaurant,
+  Success
+}
+
 class SimpleCourier {
   int? id, movement;
   String? surname, name, patronymic, phoneSource, action, image, password;
   double? rating, cash, terminal, salary, x, y;
-  bool? ordering, blocked;
+  bool? ordering, blocked, works;
   OrderStatus? orderStatus;
   WorkShift? session;
 
@@ -65,6 +77,8 @@ class SimpleCourier {
   })  : action = '',
         rating = 0 / 0;
 
+  SimpleCourier.simple({required this.x, required this.y});
+
   SimpleCourier.fromJson(
     Map<String, dynamic> json,
     List<Map<String, dynamic>> coords,
@@ -75,14 +89,14 @@ class SimpleCourier {
         phoneSource = json['phone'],
         image = json['picture'],
         ordering = json['is_in_order'],
+        works = json['is_in_session'],
         blocked = json['is_blocked'],
         cash = json['cash'] / 100,
         terminal = json['term'] / 100,
         salary = json['salary'] / 100,
-        rating = double.parse(
-          (json['current_rate_count'] / json['current_rate_amount'])
-              .toStringAsFixed(1),
-        ),
+        rating = double.parse(((json['current_rate_amount'] ?? 0) /
+                (json['current_rate_count'] ?? 1))
+            .toStringAsFixed(2)),
         movement = json['transport'] == 'Feet'
             ? 0
             : json['transport'] == 'Bicycle'
@@ -96,13 +110,30 @@ class SimpleCourier {
     }
     x = x ?? 0;
     y = y ?? 0;
-    orderStatus = OrderStatus(
-        id: json['order_id'] ?? 0, status: json['order_status'] ?? '');
-    action = blocked!
-        ? 'Заблокирован'
-        : !ordering!
-            ? 'Неактивен'
-            : orderStatus!.toAction();
+
+    orderStatus = (json['order_status'] != null)
+        ? OrderStatus.values.firstWhere(
+            (e) => e.toString() == 'OrderStatus.' + json['order_status'])
+        : null;
+
+    if (blocked!) {
+      action = 'Заблокирован';
+    } else {
+      if (!works!) {
+        action = 'Неактивен';
+      } else {
+        if (!ordering!) {
+          action = 'Активен';
+        } else {
+          int id = json['order_id']!;
+          action = [OrderStatus.Cooking].contains(orderStatus)
+              ? 'Выполняет заказ №$id'
+              : [OrderStatus.ReadyForDelivery].contains(orderStatus)
+                  ? 'Забирает заказ №$id'
+                  : 'Доставляет заказ №$id';
+        }
+      }
+    }
   }
 
   String get json => jsonEncode({

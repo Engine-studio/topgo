@@ -52,7 +52,7 @@ class CuratorCard extends StatelessWidget {
                         accept: false,
                         onTap: () => showDialog(
                           context: context,
-                          builder: (_) {
+                          builder: (context) {
                             return ChangeNotifierProvider.value(
                               value: Provider.of<User>(context, listen: false),
                               child: CuratorDeletingDialog(curator: curator),

@@ -34,8 +34,7 @@ class User with ChangeNotifier {
     this.copy(User());
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-          builder: (BuildContext context) => LoginPage(init: false)),
+      MaterialPageRoute(builder: (context) => LoginPage(init: false)),
     );
   }
 
@@ -65,6 +64,7 @@ class User with ChangeNotifier {
     patronymic = json['patronymic'];
     phoneSource = json['phone'];
     image = json['picture'];
+    print(this.image);
   }
 
   void copy(User other) {
@@ -75,7 +75,7 @@ class User with ChangeNotifier {
     this.patronymic = other.patronymic;
     this.phoneSource = other.phoneSource;
     this.password = other.password;
-    this.image = other.password;
+    this.image = other.image;
     this.role = other.role;
     this.courier = other.courier;
     this.administrator = other.administrator;
@@ -100,7 +100,8 @@ class User with ChangeNotifier {
 
   String get fullName => '${surname!} ${name!} ${patronymic!}';
   String get phone => phoneString(phoneSource!);
-  String get photo => image != null ? 'https://$host/${image!}' : default_photo;
+  String get photo =>
+      this.image != null ? 'https://$host/${image!}' : default_photo;
 
   Map<String, String> get loginData => {
         'phone': phoneSource ?? '',
@@ -139,103 +140,73 @@ class User with ChangeNotifier {
       ? administrator!.shownRestaurants
       : curator!.shownRestaurants;
 
-  void addCourier(SimpleCourier courier) {
-    if (role == Role.Administrator) {
-      administrator!.couriers.add(courier);
-      administrator!.shownCouriers.add(courier);
-      administrator!.notify();
-    } else {
-      curator!.couriers.add(courier);
-      curator!.shownCouriers.add(courier);
-      curator!.notify();
-    }
-  }
+  set curators(List<SimpleCurator> curators) => {
+        administrator!.curators = curators,
+        administrator!.shownCurators = curators,
+        notify(),
+      };
 
-  void addCurator(SimpleCurator curator) {
-    administrator!.curators.add(curator);
-    administrator!.shownCurators.add(curator);
-    administrator!.notify();
-  }
+  List<SimpleCurator> get shownCurators => administrator!.shownCurators;
 
   void deleteCourier(SimpleCourier courier) {
     if (role == Role.Administrator) {
       administrator!.couriers.remove(courier);
       administrator!.shownCouriers.remove(courier);
-      administrator!.notify();
     } else {
       curator!.couriers.remove(courier);
       curator!.shownCouriers.remove(courier);
-      curator!.notify();
     }
-  }
-
-  void deleteCurator(SimpleCurator curator) {
-    administrator!.curators.remove(curator);
-    administrator!.shownCurators.remove(curator);
-    administrator!.notify();
-  }
-
-  void blockUnblockCourier(SimpleCourier courier) {
-    SimpleCourier _courier = courier;
-    _courier.blocked = !courier.blocked!;
-    _courier.action = _courier.blocked! ? 'Заблокирован' : 'Обновите данные';
-    if (role == Role.Administrator) {
-      int index = administrator!.couriers.indexOf(courier);
-      administrator!.couriers[index] = _courier;
-      index = administrator!.shownCouriers.indexOf(courier);
-      if (index != -1) administrator!.shownCouriers[index] = _courier;
-      administrator!.notify();
-    } else {
-      int index = curator!.couriers.indexOf(courier);
-      curator!.couriers[index] = _courier;
-      index = curator!.shownCouriers.indexOf(courier);
-      if (index != -1) curator!.shownCouriers[index] = _courier;
-      curator!.notify();
-    }
-  }
-
-  void discardCourier(SimpleCourier courier, DiscardType type) {
-    print('from ${courier.fullName} and term ${courier.terminal}');
-    SimpleCourier _courier = courier;
-    _courier.discard(type);
-    print('toto ${_courier.fullName} and term ${_courier.terminal}');
-    print('from ${courier.fullName} and term ${courier.cash}');
-    if (role == Role.Administrator) {
-      int index = administrator!.couriers.indexOf(courier);
-      administrator!.couriers[index] = _courier;
-      index = administrator!.shownCouriers.indexOf(courier);
-      if (index != -1) administrator!.shownCouriers[index] = _courier;
-      administrator!.notify();
-    } else {
-      int index = curator!.couriers.indexOf(courier);
-      curator!.couriers[index] = _courier;
-      index = curator!.shownCouriers.indexOf(courier);
-      if (index != -1) curator!.shownCouriers[index] = _courier;
-      curator!.notify();
-    }
-  }
-
-  void addRestaurant(Restaurant restaurant) {
-    if (role == Role.Administrator) {
-      administrator!.restaurants.add(restaurant);
-      administrator!.shownRestaurants.add(restaurant);
-      administrator!.notify();
-    } else {
-      curator!.restaurants.add(restaurant);
-      curator!.shownRestaurants.add(restaurant);
-      curator!.notify();
-    }
+    notify();
   }
 
   void deleteRestaurant(Restaurant restaurant) {
     if (role == Role.Administrator) {
       administrator!.restaurants.remove(restaurant);
       administrator!.shownRestaurants.remove(restaurant);
-      administrator!.notify();
     } else {
       curator!.restaurants.remove(restaurant);
       curator!.shownRestaurants.remove(restaurant);
-      curator!.notify();
     }
+    notify();
+  }
+
+  void deleteCurator(SimpleCurator curator) async {
+    administrator!.curators.remove(curator);
+    administrator!.shownCurators.remove(curator);
+    notify();
+  }
+
+  void blockUnblockCourier(SimpleCourier courier) {
+    SimpleCourier _courier = courier;
+    _courier.blocked = !courier.blocked!;
+    _courier.works = false;
+    _courier.action = _courier.blocked! ? 'Заблокирован' : 'Неактивен';
+    if (role == Role.Administrator) {
+      int index = administrator!.couriers.indexOf(courier);
+      administrator!.couriers[index] = _courier;
+      index = administrator!.shownCouriers.indexOf(courier);
+      if (index != -1) administrator!.shownCouriers[index] = _courier;
+    } else {
+      int index = curator!.couriers.indexOf(courier);
+      curator!.couriers[index] = _courier;
+      index = curator!.shownCouriers.indexOf(courier);
+      if (index != -1) curator!.shownCouriers[index] = _courier;
+    }
+    notify();
+  }
+
+  void discardCourier(SimpleCourier courier, DiscardType type) {
+    if (role == Role.Administrator) {
+      int index = administrator!.couriers.indexOf(courier);
+      administrator!.couriers[index].discard(type);
+      index = administrator!.shownCouriers.indexOf(courier);
+      if (index != -1) administrator!.shownCouriers[index].discard(type);
+    } else {
+      int index = curator!.couriers.indexOf(courier);
+      curator!.couriers[index].discard(type);
+      index = curator!.shownCouriers.indexOf(courier);
+      if (index != -1) curator!.shownCouriers[index].discard(type);
+    }
+    notify();
   }
 }

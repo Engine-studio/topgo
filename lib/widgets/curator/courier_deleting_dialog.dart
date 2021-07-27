@@ -31,8 +31,8 @@ class CourierDeletingDialog extends StatelessWidget {
           text: 'Принять',
           buttonType: ButtonType.Accept,
           onPressed: () async => {
-            if (courier.id != null) await deleteCourier(context, courier),
-            context.read<User>().deleteCourier(courier),
+            if (await deleteCourier(context, courier))
+              context.read<User>().deleteCourier(courier),
             Navigator.pop(context),
           },
         ),

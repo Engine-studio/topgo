@@ -9,6 +9,7 @@ class ProfilePhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(context.read<User>().photo);
     return Container(
       width: 74,
       height: 74,
@@ -20,7 +21,7 @@ class ProfilePhoto extends StatelessWidget {
             decoration: BoxDecoration(shape: BoxShape.circle),
             clipBehavior: Clip.hardEdge,
             child: Image.network(
-              context.watch<User>().photo,
+              context.read<User>().photo,
               fit: BoxFit.fill,
             ),
           ),

@@ -11,7 +11,7 @@ Future<List<topgo.Notification>> getNotifications(BuildContext context) async {
   );
 
   return jsonDecode(json)
-      .cast<List<Map<String, dynamic>>>()
+      .cast<Map<String, dynamic>>()
       .map<topgo.Notification>((json) => topgo.Notification.fromJson(json))
       .toList();
 }

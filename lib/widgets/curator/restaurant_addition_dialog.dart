@@ -1,6 +1,6 @@
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/widgets.dart';
-import 'package:topgo/api/restaurants.dart';
+import 'package:topgo/api/restaurants.dart' as api;
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/button.dart';
@@ -89,8 +89,8 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
                       open: [open],
                       close: [close],
                     ),
-                    await newRestaurant(context, restaurant),
-                    context.read<User>().addRestaurant(restaurant),
+                    if (await api.newRestaurant(context, restaurant))
+                      await api.getRestaurants(context),
                     Navigator.pop(context),
                   }
               },

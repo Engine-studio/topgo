@@ -31,9 +31,8 @@ class CuratorDeletingDialog extends StatelessWidget {
           text: 'Принять',
           buttonType: ButtonType.Accept,
           onPressed: () async => {
-            if (curator.id != null) await deleteCurator(context, curator),
-            // TODO: BUG remove this bug
-            context.read<User>().deleteCurator(curator),
+            if (await deleteCurator(context, curator))
+              context.read<User>().deleteCurator(curator),
             Navigator.pop(context),
           },
         ),

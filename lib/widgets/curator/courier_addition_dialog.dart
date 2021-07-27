@@ -1,6 +1,6 @@
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/widgets.dart';
-import 'package:topgo/api/couriers.dart';
+import 'package:topgo/api/couriers.dart' as api;
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/button.dart';
@@ -71,8 +71,8 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
                       phoneSource: number,
                       password: password.text,
                     ),
-                    await newCourier(context, courier),
-                    context.read<User>().addCourier(courier),
+                    if (await api.newCourier(context, courier))
+                      await api.getCouriers(context),
                     Navigator.pop(context),
                   }
               },
