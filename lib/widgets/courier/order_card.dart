@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+import 'package:topgo/api/work.dart';
 import 'package:topgo/models/order.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
-import 'package:topgo/models/user.dart';
+import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/address_holder.dart';
 import 'package:topgo/widgets/border_box.dart';
@@ -14,6 +14,9 @@ import 'package:topgo/widgets/courier/problem_dialog.dart';
 import 'package:topgo/widgets/flag.dart';
 import 'package:topgo/widgets/map/map_card.dart';
 import 'package:topgo/widgets/map/map_marker.dart';
+import 'package:topgo/api/orders.dart' as api;
+import 'package:provider/provider.dart';
+import 'package:topgo/models/user.dart';
 
 class OrderCard extends StatelessWidget {
   final Order order;
@@ -26,6 +29,7 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SimpleCurator curator;
     return Container(
       child: Column(
         children: [
@@ -81,7 +85,11 @@ class OrderCard extends StatelessWidget {
                       child: Button(
                         text: 'Принять',
                         buttonType: ButtonType.Accept,
-                        onPressed: () async => {},
+                        onPressed: () async => {
+                          context.read<User>().removeRequest(order),
+                          if (await api.acceptOrder(context, order))
+                            api.getCurrentOrders(context),
+                        },
                       ),
                     ),
                     SizedBox(
@@ -90,32 +98,46 @@ class OrderCard extends StatelessWidget {
                         text: 'Отказаться',
                         buttonType: ButtonType.Decline,
                         filled: false,
-                        onPressed: () async => {},
+                        onPressed: () async => {
+                          context.read<User>().removeRequest(order),
+                          if (await api.declineOrder(context, order))
+                            api.getCurrentOrders(context),
+                        },
                       ),
                     ),
                   ],
                 )
               : Column(
                   children: [
-                    Button(
-                      text: 'Забрал',
-                      buttonType: ButtonType.Panel,
-                      onPressed: () async => {},
-                    ),
+                    order.status != OrderStatus.Delivering
+                        ? Button(
+                            text: 'Забрал',
+                            buttonType: ButtonType.Panel,
+                            onPressed: () async => {
+                              if (await api.pickOrder(context, order))
+                                api.getCurrentOrders(context),
+                            },
+                          )
+                        : Button(
+                            text: 'Доставил',
+                            buttonType: ButtonType.Panel,
+                            onPressed: () async => {
+                              if (await api.deliverOrder(context, order))
+                                api.getCurrentOrders(context),
+                            },
+                          ),
                     SizedBox(height: 8),
                     Button(
                       text: 'ЧП',
                       buttonType: ButtonType.Decline,
                       filled: false,
-                      onPressed: () => showDialog(
-                        context: context,
-                        builder: (_) {
-                          return ChangeNotifierProvider.value(
-                            value: Provider.of<User>(context, listen: false),
-                            child: ProblemDialog(),
-                          );
-                        },
-                      ),
+                      onPressed: () async => {
+                        curator = await callHelper(context),
+                        showDialog(
+                          context: context,
+                          builder: (_) => ProblemDialog(curator: curator),
+                        )
+                      },
                     ),
                   ],
                 ),

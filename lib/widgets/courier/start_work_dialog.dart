@@ -71,7 +71,7 @@ class StartWorkDialog extends StatelessWidget {
                   hasTerminal: terminal,
                 ),
                 if (await startWorkShift(context, shift))
-                  context.read<User>().courier!.startWorkShift(shift: shift),
+                  context.read<User>().startWorkShift(shift: shift),
                 Navigator.pop(context),
               },
           },

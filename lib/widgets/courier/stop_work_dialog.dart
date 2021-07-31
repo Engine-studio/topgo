@@ -33,7 +33,7 @@ class StopWorkDialog extends StatelessWidget {
           filled: false,
           onPressed: () async => {
             if (await stopWorkShift(context))
-              context.read<User>().courier!.stopWorkShift(),
+              context.read<User>().stopWorkShift(),
             Navigator.pop(context),
           },
         ),

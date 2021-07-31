@@ -64,16 +64,19 @@ class _MenuPageState extends State<MenuPage> {
   void extraPolling() async {
     try {
       print('extra polling');
+      print(thisContext!.read<User>().courier!.shift.toString());
       if (role == Role.Courier &&
           thisContext != null &&
           thisContext!.read<User>().courier!.shift != null &&
           [1, 2].contains(thisContext!.read<User>().courier!.orders.length)) {
+        print('extra polling PASSED');
         LocationData locationData = await _location.getLocation();
         await sendLocation(thisContext!, locationData);
         OrderRequest orderRequest = OrderRequest.create(
           courierId: thisContext!.read<User>().id!,
           locationData: locationData,
         );
+        thisContext!.read<User>().removeRequests();
         await getNewOrder(thisContext!, orderRequest);
       }
     } catch (e) {
@@ -95,7 +98,7 @@ class _MenuPageState extends State<MenuPage> {
     if (timer == null)
       timer = Timer.periodic(Duration(minutes: 1), (t) => polling());
     if (extra == null)
-      extra = Timer.periodic(Duration(minutes: 10), (t) => extraPolling());
+      extra = Timer.periodic(Duration(minutes: 5), (t) => extraPolling());
     List<String> icons = Items().bottomNavBarIcons(context);
     List<AppBarItem> appBarItems = Items().appBarItems(context);
     return Scaffold(

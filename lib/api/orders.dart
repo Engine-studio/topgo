@@ -1,4 +1,4 @@
-import 'dart:convert' show jsonDecode, jsonEncode;
+import 'dart:convert' show jsonDecode;
 
 import 'package:topgo/api/general.dart';
 import 'package:flutter/widgets.dart';
@@ -9,29 +9,30 @@ import 'package:topgo/models/user.dart';
 Future<List<Order>> getOrdersHistory(BuildContext context) async {
   String json = await apiRequest(
     context: context,
-    route: '/api/ordering/get_orders_by_courier_id',
+    route: '/api/ordering/get_orders_by_couriers_id',
   );
 
-  return jsonDecode(json)
-      .cast<List<Map<String, dynamic>>>()
+  context.read<User>().ordersHistory = jsonDecode(json)
+      .cast<Map<String, dynamic>>()
       .map<Order>((json) => Order.fromJson(json))
       .toList();
+
+  return Future.value([]);
 }
 
-Future<List<Order>> getCurrentOrders(
-  BuildContext context,
-  int sessionId,
-) async {
+Future<List<Order>> getCurrentOrders(BuildContext context) async {
   String json = await apiRequest(
     context: context,
     route: '/api/ordering/get_orders_by_session_id',
-    body: jsonEncode({'id': sessionId}),
+    body: context.read<User>().courier!.jsonSessionId,
   );
 
-  return jsonDecode(json)
-      .cast<List<Map<String, dynamic>>>()
+  context.read<User>().orders = jsonDecode(json)
+      .cast<Map<String, dynamic>>()
       .map<Order>((json) => Order.fromJson(json))
       .toList();
+
+  return Future.value([]);
 }
 
 Future<void> getNewOrder(
@@ -48,34 +49,61 @@ Future<void> getNewOrder(
         jsonDecode(json).cast<Map<String, dynamic>>(),
       ));
 
-  context.read<User>().courier!.notify();
+  context.read<User>().notify();
 }
 
-Future<void> acceptOrder(BuildContext context, Order order) async =>
+Future<bool> acceptOrder(BuildContext context, Order order) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/ordering/take_order',
       body: order.jsonID,
     );
+    return true;
+  } catch (e) {
+    print(e.toString());
+    return false;
+  }
+}
 
-Future<void> declineOrder(BuildContext context, Order order) async =>
+Future<bool> declineOrder(BuildContext context, Order order) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/ordering/refuse_order',
       body: order.jsonID,
     );
+    return true;
+  } catch (e) {
+    print(e.toString());
+    return false;
+  }
+}
 
-// TODO: implement of order status checking
-Future<void> pickOrder(BuildContext context, Order order) async =>
+Future<bool> pickOrder(BuildContext context, Order order) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/ordering/pick_order',
       body: order.jsonID,
     );
+    return true;
+  } catch (e) {
+    print(e.toString());
+    return false;
+  }
+}
 
-Future<void> deliverOrder(BuildContext context, Order order) async =>
+Future<bool> deliverOrder(BuildContext context, Order order) async {
+  try {
     await apiRequest(
       context: context,
       route: '/api/ordering/set_delivered_order',
       body: order.jsonID,
     );
+    return true;
+  } catch (e) {
+    print(e.toString());
+    return false;
+  }
+}

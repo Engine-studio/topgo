@@ -18,9 +18,11 @@ Future<bool> startWorkShift(
       route: '/api/ordering/create_session',
       body: shift.json,
     );
-    return Future.value(true);
-  } catch (_) {
-    return Future.value(false);
+
+    return await logInAgain(context);
+  } catch (e) {
+    print(e.toString());
+    return false;
   }
 }
 
@@ -30,9 +32,11 @@ Future<bool> stopWorkShift(BuildContext context) async {
       context: context,
       route: '/api/ordering/cancel_session',
     );
-    return Future.value(true);
-  } catch (_) {
-    return Future.value(false);
+
+    return await logInAgain(context);
+  } catch (e) {
+    print(e.toString());
+    return false;
   }
 }
 
@@ -42,7 +46,13 @@ Future<SimpleCurator> callHelper(BuildContext context) async {
     route: '/api/users/curators/get_random',
   );
 
-  return SimpleCurator.fromJson(jsonDecode(json).cast<Map<String, dynamic>>());
+  try {
+    SimpleCurator.fromJson(jsonDecode(json));
+  } catch (e) {
+    print(e.toString());
+  }
+
+  return SimpleCurator.fromJson(jsonDecode(json));
 }
 
 Future<void> sendLocation(

@@ -1,3 +1,5 @@
+import 'dart:convert' show jsonEncode;
+
 import 'package:topgo/models/order.dart';
 import 'package:topgo/models/simple_courier.dart';
 
@@ -10,6 +12,10 @@ class Courier {
 
   List<Order> history, shownHistory;
   WorkShift? shift;
+
+  String get jsonSessionId => jsonEncode({
+        "id": shift != null ? shift!.id : -1,
+      });
 
   Courier.fromJson(
     Map<String, dynamic> json,
@@ -24,25 +30,11 @@ class Courier {
         cash = json['cash'] / 100,
         terminal = json['term'] / 100,
         salary = json['salary'] / 100,
-        // TODO: remove it
-        orders = [Order.create()],
-        ordersRequest = [
-          Order.create(),
-          Order.create(),
-        ],
+        orders = [],
+        ordersRequest = [],
         history = [],
         shownHistory = [],
         shift = session != null ? WorkShift.fromJson(session) : null;
-
-  void startWorkShift({required WorkShift shift}) {
-    this.shift = shift;
-    notify();
-  }
-
-  void stopWorkShift() {
-    this.shift = null;
-    notify();
-  }
 
   void updateView(String key) {
     key = key.toLowerCase();

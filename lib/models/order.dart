@@ -3,6 +3,7 @@ import 'dart:convert' show jsonEncode;
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:topgo/functions/naive_time.dart';
+import 'package:topgo/models/simple_courier.dart';
 
 class OrderRequest {
   int courierId;
@@ -27,6 +28,7 @@ class Order {
   double? appearance, behavior, sum;
   List<int>? start, stop;
   bool? withCash;
+  OrderStatus? status;
 
   Order.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -41,7 +43,11 @@ class Order {
         //appearance, behavior
         start = parseNaiveDateTime(json['take_datetime']),
         stop = parseNaiveDateTime(json['delivery_datetime']),
-        sum = json['courier_share'] / 100;
+        sum = json['courier_share'] / 100,
+        status = (json['status'] != null)
+            ? OrderStatus.values.firstWhere(
+                (e) => e.toString() == 'OrderStatus.' + json['status'])
+            : null;
 
   Order.create()
       : id = 123,

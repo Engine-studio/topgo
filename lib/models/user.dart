@@ -4,6 +4,7 @@ import 'package:topgo/functions/phone_string.dart';
 import 'package:topgo/models/administrator.dart';
 import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/curator.dart';
+import 'package:topgo/models/order.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/api/general.dart';
@@ -207,6 +208,37 @@ class User with ChangeNotifier {
       index = curator!.shownCouriers.indexOf(courier);
       if (index != -1) curator!.shownCouriers[index].discard(type);
     }
+    notify();
+  }
+
+  void startWorkShift({required WorkShift shift}) {
+    this.courier!.shift = shift;
+    notify();
+  }
+
+  void stopWorkShift() {
+    this.courier!.shift = null;
+    notify();
+  }
+
+  set orders(List<Order> orders) => {
+        this.courier!.orders = orders,
+        notify(),
+      };
+
+  set ordersHistory(List<Order> orders) => {
+        this.courier!.history = orders,
+        this.courier!.shownHistory = orders,
+        notify(),
+      };
+
+  void removeRequest(Order order) {
+    this.courier!.ordersRequest.remove(order);
+    notify();
+  }
+
+  void removeRequests() {
+    this.courier!.ordersRequest = [];
     notify();
   }
 }

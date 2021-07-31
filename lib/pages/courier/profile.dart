@@ -47,7 +47,7 @@ class CourierProfileTab extends StatelessWidget {
                     buttonType: ButtonType.Panel,
                     onPressed: () => showDialog(
                       context: context,
-                      builder: (_) {
+                      builder: (context) {
                         return ChangeNotifierProvider.value(
                           value: Provider.of<User>(context, listen: false),
                           child: StartWorkDialog(),
@@ -116,7 +116,7 @@ class CourierProfileTab extends StatelessWidget {
                     buttonType: ButtonType.Decline,
                     onPressed: () => showDialog(
                       context: context,
-                      builder: (_) {
+                      builder: (context) {
                         return ChangeNotifierProvider.value(
                           value: Provider.of<User>(context, listen: false),
                           child: StopWorkDialog(),
