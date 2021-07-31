@@ -3,7 +3,6 @@ import 'dart:convert' show jsonEncode;
 import 'package:topgo/api/general.dart';
 import 'package:topgo/functions/naive_time.dart';
 import 'package:topgo/functions/phone_string.dart';
-import 'package:topgo/models/order.dart';
 
 enum DiscardType {
   Full,
@@ -62,7 +61,14 @@ enum OrderStatus {
 
 class SimpleCourier {
   int? id, movement;
-  String? surname, name, patronymic, phoneSource, action, image, password;
+  String? surname,
+      name,
+      patronymic,
+      phoneSource,
+      action,
+      image,
+      password,
+      email;
   double? rating, cash, terminal, salary, x, y;
   bool? ordering, blocked, works;
   OrderStatus? orderStatus;
@@ -73,6 +79,7 @@ class SimpleCourier {
     required this.surname,
     required this.patronymic,
     required this.phoneSource,
+    required this.email,
     required this.password,
   })  : action = '',
         rating = 0 / 0;
@@ -141,6 +148,7 @@ class SimpleCourier {
         "name": name!,
         "patronymic": patronymic!,
         "phone": phoneSource!,
+        "email": email!,
         "password": password!,
       });
 

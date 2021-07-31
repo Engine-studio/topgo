@@ -5,7 +5,7 @@ import 'package:topgo/functions/naive_time.dart';
 class Restaurant {
   int? id;
   double? x, y;
-  String? name, address, phone, password;
+  String? name, address, phone, password, email;
   List<List<int>>? open, close;
 
   static List<List<int>>? castJson(dynamic j) {
@@ -29,6 +29,7 @@ class Restaurant {
     required this.name,
     required this.address,
     required this.phone,
+    required this.email,
     required this.password,
     required this.open,
     required this.close,
@@ -38,6 +39,7 @@ class Restaurant {
         "name": name!,
         "address": address!,
         "phone": phone!,
+        "email": email!,
         "password": password!,
         "working_from": open!.map((time) => toNaiveTime(time)).toList(),
         "working_till": close!.map((time) => toNaiveTime(time)).toList(),

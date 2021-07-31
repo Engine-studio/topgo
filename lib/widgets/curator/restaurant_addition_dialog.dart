@@ -2,12 +2,10 @@ import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/restaurants.dart' as api;
 import 'package:topgo/models/restaurant.dart';
-import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/courier/time_holder.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
-import 'package:provider/provider.dart';
 
 class RestaurantAdditionDialog extends StatefulWidget {
   const RestaurantAdditionDialog({Key? key}) : super(key: key);
@@ -18,8 +16,9 @@ class RestaurantAdditionDialog extends StatefulWidget {
 }
 
 class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
-  late TextEditingController name, address, password;
+  late TextEditingController name, address, password, email;
   late MaskedTextController phone;
+  late RegExp regExp;
   List<int> open = [8, 0], close = [23, 0];
 
   @override
@@ -29,6 +28,9 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
     address = TextEditingController();
     phone = MaskedTextController(mask: '+0 (000) 000-00-00');
     password = TextEditingController();
+    email = TextEditingController();
+    regExp = RegExp(r"^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$",
+        caseSensitive: false, multiLine: false);
   }
 
   @override
@@ -39,13 +41,15 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
       child: SingleChildScrollView(
         child: DialogBox(
           title: 'Добавление ресторана',
-          height: 494,
+          height: 546,
           children: [
             Input(text: 'Название', controller: name),
             SizedBox(height: 8),
             Input(text: 'Адрес', controller: address),
             SizedBox(height: 8),
             Input(text: 'Телефон', maskedController: phone),
+            SizedBox(height: 8),
+            Input(text: 'Почта', controller: email),
             SizedBox(height: 8),
             Input(text: 'Пароль', controller: password),
             SizedBox(height: 24),
@@ -78,6 +82,8 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
                     address.text != '' &&
                     number.length == 11 &&
                     password.text != '' &&
+                    email.text != '' &&
+                    regExp.hasMatch(email.text) &&
                     (open[0] < close[0] ||
                         ((open[0] == close[0]) && open[1] < close[1])))
                   {
@@ -85,6 +91,7 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
                       name: name.text,
                       address: address.text,
                       phone: number,
+                      email: email.text,
                       password: password.text,
                       open: [open],
                       close: [close],

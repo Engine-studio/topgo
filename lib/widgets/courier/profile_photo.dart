@@ -9,7 +9,6 @@ class ProfilePhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<User>().photo);
     return Container(
       width: 74,
       height: 74,

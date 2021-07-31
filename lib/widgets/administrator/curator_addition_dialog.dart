@@ -2,11 +2,9 @@ import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/curators.dart' as api;
 import 'package:topgo/models/simple_curator.dart';
-import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
-import 'package:provider/provider.dart';
 
 class CuratorAdditionDialog extends StatefulWidget {
   const CuratorAdditionDialog({Key? key}) : super(key: key);

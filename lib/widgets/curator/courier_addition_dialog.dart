@@ -2,11 +2,9 @@ import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/couriers.dart' as api;
 import 'package:topgo/models/simple_courier.dart';
-import 'package:topgo/models/user.dart';
 import 'package:topgo/widgets/button.dart';
 import 'package:topgo/widgets/dialog.dart';
 import 'package:topgo/widgets/input.dart';
-import 'package:provider/provider.dart';
 
 class CourierAdditionDialog extends StatefulWidget {
   const CourierAdditionDialog({Key? key}) : super(key: key);
@@ -20,7 +18,10 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
   late TextEditingController surname;
   late TextEditingController patronymic;
   late MaskedTextController phone;
+  late TextEditingController email;
   late TextEditingController password;
+  late RegExp regExp;
+
   @override
   void initState() {
     super.initState();
@@ -28,7 +29,10 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
     surname = TextEditingController();
     patronymic = TextEditingController();
     phone = MaskedTextController(mask: '+0 (000) 000-00-00');
+    email = TextEditingController();
     password = TextEditingController();
+    regExp = RegExp(r"^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$",
+        caseSensitive: false, multiLine: false);
   }
 
   @override
@@ -39,7 +43,7 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
       child: SingleChildScrollView(
         child: DialogBox(
           title: 'Добавление курьера',
-          height: 451,
+          height: 503,
           children: [
             Input(text: 'Имя', controller: name),
             SizedBox(height: 8),
@@ -48,6 +52,8 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
             Input(text: 'Отчество', controller: patronymic),
             SizedBox(height: 8),
             Input(text: 'Телефон', maskedController: phone),
+            SizedBox(height: 8),
+            Input(text: 'Почта', controller: email),
             SizedBox(height: 8),
             Input(text: 'Пароль', controller: password),
             SizedBox(height: 24),
@@ -62,6 +68,8 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
                     surname.text != '' &&
                     patronymic.text != '' &&
                     number.length == 11 &&
+                    email.text != '' &&
+                    regExp.hasMatch(email.text) &&
                     password.text != '')
                   {
                     courier = SimpleCourier.create(
@@ -69,6 +77,7 @@ class _CourierAdditionDialogState extends State<CourierAdditionDialog> {
                       surname: surname.text,
                       patronymic: patronymic.text,
                       phoneSource: number,
+                      email: email.text,
                       password: password.text,
                     ),
                     if (await api.newCourier(context, courier))
