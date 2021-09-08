@@ -102,6 +102,7 @@ class _MenuPageState extends State<MenuPage> {
     List<String> icons = Items().bottomNavBarIcons(context);
     List<AppBarItem> appBarItems = Items().appBarItems(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: Appbar(
         appBarItem: appBarItems[currentIndex],
         onPressed: () {},
