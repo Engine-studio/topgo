@@ -17,7 +17,7 @@ class MoneyHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 110,
+      width: 100,
       height: 70,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

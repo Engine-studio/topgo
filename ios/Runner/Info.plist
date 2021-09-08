@@ -31,9 +31,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Upload image from camera for profile photo</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>I need it </string>
+	<string>Необходимо для трекинга вашего местоположения во время смены и фиксирования пройденного расстояния во время доставки</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Because</string>
+	<string>Необходимо для трекинга вашего местоположения во время смены и фиксирования пройденного расстояния во время доставки</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Upload images for profile photo</string>
 	<key>UILaunchStoryboardName</key>
