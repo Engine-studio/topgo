@@ -111,6 +111,8 @@ class _MyAppState extends State<MyApp> {
                   ),
                 )
               : AnimatedSplashScreen.withScreenFunction(
+                  duration: 1000,
+                  animationDuration: Duration(milliseconds: 900),
                   splashIconSize: double.infinity,
                   backgroundColor: Color(0xFF16A7D8),
                   splash: Container(

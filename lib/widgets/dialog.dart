@@ -21,7 +21,7 @@ class DialogBox extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       child: Container(
-        height: height,
+        height: height + 25,
         width: double.infinity,
         padding: this.padding,
         decoration: BoxDecoration(

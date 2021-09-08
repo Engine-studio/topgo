@@ -21,7 +21,7 @@ class CuratorDeletingDialog extends StatelessWidget {
       height: 267,
       children: [
         Text(
-          'Вы собираетесь удалить аккаунт\nданного куратора.' +
+          'Вы собираетесь удалить аккаунт данного куратора.' +
               '\n\nВы точно хотите это сделать?',
           style: TxtStyle.mainText,
           textAlign: TextAlign.center,

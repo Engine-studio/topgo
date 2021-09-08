@@ -21,7 +21,7 @@ class CourierDeletingDialog extends StatelessWidget {
       height: 267,
       children: [
         Text(
-          'Вы собираетесь удалить аккаунт\nданного курьера.' +
+          'Вы собираетесь удалить аккаунт данного курьера.' +
               '\n\nВы точно хотите это сделать?',
           style: TxtStyle.mainText,
           textAlign: TextAlign.center,

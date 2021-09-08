@@ -21,9 +21,9 @@ class ProblemDialog extends StatelessWidget {
       height: 403,
       children: [
         Text(
-          'Если у вас произошло что-то\n' +
-              'непредвиденное, свяжитесь\n' +
-              'с куратором и ждите\n' +
+          'Если у вас произошло что-то ' +
+              'непредвиденное, свяжитесь ' +
+              'с куратором и ждите ' +
               'дальшейших указаний',
           style: TxtStyle.smallText,
           textAlign: TextAlign.center,
