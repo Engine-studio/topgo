@@ -57,7 +57,7 @@ class FinanceCard extends StatelessWidget {
                       bordered: false,
                     ),
                     MoneyHolder(
-                      text: 'Оплата\nпо терминалу',
+                      text: 'Оплата картой',
                       sum: courier.terminal!,
                       bordered: false,
                     ),

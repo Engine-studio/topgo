@@ -32,7 +32,7 @@ class CourierProfileTab extends StatelessWidget {
                   text: 'Оплата наличными',
                   sum: context.read<User>().courier!.cash),
               MoneyHolder(
-                  text: 'Оплата\nпо терминалу',
+                  text: 'Оплата картой',
                   sum: context.read<User>().courier!.terminal),
               MoneyHolder(
                   text: 'Заработная плата',
