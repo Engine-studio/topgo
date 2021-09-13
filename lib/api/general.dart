@@ -31,7 +31,10 @@ Future<String> apiRequest({
     );
 
     print('');
+    print('REQ:');
     print('route: $route');
+    print('body: $body');
+    print('RESP:');
     print('code: ${response.statusCode}');
     print('body: ${response.body}');
     print('');
