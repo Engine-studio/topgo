@@ -45,30 +45,31 @@ class User with ChangeNotifier {
     this.password,
   })  : logined = true,
         token = json['jwt'] {
+    Map<String, dynamic> jsonb = Map();
     if (json.containsKey('admin')) {
       role = Role.Administrator;
-      json = json['admin'];
-      administrator = Administrator.fromJson(json, notify: notify);
+      jsonb = json['admin'];
+      administrator = Administrator.fromJson(jsonb, notify: notify);
     } else if (json.containsKey('curator')) {
       role = Role.Curator;
-      json = json['curator'];
-      curator = Curator(json, notify: notify);
+      jsonb = json['curator'];
+      curator = Curator(jsonb, notify: notify);
     } else if (json.containsKey('courier')) {
       role = Role.Courier;
       Map<String, dynamic>? session = json['session'];
-      json = json['courier'];
-      courier = Courier.fromJson(json, session, notify: notify);
+      jsonb = json['courier'];
+      courier = Courier.fromJson(jsonb, session, notify: notify);
     }
-    id = json['id'];
-    surname = json['surname'];
-    name = json['name'];
-    patronymic = json['patronymic'];
-    phoneSource = json['phone'];
-    image = json['picture'];
-    print(this.image);
+    id = jsonb['id'];
+    surname = jsonb['surname'];
+    name = jsonb['name'];
+    patronymic = jsonb['patronymic'];
+    phoneSource = jsonb['phone'];
+    image = jsonb['picture'];
   }
 
   void copy(User other) {
+    this.id = other.id;
     this.logined = other.logined;
     this.token = other.token;
     this.surname = other.surname;
@@ -212,12 +213,10 @@ class User with ChangeNotifier {
   }
 
   void startWorkShift({required WorkShift shift}) {
-    this.courier!.shift = shift;
     notify();
   }
 
   void stopWorkShift() {
-    this.courier!.shift = null;
     notify();
   }
 

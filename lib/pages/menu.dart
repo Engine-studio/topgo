@@ -46,6 +46,7 @@ class _MenuPageState extends State<MenuPage> {
           showNotification(notification);
         if (thisContext!.read<User>().courier!.shift != null) {
           LocationData locationData = await _location.getLocation();
+          await clearLocation(thisContext!);
           await sendLocation(thisContext!, locationData);
           OrderRequest orderRequest = OrderRequest.create(
             courierId: thisContext!.read<User>().id!,
@@ -53,8 +54,7 @@ class _MenuPageState extends State<MenuPage> {
           );
           if (thisContext!.read<User>().courier!.orders.length == 0)
             await getNewOrder(thisContext!, orderRequest);
-        } else
-          await clearLocation(context);
+        }
       }
     } catch (e) {
       print(e.toString());
@@ -64,7 +64,6 @@ class _MenuPageState extends State<MenuPage> {
   void extraPolling() async {
     try {
       print('extra polling');
-      print(thisContext!.read<User>().courier!.shift.toString());
       if (role == Role.Courier &&
           thisContext != null &&
           thisContext!.read<User>().courier!.shift != null &&
@@ -94,7 +93,7 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     if (role == null) role = context.read<User>().role;
-    if (thisContext == null) thisContext = context;
+    thisContext = context;
     if (timer == null)
       timer = Timer.periodic(Duration(minutes: 1), (t) => polling());
     if (extra == null)
