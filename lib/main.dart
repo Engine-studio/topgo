@@ -9,6 +9,7 @@ import 'package:topgo/models/notification.dart' as not;
 import 'package:topgo/pages/login.dart';
 import 'package:topgo/pages/menu.dart';
 import 'package:topgo/styles.dart';
+import 'package:topgo/widgets/button.dart';
 
 import 'models/user.dart';
 
@@ -63,87 +64,128 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  PermissionStatus? _permissionGranted;
-  Location _location = Location();
-
-  Future<void> _checkPermissions() async {
-    final PermissionStatus permissionGrantedResult =
-        await _location.hasPermission();
-    setState(() {
-      _permissionGranted = permissionGrantedResult;
-    });
-    _requestPermission();
-  }
-
-  Future<void> _requestPermission() async {
-    if (_permissionGranted != PermissionStatus.granted) {
-      final PermissionStatus permissionRequestedResult =
-          await _location.requestPermission();
-      setState(() {
-        _permissionGranted = permissionRequestedResult;
-      });
-    }
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    _checkPermissions();
     return ChangeNotifierProvider<User>(
       create: (_) => User(),
       builder: (context, _) {
         return MaterialApp(
           title: 'TopGo',
           debugShowCheckedModeBanner: false,
-          home: _permissionGranted != PermissionStatus.granted
-              ? Container(
-                  decoration: BoxDecoration(
-                    gradient: GrdStyle.splash,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 75),
-                    child: Image.asset('assets/images/logo.png'),
-                  ),
-                )
-              : AnimatedSplashScreen.withScreenFunction(
-                  duration: 1000,
-                  animationDuration: Duration(milliseconds: 900),
-                  splashIconSize: double.infinity,
-                  backgroundColor: Color(0xFF16A7D8),
-                  splash: Container(
-                    decoration: BoxDecoration(
-                      gradient: GrdStyle.splash,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 75),
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                  ),
-                  screenFunction: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    String? phone = prefs.getString('phone');
-                    String? password = prefs.getString('password');
-                    User user = await logInFirst(phone, password);
+          home: AnimatedSplashScreen.withScreenFunction(
+            duration: 1000,
+            animationDuration: Duration(milliseconds: 900),
+            splashIconSize: double.infinity,
+            backgroundColor: Color(0xFF16A7D8),
+            splash: Container(
+              decoration: BoxDecoration(
+                gradient: GrdStyle.splash,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 75),
+                child: Image.asset('assets/images/logo.png'),
+              ),
+            ),
+            screenFunction: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              String? phone = prefs.getString('phone');
+              String? password = prefs.getString('password');
+              User user = await logInFirst(phone, password);
+              context.read<User>().copy(user);
 
-                    Location location = Location();
+              Location location = Location();
 
-                    while (await location.hasPermission() !=
-                        PermissionStatus.granted)
-                      await location.requestPermission();
-
-                    context.read<User>().copy(user);
-
-                    return user.logined ? MenuPage() : LoginPage();
-                  },
-                ),
+              return (await location.hasPermission() !=
+                      PermissionStatus.granted)
+                  ? RequestPage()
+                  : user.logined
+                      ? MenuPage()
+                      : LoginPage();
+            },
+          ),
         );
       },
+    );
+  }
+}
+
+class RequestPage extends StatelessWidget {
+  const RequestPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(
+          vertical: 78,
+          horizontal: 30,
+        ),
+        decoration: BoxDecoration(gradient: GrdStyle.splash),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/images/logo.png',
+                width: 100,
+                height: 50,
+              ),
+              Spacer(flex: 75),
+              Text(
+                'Использование геопозиции',
+                style: TxtStyle.mainHeader.copyWith(
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+              Spacer(flex: 50),
+              Text(
+                'Чтобы воспользоваться приложением TopGo разрешите' +
+                    ' использовать данные о вашем местоположении',
+                textAlign: TextAlign.center,
+                style: TxtStyle.mainText.copyWith(
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+              Spacer(flex: 20),
+              Text(
+                'Мы собираем данные о вашем местоположении для расчета сто' +
+                    'имости доставки и трекинга процесса доставки кураторами' +
+                    ' в режиме реального времени',
+                textAlign: TextAlign.center,
+                style: TxtStyle.mainText.copyWith(
+                  color: ClrStyle.lightBackground,
+                ),
+              ),
+              Spacer(flex: 87),
+              Button(
+                text: 'Принять',
+                buttonType: ButtonType.Accept,
+                onPressed: () async {
+                  Location location = Location();
+
+                  while (await location.hasPermission() !=
+                      PermissionStatus.granted)
+                    await location.requestPermission();
+
+                  if (await location.hasPermission() ==
+                      PermissionStatus.granted)
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => MyApp()));
+                },
+              ),
+              SizedBox(height: 20),
+              Button(
+                text: 'Отказаться',
+                buttonType: ButtonType.Decline,
+                onPressed: () async {},
+              ),
+              Spacer(flex: 202),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
