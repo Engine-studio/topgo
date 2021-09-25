@@ -18,19 +18,21 @@ class CourierHistoryTab extends StatelessWidget {
         if (snapshot.hasError) return Error(text: snapshot.error!.toString());
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
+          List<Order> shown = context.watch<User>().shownHistory;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SingleChildScrollView(
-              child: Column(
+              child: Wrap(
+                runSpacing: 8,
                 children: [
-                  SizedBox(height: 16),
-                  ...context.watch<User>().courier!.shownHistory.map(
-                        (order) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: OrderHistoryCard(order: order),
-                        ),
-                      ),
-                  SizedBox(height: 16),
+                  SizedBox(width: 12),
+                  ...shown
+                      .map((order) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: OrderHistoryCard(order: order),
+                          ))
+                      .toList(),
+                  SizedBox(width: 8),
                 ],
               ),
             ),

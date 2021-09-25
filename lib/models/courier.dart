@@ -43,8 +43,10 @@ class Courier {
     } else {
       List<Order> res = [];
       for (Order item in this.history) {
-        if (item.fromAddress!.toLowerCase().contains(key) ||
-            item.toAddress!.toLowerCase().contains(key)) res.add(item);
+        if ((item.fromAddress != null &&
+                item.fromAddress!.toLowerCase().contains(key)) ||
+            (item.toAddress != null &&
+                item.toAddress!.toLowerCase().contains(key))) res.add(item);
       }
       this.shownHistory = res;
     }

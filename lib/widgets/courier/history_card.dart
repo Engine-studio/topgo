@@ -19,25 +19,27 @@ class OrderHistoryCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
-            AddressHolder(dist: 'Откуда:', address: order.fromAddress!),
+            AddressHolder(
+                dist: 'Откуда:', address: order.fromAddress ?? 'Not found'),
             SizedBox(height: 8),
-            AddressHolder(dist: 'Куда:', address: order.toAddress!),
+            AddressHolder(
+                dist: 'Куда:', address: order.toAddress ?? 'Not found'),
             SizedBox(height: 18),
             OrderInfoHolder(
-              time: order.total!,
+              time: order.total ?? 0,
               payment: order.withCash! ? 'Наличные' : 'Терминал',
-              sum: order.sum!,
+              sum: order.sum ?? 0,
             ),
             SizedBox(height: 18),
             Row(
               children: [
                 Flexible(
-                  flex: 6,
+                  flex: 5,
                   child: Row(
                     children: [
                       Text('Внешний вид:', style: TxtStyle.smallText),
                       SizedBox(width: 8),
-                      StarHolder(rating: order.appearance!),
+                      StarHolder(rating: order.appearance ?? 0),
                     ],
                   ),
                 ),
@@ -49,7 +51,7 @@ class OrderHistoryCard extends StatelessWidget {
                       Text('Получен:', style: TxtStyle.smallText),
                       SizedBox(width: 8),
                       Text(
-                        timeString(order.start!),
+                        timeString(order.start ?? [0, 0]),
                         style: TxtStyle.smallText,
                       ),
                     ],
@@ -61,12 +63,12 @@ class OrderHistoryCard extends StatelessWidget {
             Row(
               children: [
                 Flexible(
-                  flex: 6,
+                  flex: 5,
                   child: Row(
                     children: [
                       Text('Вежливость:', style: TxtStyle.smallText),
                       SizedBox(width: 8),
-                      StarHolder(rating: order.behavior!),
+                      StarHolder(rating: order.behavior ?? 0),
                     ],
                   ),
                 ),
@@ -78,7 +80,7 @@ class OrderHistoryCard extends StatelessWidget {
                       Text('Доставлен:', style: TxtStyle.smallText),
                       SizedBox(width: 8),
                       Text(
-                        timeString(order.stop!),
+                        timeString(order.stop ?? [0, 0]),
                         style: TxtStyle.smallText,
                       ),
                     ],
