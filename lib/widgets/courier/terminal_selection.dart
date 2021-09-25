@@ -49,7 +49,7 @@ class _TerminalSelectionState extends State<TerminalSelection> {
               children: buttons
                   .map(
                     (txt) => Container(
-                      width: 109,
+                      width: 85,
                       alignment: Alignment.center,
                       child: GestureDetector(
                         onTap: () => switchChoise(txt == 'Есть'),
