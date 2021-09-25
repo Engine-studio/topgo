@@ -41,7 +41,7 @@ class _MenuPageState extends State<MenuPage> {
       print('polling');
       if (role == Role.Courier && thisContext != null) {
         List<notif.Notification> notifications =
-            thisContext != null ? await getNotifications(thisContext!) : [];
+            await getNotifications(thisContext!);
         for (notif.Notification notification in notifications)
           showNotification(notification);
         if (thisContext!.read<User>().courier!.shift != null) {

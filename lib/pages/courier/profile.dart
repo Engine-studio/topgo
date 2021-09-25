@@ -73,13 +73,13 @@ class CourierProfileTab extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  Spacer(flex: 16),
                   BorderBox(
-                    height: 218,
+                    height: 182,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 40,
-                        vertical: 24,
+                        vertical: 12,
                       ),
                       child: Column(
                         children: [
@@ -100,7 +100,7 @@ class CourierProfileTab extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 32),
+                          SizedBox(height: 16),
                           MovementSelection(
                             index: shift.movement!,
                             disabled: true,
@@ -124,7 +124,7 @@ class CourierProfileTab extends StatelessWidget {
                       },
                     ),
                   ),
-                  SizedBox(height: 24),
+                  Spacer(flex: 24),
                 ],
         ],
       ),
