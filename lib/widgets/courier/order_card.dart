@@ -5,6 +5,7 @@ import 'package:topgo/models/order.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/simple_curator.dart';
+import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/address_holder.dart';
 import 'package:topgo/widgets/border_box.dart';
@@ -15,6 +16,7 @@ import 'package:topgo/widgets/flag.dart';
 import 'package:topgo/widgets/map/map_card.dart';
 import 'package:topgo/widgets/map/map_marker.dart';
 import 'package:topgo/api/orders.dart' as api;
+import 'package:provider/provider.dart';
 
 class OrderCard extends StatelessWidget {
   final Order order;
@@ -86,7 +88,7 @@ class OrderCard extends StatelessWidget {
                         buttonType: ButtonType.Accept,
                         onPressed: () async => {
                           if (await api.acceptOrder(context, order))
-                            api.getCurrentOrders(context),
+                            await api.getCurrentOrders(context),
                         },
                       ),
                     ),
@@ -98,7 +100,7 @@ class OrderCard extends StatelessWidget {
                         filled: false,
                         onPressed: () async => {
                           if (await api.declineOrder(context, order))
-                            api.getCurrentOrders(context),
+                            await api.getCurrentOrders(context),
                         },
                       ),
                     ),
@@ -109,10 +111,13 @@ class OrderCard extends StatelessWidget {
                     order.status != OrderStatus.Delivering
                         ? Button(
                             text: 'Забрал',
-                            buttonType: ButtonType.Panel,
+                            buttonType: order.status != OrderStatus.Cooking
+                                ? ButtonType.Panel
+                                : ButtonType.Select,
                             onPressed: () async => {
-                              if (await api.pickOrder(context, order))
-                                api.getCurrentOrders(context),
+                              if (order.status != OrderStatus.Cooking)
+                                if (await api.pickOrder(context, order))
+                                  await api.getCurrentOrders(context),
                             },
                           )
                         : Button(
@@ -120,7 +125,7 @@ class OrderCard extends StatelessWidget {
                             buttonType: ButtonType.Panel,
                             onPressed: () async => {
                               if (await api.deliverOrder(context, order))
-                                api.getCurrentOrders(context),
+                                await api.getCurrentOrders(context),
                             },
                           ),
                     SizedBox(height: 8),
