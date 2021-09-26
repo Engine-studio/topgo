@@ -30,7 +30,11 @@ class DialogBox extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(title, style: TxtStyle.mainHeader),
+            Text(
+              title,
+              style: TxtStyle.mainHeader,
+              textAlign: TextAlign.center,
+            ),
             SizedBox(height: 24),
             ...children,
           ],

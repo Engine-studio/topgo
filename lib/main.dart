@@ -64,128 +64,126 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<User>(
-      create: (_) => User(),
-      builder: (context, _) {
-        return MaterialApp(
-          title: 'TopGo',
-          debugShowCheckedModeBanner: false,
-          home: AnimatedSplashScreen.withScreenFunction(
-            duration: 1000,
-            animationDuration: Duration(milliseconds: 900),
-            splashIconSize: double.infinity,
-            backgroundColor: Color(0xFF16A7D8),
-            splash: Container(
-              decoration: BoxDecoration(
-                gradient: GrdStyle.splash,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 75),
-                child: Image.asset('assets/images/logo.png'),
-              ),
-            ),
-            screenFunction: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              String? phone = prefs.getString('phone');
-              String? password = prefs.getString('password');
-              User user = await logInFirst(phone, password);
-              context.read<User>().copy(user);
-
-              Location location = Location();
-
-              return (await location.hasPermission() !=
-                      PermissionStatus.granted)
-                  ? RequestPage()
-                  : user.logined
-                      ? MenuPage()
-                      : LoginPage();
-            },
-          ),
-        );
-      },
-    );
-  }
+  _MyAppState createState() => _MyAppState();
 }
 
-class RequestPage extends StatelessWidget {
-  const RequestPage({Key? key}) : super(key: key);
+class _MyAppState extends State<MyApp> {
+  final Location location = Location();
+  bool? granted;
+
+  Future<void> checkPermissions() async {
+    if (await location.hasPermission() == PermissionStatus.granted)
+      setState(() {
+        granted = true;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          vertical: 78,
-          horizontal: 30,
-        ),
-        decoration: BoxDecoration(gradient: GrdStyle.splash),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 100,
-                height: 50,
-              ),
-              Spacer(flex: 75),
-              Text(
-                'Использование геопозиции',
-                style: TxtStyle.mainHeader.copyWith(
-                  color: ClrStyle.lightBackground,
-                ),
-              ),
-              Spacer(flex: 50),
-              Text(
-                'Чтобы воспользоваться приложением TopGo разрешите' +
-                    ' использовать данные о вашем местоположении',
-                textAlign: TextAlign.center,
-                style: TxtStyle.mainText.copyWith(
-                  color: ClrStyle.lightBackground,
-                ),
-              ),
-              Spacer(flex: 20),
-              Text(
-                'Мы собираем данные о вашем местоположении для расчета сто' +
-                    'имости доставки и трекинга процесса доставки кураторами' +
-                    ' в режиме реального времени',
-                textAlign: TextAlign.center,
-                style: TxtStyle.mainText.copyWith(
-                  color: ClrStyle.lightBackground,
-                ),
-              ),
-              Spacer(flex: 87),
-              Button(
-                text: 'Принять',
-                buttonType: ButtonType.Accept,
-                onPressed: () async {
-                  Location location = Location();
+    checkPermissions();
+    return (granted == true)
+        ? ChangeNotifierProvider<User>(
+            create: (_) => User(),
+            builder: (context, _) {
+              return MaterialApp(
+                title: 'TopGo',
+                debugShowCheckedModeBanner: false,
+                home: AnimatedSplashScreen.withScreenFunction(
+                  duration: 1000,
+                  animationDuration: Duration(milliseconds: 900),
+                  splashIconSize: double.infinity,
+                  backgroundColor: Color(0xFF16A7D8),
+                  splash: Container(
+                    decoration: BoxDecoration(
+                      gradient: GrdStyle.splash,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 75),
+                      child: Image.asset('assets/images/logo.png'),
+                    ),
+                  ),
+                  screenFunction: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    String? phone = prefs.getString('phone');
+                    String? password = prefs.getString('password');
+                    User user = await logInFirst(phone, password);
+                    context.read<User>().copy(user);
 
-                  while (await location.hasPermission() !=
-                      PermissionStatus.granted)
-                    await location.requestPermission();
-
-                  if (await location.hasPermission() ==
-                      PermissionStatus.granted)
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => MyApp()));
-                },
+                    return user.logined ? MenuPage() : LoginPage();
+                  },
+                ),
+              );
+            },
+          )
+        : MaterialApp(
+            title: 'TopGo',
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              body: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 78,
+                  horizontal: 30,
+                ),
+                decoration: BoxDecoration(gradient: GrdStyle.splash),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/logo.png',
+                      width: 100,
+                      height: 50,
+                    ),
+                    Spacer(flex: 75),
+                    Text(
+                      'Использование геопозиции',
+                      style: TxtStyle.mainHeader.copyWith(
+                        color: ClrStyle.lightBackground,
+                      ),
+                    ),
+                    Spacer(flex: 50),
+                    Text(
+                      'Чтобы воспользоваться приложением TopGo разрешите' +
+                          ' использовать данные о вашем местоположении',
+                      textAlign: TextAlign.center,
+                      style: TxtStyle.mainText.copyWith(
+                        color: ClrStyle.lightBackground,
+                      ),
+                    ),
+                    Spacer(flex: 20),
+                    Text(
+                      'Мы собираем данные о вашем местоположении для расчета сто' +
+                          'имости доставки и трекинга процесса доставки кураторами' +
+                          ' в режиме реального времени',
+                      textAlign: TextAlign.center,
+                      style: TxtStyle.mainText.copyWith(
+                        color: ClrStyle.lightBackground,
+                      ),
+                    ),
+                    Spacer(flex: 87),
+                    Button(
+                      text: 'Принять',
+                      buttonType: ButtonType.Accept,
+                      onPressed: () async {
+                        while (granted != true) {
+                          await location.requestPermission();
+                          await checkPermissions();
+                        }
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    Button(
+                      text: 'Отказаться',
+                      buttonType: ButtonType.Decline,
+                      onPressed: () async {},
+                    ),
+                    Spacer(flex: 202),
+                  ],
+                ),
               ),
-              SizedBox(height: 20),
-              Button(
-                text: 'Отказаться',
-                buttonType: ButtonType.Decline,
-                onPressed: () async {},
-              ),
-              Spacer(flex: 202),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
