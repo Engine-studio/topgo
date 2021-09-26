@@ -27,27 +27,40 @@ class Order {
   LatLng? fromLatLng, toLatLng;
   double? appearance, behavior, sum;
   List<int>? start, stop;
-  bool? withCash;
+  String? withCash;
   OrderStatus? status;
 
   Order.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
+      : id = json['order_id'] ?? json['id'],
         restaurantId = json['restaurant_id'],
         sessionId = json['session_id'],
-        total = json['coocking_time'],
-        //fromAddress = json['']
-        toAddress = json['delivery_address'],
-        //fromLatLng = json['']
-        toLatLng = LatLng(json['address_lat'], json['address_lng']),
-        withCash = json['method'] == 'Cash',
-        //appearance, behavior
+        fromAddress = json['restaurant_address'],
+        toAddress = json['destination_address'] ?? json['delivery_address'],
+        fromLatLng =
+            json['restaurant_lat'] != null && json['restaurant_lng'] != null
+                ? LatLng(json['restaurant_lat']!, json['restaurant_lng']!)
+                : null,
+        toLatLng =
+            json['destination_lat'] != null && json['destination_lng'] != null
+                ? LatLng(json['destination_lat']!, json['destination_lng']!)
+                : null,
+        withCash = json['method'] ?? json['payment_method'],
+        appearance = (json['look_rate'] ?? 0) * 1.0,
+        behavior = (json['politeness_rate'] ?? 0) * 1.0,
         start = parseNaiveDateTime(json['take_datetime']),
         stop = parseNaiveDateTime(json['delivery_datetime']),
-        sum = json['courier_share'] / 100,
+        sum =
+            ((json['pay_amount'] ?? json['order_price']) * 1.0 ?? 0.0) / 100.0,
         status = (json['status'] != null)
             ? OrderStatus.values.firstWhere(
                 (e) => e.toString() == 'OrderStatus.' + json['status'])
-            : null;
+            : (json['order_status'] != null)
+                ? OrderStatus.values.firstWhere((e) =>
+                    e.toString() == 'OrderStatus.' + json['order_status'])
+                : null {
+    List<int> tmp = parseNaiveTime(json['cooking_time']) ?? [0, 0];
+    this.total = tmp[0] * 60 + tmp[1];
+  }
 
   Order.create()
       : id = 123,
@@ -58,7 +71,7 @@ class Order {
         toAddress = 'to ' * 12,
         fromLatLng = LatLng(55.756063, 37.627903),
         toLatLng = LatLng(55.786063, 37.647903),
-        withCash = true,
+        withCash = 'Cash',
         //appearance, behavior
         start = [15, 0],
         stop = [16, 0],

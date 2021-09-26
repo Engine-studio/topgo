@@ -27,7 +27,7 @@ class OrderHistoryCard extends StatelessWidget {
             SizedBox(height: 18),
             OrderInfoHolder(
               time: order.total ?? 0,
-              payment: order.withCash! ? 'Наличные' : 'Терминал',
+              payment: order.withCash!,
               sum: order.sum ?? 0,
             ),
             SizedBox(height: 18),

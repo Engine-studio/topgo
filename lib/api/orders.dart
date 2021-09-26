@@ -4,12 +4,13 @@ import 'package:topgo/api/general.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/models/order.dart';
 import 'package:provider/provider.dart';
+import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 
 Future<List<Order>> getOrdersHistory(BuildContext context) async {
   String json = await apiRequest(
     context: context,
-    route: '/api/ordering/get_orders_by_couriers_id',
+    route: '/api/users/couriers/get_history',
   );
 
   context.read<User>().ordersHistory = jsonDecode(json)
@@ -23,13 +24,20 @@ Future<List<Order>> getOrdersHistory(BuildContext context) async {
 Future<List<Order>> getCurrentOrders(BuildContext context) async {
   String json = await apiRequest(
     context: context,
-    route: '/api/ordering/get_orders_by_session_id',
-    body: context.read<User>().courier!.jsonSessionId,
+    route: '/api/users/couriers/get_current',
   );
 
-  context.read<User>().orders = jsonDecode(json)
+  List<Order> orders = jsonDecode(json)
       .cast<Map<String, dynamic>>()
       .map<Order>((json) => Order.fromJson(json))
+      .toList();
+
+  context.read<User>().ordersRequests = orders
+      .where((order) => order.status == OrderStatus.CourierConfirmation)
+      .toList();
+
+  context.read<User>().orders = orders
+      .where((order) => order.status != OrderStatus.CourierConfirmation)
       .toList();
 
   return Future.value([]);
@@ -45,9 +53,12 @@ Future<void> getNewOrder(
     body: orderRequest.json,
   );
 
-  context.read<User>().courier!.ordersRequest.add(Order.fromJson(
-        jsonDecode(json).cast<Map<String, dynamic>>(),
-      ));
+  context.read<User>().courier!.ordersRequest.addAll(
+        jsonDecode(json)
+            .cast<Map<String, dynamic>>()
+            .map<Order>((json) => Order.fromJson(json))
+            .toList(),
+      );
 
   context.read<User>().notify();
 }

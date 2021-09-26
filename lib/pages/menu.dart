@@ -29,12 +29,10 @@ class MenuPage extends StatefulWidget {
   _MenuPageState createState() => _MenuPageState();
 }
 
-Location _location = Location();
-
 class _MenuPageState extends State<MenuPage> {
   int currentIndex = 0;
   Timer? timer, extra;
-  //final Location _location = Location();
+  final Location _location = Location();
   BuildContext? thisContext;
   Role? role;
 
@@ -47,10 +45,7 @@ class _MenuPageState extends State<MenuPage> {
         for (notif.Notification notification in notifications)
           showNotification(notification);
         if (thisContext!.read<User>().courier!.shift != null) {
-          print('смена начата');
           LocationData locationData = await _location.getLocation();
-          print(locationData);
-          print('данные о локации получены');
           await clearLocation(thisContext!);
           await sendLocation(thisContext!, locationData);
           OrderRequest orderRequest = OrderRequest.create(
@@ -59,9 +54,7 @@ class _MenuPageState extends State<MenuPage> {
           );
           if (thisContext!.read<User>().courier!.orders.length == 0)
             await getNewOrder(thisContext!, orderRequest);
-        } else {
-          print('смена не начата');
-        }
+        } else {}
       }
     } catch (e) {
       print(e.toString());
@@ -102,7 +95,7 @@ class _MenuPageState extends State<MenuPage> {
     if (role == null) role = context.read<User>().role;
     thisContext = context;
     if (timer == null)
-      timer = Timer.periodic(Duration(seconds: 10), (t) => polling());
+      timer = Timer.periodic(Duration(seconds: 30), (t) => polling());
     if (extra == null)
       extra = Timer.periodic(Duration(minutes: 5), (t) => extraPolling());
     List<String> icons = Items().bottomNavBarIcons(context);

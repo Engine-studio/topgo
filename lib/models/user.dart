@@ -227,6 +227,11 @@ class User with ChangeNotifier {
         notify(),
       };
 
+  set ordersRequests(List<Order> orders) => {
+        this.courier!.ordersRequest = orders,
+        notify(),
+      };
+
   set ordersHistory(List<Order> orders) => {
         this.courier!.history = orders,
         this.courier!.shownHistory = orders,

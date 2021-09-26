@@ -15,8 +15,6 @@ import 'package:topgo/widgets/flag.dart';
 import 'package:topgo/widgets/map/map_card.dart';
 import 'package:topgo/widgets/map/map_marker.dart';
 import 'package:topgo/api/orders.dart' as api;
-import 'package:provider/provider.dart';
-import 'package:topgo/models/user.dart';
 
 class OrderCard extends StatelessWidget {
   final Order order;
@@ -29,6 +27,7 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(order);
     SimpleCurator curator;
     return Container(
       child: Column(
@@ -72,7 +71,7 @@ class OrderCard extends StatelessWidget {
           SizedBox(height: 16),
           OrderInfoHolder(
             time: order.total!,
-            payment: order.withCash.toString(),
+            payment: order.withCash!,
             sum: order.sum!,
           ),
           SizedBox(height: 16),
@@ -86,7 +85,6 @@ class OrderCard extends StatelessWidget {
                         text: 'Принять',
                         buttonType: ButtonType.Accept,
                         onPressed: () async => {
-                          context.read<User>().removeRequest(order),
                           if (await api.acceptOrder(context, order))
                             api.getCurrentOrders(context),
                         },
@@ -99,7 +97,6 @@ class OrderCard extends StatelessWidget {
                         buttonType: ButtonType.Decline,
                         filled: false,
                         onPressed: () async => {
-                          context.read<User>().removeRequest(order),
                           if (await api.declineOrder(context, order))
                             api.getCurrentOrders(context),
                         },

@@ -15,6 +15,11 @@ class OrderInfoHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String pay = payment == 'Cash'
+        ? 'Наличные'
+        : payment == 'Card'
+            ? 'Терминал'
+            : 'Оплачен';
     return Row(
       children: [
         Flexible(
@@ -57,7 +62,7 @@ class OrderInfoHolder extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8),
-              Text(payment, style: TxtStyle.smallText),
+              Text(pay, style: TxtStyle.smallText),
             ],
           ),
         ),
