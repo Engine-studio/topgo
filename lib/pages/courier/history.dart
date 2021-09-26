@@ -19,6 +19,7 @@ class CourierHistoryTab extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
           List<Order> shown = context.watch<User>().shownHistory;
+          shown.sort((a, b) => b.id!.compareTo(a.id!));
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SingleChildScrollView(
