@@ -7,7 +7,11 @@ import 'package:topgo/widgets/courier/star_holder.dart';
 import 'package:provider/provider.dart';
 
 class CourierProfileCard extends StatelessWidget {
-  const CourierProfileCard({Key? key}) : super(key: key);
+  final bool warned, blocked;
+
+  const CourierProfileCard(
+      {Key? key, required this.warned, required this.blocked})
+      : super(key: key);
 
   Widget statusText(bool warned, bool blocked) {
     String text = blocked
@@ -29,8 +33,6 @@ class CourierProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool warned = context.read<User>().courier!.warned;
-    bool blocked = context.read<User>().courier!.blocked;
     return BorderBox(
       height: 105,
       child: Padding(
@@ -56,7 +58,7 @@ class CourierProfileCard extends StatelessWidget {
                       StarHolder(rating: context.read<User>().courier!.rating),
                       SizedBox(
                         height: 15,
-                        child: statusText(warned, blocked),
+                        child: statusText(this.warned, this.blocked),
                       ),
                     ],
                   ),

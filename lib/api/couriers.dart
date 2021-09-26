@@ -13,7 +13,9 @@ Future<List<SimpleCourier>> getCouriers(BuildContext context) async {
   );
   Map<String, dynamic> parsedJson = jsonDecode(json);
 
-  context.read<User>().couriers = parsedJson['couriers']
+  List<int> ids = List.empty(growable: true);
+
+  List<SimpleCourier> cours = parsedJson['couriers']
       .cast<Map<String, dynamic>>()
       .where((json) => !json['is_deleted'])
       .map<SimpleCourier>((json) => SimpleCourier.fromJson(
@@ -21,6 +23,17 @@ Future<List<SimpleCourier>> getCouriers(BuildContext context) async {
             parsedJson['coords'].cast<Map<String, dynamic>>(),
           ))
       .toList();
+
+  List<SimpleCourier> approvedCours = List.empty(growable: true);
+
+  for (SimpleCourier c in cours) {
+    if (!ids.contains(c.id)) {
+      approvedCours.add(c);
+      ids.add(c.id!);
+    }
+  }
+
+  context.read<User>().couriers = approvedCours;
 
   return Future.value([]);
 }

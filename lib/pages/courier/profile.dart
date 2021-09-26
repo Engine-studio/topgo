@@ -27,13 +27,14 @@ class CourierProfileTab extends StatelessWidget {
         if (snapshot.hasError) return Error(text: snapshot.error!.toString());
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
-          bool blocked = context.read<User>().courier!.blocked;
+          bool blocked = context.watch<User>().courier!.blocked;
+          bool warned = context.watch<User>().courier!.warned;
           WorkShift? shift = context.watch<User>().courier!.shift;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             child: Column(
               children: [
-                CourierProfileCard(),
+                CourierProfileCard(warned: warned, blocked: blocked),
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

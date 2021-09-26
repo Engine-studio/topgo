@@ -1,25 +1,24 @@
 import 'dart:convert' show utf8, jsonDecode;
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:topgo/api/general.dart';
+import 'package:topgo/models/user.dart';
+import 'package:provider/provider.dart';
 
 final ImagePicker _picker = ImagePicker();
 
-PickedFile? _pickedFile;
+Future<XFile?> pickPhoto() async {
+  print('Start picking');
 
-void pickPhoto() async {
-  print('start picking');
+  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-  _pickedFile = await _picker.getImage(
-    source: ImageSource.gallery,
-    imageQuality: 50,
-  );
-
-  print('pick photo');
+  print('Photo picked');
+  return image;
 }
 
 Future<String> uploadFile(File file) async {
@@ -41,12 +40,30 @@ Future<String> uploadFile(File file) async {
     throw Exception('Unable to connect to the server');
 }
 
-Future<String?> pickAndUploadFile() async {
-  pickPhoto();
+Future<String?> pickAndUploadFile(BuildContext context) async {
+  XFile? _pickedFile = await pickPhoto();
 
-  if (_pickedFile == null) return Future.value(null);
+  if (_pickedFile == null) return null;
 
-  File foundFile = File(_pickedFile!.path);
+  File foundFile = File(_pickedFile.path);
 
-  return await uploadFile(foundFile);
+  User user = context.read<User>();
+
+  String route = '/api/users/' +
+      (user.role == Role.Courier
+          ? 'couriers'
+          : user.role == Role.Administrator
+              ? 'admin'
+              : 'curators') +
+      '/update';
+
+  String picture = await uploadFile(foundFile);
+
+  await apiRequest(
+    context: context,
+    route: route,
+    body: user.updatePhotoBody(picture),
+  );
+
+  return picture;
 }

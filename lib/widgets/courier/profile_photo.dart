@@ -9,6 +9,7 @@ class ProfilePhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? pic;
     return Container(
       width: 74,
       height: 74,
@@ -28,8 +29,10 @@ class ProfilePhoto extends StatelessWidget {
             left: 50,
             top: 50,
             child: GestureDetector(
-              onTap: () async =>
-                  context.read<User>().updatePhoto(await pickAndUploadFile()),
+              onTap: () async => {
+                pic = await pickAndUploadFile(context),
+                if (pic != null) context.read<User>().updatePhoto(pic),
+              },
               child: Container(
                 width: 24,
                 height: 24,

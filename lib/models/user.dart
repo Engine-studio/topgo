@@ -1,3 +1,5 @@
+import 'dart:convert' show jsonEncode;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topgo/functions/phone_string.dart';
@@ -109,6 +111,11 @@ class User with ChangeNotifier {
         'phone': phoneSource ?? '',
         'password': password ?? '',
       };
+
+  String updatePhotoBody(String picture) => jsonEncode({
+        "id": id,
+        "picture": picture,
+      });
 
   set couriers(List<SimpleCourier> couriers) => role == Role.Administrator
       ? {

@@ -3,7 +3,7 @@ description: Mobile application for TopGo company.
 
 publish_to: 'none'
 
-version: 1.0.1+1
+version: 1.1.0+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -23,8 +23,8 @@ dependencies:
   location: ^4.3.0
   url_launcher:
   shared_preferences: ^2.0.5
-  image_picker: ^0.7.4
-  flutter_local_notifications: ^5.0.0+1
+  image_picker: ^0.8.1
+  flutter_local_notifications: ^8.2.0
   extended_masked_text: ^2.2.1
   permission_handler: ^8.1.6
 

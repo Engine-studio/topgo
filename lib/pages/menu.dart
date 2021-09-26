@@ -97,7 +97,7 @@ class _MenuPageState extends State<MenuPage> {
     if (timer == null)
       timer = Timer.periodic(Duration(seconds: 30), (t) => polling());
     if (extra == null)
-      extra = Timer.periodic(Duration(minutes: 5), (t) => extraPolling());
+      extra = Timer.periodic(Duration(seconds: 90), (t) => extraPolling());
     List<String> icons = Items().bottomNavBarIcons(context);
     List<AppBarItem> appBarItems = Items().appBarItems(context);
     return Scaffold(

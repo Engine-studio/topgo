@@ -21,7 +21,7 @@ class Courier {
     Map<String, dynamic> json,
     Map<String, dynamic>? session, {
     required this.notify,
-  })  : blocked = json['is_bloked'] ?? false,
+  })  : blocked = json['is_blocked'] ?? false,
         warned = json['is_warned'],
         deleted = json['is_deleted'],
         rating = double.parse(((json['current_rate_ammount'] ?? 0) /

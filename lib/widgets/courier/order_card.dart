@@ -5,7 +5,6 @@ import 'package:topgo/models/order.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/simple_curator.dart';
-import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/address_holder.dart';
 import 'package:topgo/widgets/border_box.dart';
@@ -16,7 +15,6 @@ import 'package:topgo/widgets/flag.dart';
 import 'package:topgo/widgets/map/map_card.dart';
 import 'package:topgo/widgets/map/map_marker.dart';
 import 'package:topgo/api/orders.dart' as api;
-import 'package:provider/provider.dart';
 
 class OrderCard extends StatelessWidget {
   final Order order;
