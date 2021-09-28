@@ -71,7 +71,8 @@ class _LoginPageState extends State<LoginPage> {
                     User user = await logInFirst(number, password.text);
                     context.read<User>().copy(user);
 
-                    if (user.logined)
+                    if (user.logined &&
+                        !(user.courier != null && user.courier!.deleted))
                       Navigator.push(
                         context,
                         MaterialPageRoute(

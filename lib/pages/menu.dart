@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:topgo/api/general.dart';
 import 'package:topgo/api/notifications.dart';
 import 'package:topgo/api/orders.dart';
 import 'package:topgo/api/work.dart';
 import 'package:topgo/main.dart';
+import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/items.dart';
 import 'package:topgo/models/notification.dart' as notif;
 import 'package:topgo/models/order.dart';
@@ -34,83 +36,84 @@ class _MenuPageState extends State<MenuPage> {
   Timer? timer, extra;
   final Location _location = Location();
   BuildContext? thisContext;
-  Role? role;
 
   void polling() async {
+    print('POLLING');
     try {
-      print('polling');
-      if (role == Role.Courier && thisContext != null) {
-        List<notif.Notification> notifications =
-            await getNotifications(thisContext!);
-        for (notif.Notification notification in notifications)
-          showNotification(notification);
-        if (thisContext!.read<User>().courier!.shift != null) {
-          LocationData locationData = await _location.getLocation();
-          await clearLocation(thisContext!);
-          await sendLocation(thisContext!, locationData);
-          OrderRequest orderRequest = OrderRequest.create(
-            courierId: thisContext!.read<User>().id!,
-            locationData: locationData,
-          );
-          if (thisContext!.read<User>().courier!.orders.length == 0)
-            await getNewOrder(thisContext!, orderRequest);
-        } else {}
-      }
+      await reLogIn(thisContext!);
+
+      await getCurrentOrders(thisContext!);
+      await pollNotifications(thisContext!);
+      await getOrder(thisContext!, extra: false);
     } catch (e) {
-      print(e.toString());
+      print('POLLING ERR: ' + e.toString());
     }
+  }
+
+  Future<void> reLogIn(BuildContext context) async {
+    User pSelf = context.read<User>();
+    Courier pCourier = pSelf.courier!;
+    await logInAgain(context);
+    User self = context.read<User>();
+    Courier courier = self.courier!;
+
+    if (courier.deleted) {
+      showNotification(notif.Notification.create(
+        title: "Удаление",
+        message: "Вас удалили!",
+      ));
+      self.logOut(context);
+    }
+
+    if (pCourier.blocked != courier.blocked)
+      courier.blocked
+          ? showNotification(notif.Notification.create(
+              title: "Блокировка",
+              message: "Вас заблокировали!",
+            ))
+          : showNotification(notif.Notification.create(
+              title: "Снятие блокировки",
+              message: "Вас разблокировали!",
+            ));
   }
 
   void extraPolling() async {
+    print('EXTRA POLLING');
     try {
-      print('extra polling');
-      if (role == Role.Courier &&
-          thisContext != null &&
-          thisContext!.read<User>().courier!.shift != null &&
-          [1, 2].contains(thisContext!.read<User>().courier!.orders.length)) {
-        print('extra polling PASSED');
-        LocationData locationData = await _location.getLocation();
-        await sendLocation(thisContext!, locationData);
-        OrderRequest orderRequest = OrderRequest.create(
-          courierId: thisContext!.read<User>().id!,
-          locationData: locationData,
-        );
-        thisContext!.read<User>().removeRequests();
-        await getNewOrder(thisContext!, orderRequest);
-      }
+      await getOrder(thisContext!, extra: true);
     } catch (e) {
-      print(e.toString());
+      print('EXTRA POLLING ERR: ' + e.toString());
     }
-  }
-
-  @override
-  void dispose() {
-    timer!.cancel();
-    extra!.cancel();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (role == null) role = context.read<User>().role;
     thisContext = context;
-    if (timer == null)
-      timer = Timer.periodic(Duration(seconds: 30), (t) => polling());
-    if (extra == null)
-      extra = Timer.periodic(Duration(seconds: 90), (t) => extraPolling());
-    List<String> icons = Items().bottomNavBarIcons(context);
-    List<AppBarItem> appBarItems = Items().appBarItems(context);
+
+    if (context.read<User>().role == Role.Courier) {
+      if (timer == null)
+        timer = Timer.periodic(
+          Duration(seconds: 60),
+          (t) => {if (thisContext != null) polling()},
+        );
+      if (extra == null)
+        extra = Timer.periodic(
+          Duration(seconds: 180),
+          (t) => {if (thisContext != null) extraPolling()},
+        );
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: Appbar(
-        appBarItem: appBarItems[currentIndex],
+        appBarItem: Items().appBarItems(context)[currentIndex],
         onPressed: () {},
       ),
       body: SafeArea(
-        child: tab(currentIndex, role!),
+        child: tab(currentIndex, context.read<User>().role!),
       ),
       bottomNavigationBar: BottomNavBar(
-        icons: icons,
+        icons: Items().bottomNavBarIcons(context),
         onPressed: (index) {
           context.read<User>().updateView('');
           setState(() {
@@ -119,6 +122,74 @@ class _MenuPageState extends State<MenuPage> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    if (timer != null) timer!.cancel();
+    if (extra != null) extra!.cancel();
+    super.dispose();
+  }
+
+  Future<LocationData> processLocation(BuildContext context) async {
+    LocationData locationData = await _location.getLocation();
+
+    if ((locationData.speed ?? 0) * 3.6 >= 80)
+      showNotification(notif.Notification.create(
+        title: "Соблюдайте скоростной режим!",
+        message: "Уважаемый курьер, вы движетесь со скоростью более 80 км/час.",
+      ));
+
+    await clearLocation(thisContext!);
+    await sendLocation(thisContext!, locationData);
+    return locationData;
+  }
+
+  Future<void> pollNotifications(BuildContext context) async {
+    List<notif.Notification> notifications =
+        await getNotifications(thisContext!);
+    for (notif.Notification notification in notifications)
+      showNotification(notification);
+  }
+
+  Future<void> getOrder(
+    BuildContext context, {
+    required bool extra,
+  }) async {
+    User self = context.read<User>();
+    Courier selfCourier = self.courier!;
+
+    if (selfCourier.shift != null) {
+      OrderRequest orderRequest = OrderRequest.create(
+        courierId: self.id!,
+        locationData: await processLocation(context),
+      );
+
+      int pCount = selfCourier.ordersRequest.length;
+      List<Order> orders;
+
+      if (extra && [1, 2].contains(selfCourier.orders.length)) {
+        context.read<User>().removeRequests();
+
+        await getNewOrder(context, orderRequest);
+        orders = context.read<User>().courier!.ordersRequest;
+        if (pCount != orders.length)
+          showNotification(notif.Notification.create(
+            title: "У вас новый дополнительный заказ!",
+            message: "Обратите внимание на заказ №${orders.last.id}",
+          ));
+      }
+
+      if (!extra && selfCourier.orders.length == 0) {
+        await getNewOrder(context, orderRequest);
+        orders = context.read<User>().courier!.ordersRequest;
+        if (pCount != orders.length)
+          showNotification(notif.Notification.create(
+            title: "У вас новый заказ!",
+            message: "Обратите внимание на заказ №${orders.last.id}",
+          ));
+      }
+    }
   }
 }
 
