@@ -11,6 +11,7 @@ import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/items.dart';
 import 'package:topgo/models/notification.dart' as notif;
 import 'package:topgo/models/order.dart';
+import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/pages/administrator/curators.dart';
 import 'package:topgo/pages/courier/history.dart';
@@ -40,41 +41,46 @@ class _MenuPageState extends State<MenuPage> {
   void polling() async {
     print('POLLING');
     try {
-      await reLogIn(thisContext!);
-
-      await getCurrentOrders(thisContext!);
+      await pollSelfData(thisContext!);
       await pollNotifications(thisContext!);
+      await pollOrders(thisContext!);
       await getOrder(thisContext!, extra: false);
     } catch (e) {
       print('POLLING ERR: ' + e.toString());
     }
   }
 
-  Future<void> reLogIn(BuildContext context) async {
-    User pSelf = context.read<User>();
-    Courier pCourier = pSelf.courier!;
-    await logInAgain(context);
-    User self = context.read<User>();
-    Courier courier = self.courier!;
+  Future<void> pollOrders(BuildContext context) async {
+    List<Order> pOrders = context.read<User>().courier!.orders;
+    List<Order> pHistory = context.read<User>().courier!.history;
+    await getCurrentOrders(thisContext!);
+    await getOrdersHistory(thisContext!);
+    List<Order> orders = context.read<User>().courier!.orders;
+    List<Order> history = context.read<User>().courier!.history;
 
-    if (courier.deleted) {
-      showNotification(notif.Notification.create(
-        title: "Удаление",
-        message: "Вас удалили!",
-      ));
-      self.logOut(context);
+    for (Order order in pOrders) {
+      if (order.status == OrderStatus.Cooking)
+        for (Order actual in orders)
+          if (order.id == actual.id &&
+              actual.status == OrderStatus.ReadyForDelivery)
+            showNotification(notif.Notification.create(
+              title: "Заказ готов",
+              message: "Заказ #${actual.id} готов к доставке!",
+            ));
     }
 
-    if (pCourier.blocked != courier.blocked)
-      courier.blocked
-          ? showNotification(notif.Notification.create(
-              title: "Блокировка",
-              message: "Вас заблокировали!",
-            ))
-          : showNotification(notif.Notification.create(
-              title: "Снятие блокировки",
-              message: "Вас разблокировали!",
-            ));
+    if (orders.length < pOrders.length && history.length == pHistory.length) {
+      bool found;
+      for (Order order in pOrders) {
+        found = false;
+        for (Order actual in orders) if (actual.id == order.id) found = true;
+        if (!found)
+          showNotification(notif.Notification.create(
+            title: "Заказ отменен",
+            message: "Заказ #${order.id} был отменен!",
+          ));
+      }
+    }
   }
 
   void extraPolling() async {
@@ -131,6 +137,33 @@ class _MenuPageState extends State<MenuPage> {
     super.dispose();
   }
 
+  Future<void> pollSelfData(BuildContext context) async {
+    User pSelf = context.read<User>();
+    Courier pCourier = pSelf.courier!;
+    await logInAgain(context);
+    User self = context.read<User>();
+    Courier courier = self.courier!;
+
+    if (courier.deleted) {
+      showNotification(notif.Notification.create(
+        title: "Удаление",
+        message: "Вас удалили!",
+      ));
+      self.logOut(context);
+    }
+
+    if (pCourier.blocked != courier.blocked)
+      courier.blocked
+          ? showNotification(notif.Notification.create(
+              title: "Блокировка",
+              message: "Вас заблокировали!",
+            ))
+          : showNotification(notif.Notification.create(
+              title: "Снятие блокировки",
+              message: "Вас разблокировали!",
+            ));
+  }
+
   Future<LocationData> processLocation(BuildContext context) async {
     LocationData locationData = await _location.getLocation();
 
@@ -176,7 +209,7 @@ class _MenuPageState extends State<MenuPage> {
         if (pCount != orders.length)
           showNotification(notif.Notification.create(
             title: "У вас новый дополнительный заказ!",
-            message: "Обратите внимание на заказ №${orders.last.id}",
+            message: "Обратите внимание на заказ #${orders.last.id}",
           ));
       }
 
@@ -186,7 +219,7 @@ class _MenuPageState extends State<MenuPage> {
         if (pCount != orders.length)
           showNotification(notif.Notification.create(
             title: "У вас новый заказ!",
-            message: "Обратите внимание на заказ №${orders.last.id}",
+            message: "Обратите внимание на заказ #${orders.last.id}",
           ));
       }
     }
