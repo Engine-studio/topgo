@@ -16,7 +16,6 @@ class ProblemDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(curator);
     return DialogBox(
       title: 'Чрезвычайное происшествие',
       height: 403,

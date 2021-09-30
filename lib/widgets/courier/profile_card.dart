@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:topgo/api/work.dart';
+import 'package:topgo/models/simple_curator.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/border_box.dart';
+import 'package:topgo/widgets/courier/problem_dialog.dart';
 import 'package:topgo/widgets/courier/profile_photo.dart';
 import 'package:topgo/widgets/courier/star_holder.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +37,7 @@ class CourierProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SimpleCurator curator;
     return BorderBox(
       height: 105,
       child: Padding(
@@ -58,7 +63,16 @@ class CourierProfileCard extends StatelessWidget {
                       StarHolder(rating: context.read<User>().courier!.rating),
                       SizedBox(
                         height: 15,
-                        child: statusText(this.warned, this.blocked),
+                        child: GestureDetector(
+                          onTap: () async => {
+                            curator = await callHelper(context),
+                            showDialog(
+                              context: context,
+                              builder: (_) => ProblemDialog(curator: curator),
+                            )
+                          },
+                          child: statusText(this.warned, this.blocked),
+                        ),
                       ),
                     ],
                   ),

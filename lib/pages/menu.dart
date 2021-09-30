@@ -33,7 +33,7 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  int currentIndex = 0;
+  int? currentIndex;
   Timer? timer, extra;
   final Location _location = Location();
   BuildContext? thisContext;
@@ -51,34 +51,36 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Future<void> pollOrders(BuildContext context) async {
-    List<Order> pOrders = context.read<User>().courier!.orders;
-    List<Order> pHistory = context.read<User>().courier!.history;
-    await getCurrentOrders(thisContext!);
-    await getOrdersHistory(thisContext!);
-    List<Order> orders = context.read<User>().courier!.orders;
-    List<Order> history = context.read<User>().courier!.history;
+    if (context.read<User>().courier!.shift != null) {
+      List<Order> pOrders = context.read<User>().courier!.orders;
+      List<Order> pHistory = context.read<User>().courier!.history;
+      await getCurrentOrders(thisContext!);
+      await getOrdersHistory(thisContext!);
+      List<Order> orders = context.read<User>().courier!.orders;
+      List<Order> history = context.read<User>().courier!.history;
 
-    for (Order order in pOrders) {
-      if (order.status == OrderStatus.Cooking)
-        for (Order actual in orders)
-          if (order.id == actual.id &&
-              actual.status == OrderStatus.ReadyForDelivery)
-            showNotification(notif.Notification.create(
-              title: "Заказ готов",
-              message: "Заказ #${actual.id} готов к доставке!",
-            ));
-    }
-
-    if (orders.length < pOrders.length && history.length == pHistory.length) {
-      bool found;
       for (Order order in pOrders) {
-        found = false;
-        for (Order actual in orders) if (actual.id == order.id) found = true;
-        if (!found)
-          showNotification(notif.Notification.create(
-            title: "Заказ отменен",
-            message: "Заказ #${order.id} был отменен!",
-          ));
+        if (order.status == OrderStatus.Cooking)
+          for (Order actual in orders)
+            if (order.id == actual.id &&
+                actual.status == OrderStatus.ReadyForDelivery)
+              showNotification(notif.Notification.create(
+                title: "Заказ готов",
+                message: "Заказ #${actual.id} готов к доставке!",
+              ));
+      }
+
+      if (orders.length < pOrders.length && history.length == pHistory.length) {
+        bool found;
+        for (Order order in pOrders) {
+          found = false;
+          for (Order actual in orders) if (actual.id == order.id) found = true;
+          if (!found)
+            showNotification(notif.Notification.create(
+              title: "Заказ отменен",
+              message: "Заказ #${order.id} был отменен!",
+            ));
+        }
       }
     }
   }
@@ -96,6 +98,9 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     thisContext = context;
 
+    if (currentIndex == null)
+      currentIndex = context.read<User>().role == Role.Courier ? 2 : 0;
+
     if (context.read<User>().role == Role.Courier) {
       if (timer == null)
         timer = Timer.periodic(
@@ -112,11 +117,11 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: Appbar(
-        appBarItem: Items().appBarItems(context)[currentIndex],
+        appBarItem: Items().appBarItems(context)[currentIndex!],
         onPressed: () {},
       ),
       body: SafeArea(
-        child: tab(currentIndex, context.read<User>().role!),
+        child: tab(currentIndex!, context.read<User>().role!),
       ),
       bottomNavigationBar: BottomNavBar(
         icons: Items().bottomNavBarIcons(context),

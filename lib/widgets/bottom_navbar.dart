@@ -20,7 +20,7 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   final void Function(int) onPressed;
   final List<String> icons;
-  int _currentIndex = 0;
+  int? _currentIndex;
 
   _BottomNavBarState(this.onPressed, this.icons);
 
@@ -29,6 +29,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
     int orders = context.read<User>().role == Role.Courier
         ? context.watch<User>().courier!.ordersRequest.length
         : -1;
+
+    if (_currentIndex == null)
+      _currentIndex = context.read<User>().role == Role.Courier ? 2 : 0;
+
     return Theme(
       data: ThemeData(
         brightness: Brightness.light,
@@ -49,7 +53,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         child: ClipRRect(
           borderRadius: BorderRadius.vertical(top: Radius.circular(6)),
           child: BottomNavigationBar(
-            currentIndex: _currentIndex,
+            currentIndex: _currentIndex!,
             type: BottomNavigationBarType.fixed,
             backgroundColor: ClrStyle.lightBackground,
             selectedFontSize: 0,
@@ -61,7 +65,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       clipBehavior: Clip.none,
                       children: [
                         ShaderMask(
-                          shaderCallback: _currentIndex == icons.indexOf(icon)
+                          shaderCallback: _currentIndex! == icons.indexOf(icon)
                               ? (bounds) => GrdStyle.select.createShader(bounds)
                               : (bounds) => GrdStyle()
                                   .panelGradient(context)
@@ -83,7 +87,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                     height: 22,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      gradient: _currentIndex ==
+                                      gradient: _currentIndex! ==
                                               icons.indexOf(icon)
                                           ? GrdStyle.select
                                           : GrdStyle().panelGradient(context),

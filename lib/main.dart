@@ -18,7 +18,15 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 void showNotification(not.Notification not) async {
   AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails('', '', '');
+      AndroidNotificationDetails(
+    'your channel id',
+    'your channel name',
+    'your channel description',
+    importance: Importance.max,
+    priority: Priority.high,
+    color: const Color.fromARGB(0, 106, 165, 215),
+    ticker: 'ticker',
+  );
 
   IOSNotificationDetails iOSPlatformChannelSpecifics = IOSNotificationDetails(
     presentAlert: true,
@@ -27,8 +35,9 @@ void showNotification(not.Notification not) async {
   );
 
   NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics);
+    android: androidPlatformChannelSpecifics,
+    iOS: iOSPlatformChannelSpecifics,
+  );
 
   await flutterLocalNotificationsPlugin.show(
     not.message.hashCode,
@@ -42,25 +51,31 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('notification');
+      AndroidInitializationSettings('logo');
+
   IOSInitializationSettings initializationSettingsIOS =
       IOSInitializationSettings(
-          requestAlertPermission: true,
-          requestBadgePermission: true,
-          requestSoundPermission: true,
-          onDidReceiveLocalNotification:
-              (int id, String? title, String? body, String? payload) async {});
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+    onDidReceiveLocalNotification: (
+      int id,
+      String? title,
+      String? body,
+      String? payload,
+    ) async {},
+  );
+
   InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
   );
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String? payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
-    }
-  });
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onSelectNotification: (String? payload) async {},
+  );
+
   runApp(MyApp());
 }
 
