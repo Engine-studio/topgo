@@ -5,9 +5,10 @@ import 'package:topgo/widgets/border_box.dart';
 import 'package:topgo/widgets/time_picker.dart';
 
 class TimeHolder extends StatefulWidget {
+  final double width;
   final String text;
   final List<int> time;
-  final bool disabled;
+  final bool disabled, forShift;
   final void Function(List<int>) onChange;
   const TimeHolder({
     Key? key,
@@ -15,6 +16,8 @@ class TimeHolder extends StatefulWidget {
     required this.time,
     required this.disabled,
     required this.onChange,
+    this.width = 109,
+    this.forShift = false,
   }) : super(key: key);
 
   @override
@@ -36,7 +39,7 @@ class _TimeHolderState extends State<TimeHolder> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 109,
+      width: widget.width,
       height: 69,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,6 +51,7 @@ class _TimeHolderState extends State<TimeHolder> {
               onTap: () => showTimePicker(
                 context: context,
                 selected: time,
+                forShift: widget.forShift,
                 onConfirm: (List<int> time) => changeTime(time),
               ),
               child: BorderBox(

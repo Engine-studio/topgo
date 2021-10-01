@@ -11,36 +11,39 @@ import 'package:topgo/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class StartWorkDialog extends StatelessWidget {
-  List<int> begin = [9, 0], end = [18, 0];
-  int movement = 0;
-  bool terminal = false;
-
+class StartWorkDialog extends StatefulWidget {
   StartWorkDialog({Key? key}) : super(key: key);
+
+  @override
+  _StartWorkDialogState createState() => _StartWorkDialogState();
+}
+
+class _StartWorkDialogState extends State<StartWorkDialog> {
+  List<int> dur = [8, 0];
+
+  int movement = 0;
+
+  bool terminal = false;
 
   @override
   Widget build(BuildContext context) {
     WorkShift shift;
+    DateTime now;
     return DialogBox(
       title: 'Начало смены',
       height: 476,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TimeHolder(
-              text: 'Начало смены',
-              time: this.begin,
-              disabled: false,
-              onChange: (time) => {this.begin = time},
-            ),
-            TimeHolder(
-              text: 'Конец смены',
-              time: this.end,
-              disabled: false,
-              onChange: (time) => {this.end = time},
-            ),
-          ],
+        TimeHolder(
+          text: 'Продолжительность смены',
+          time: this.dur,
+          disabled: false,
+          width: 250,
+          forShift: true,
+          onChange: (time) => {
+            setState(() {
+              this.dur = time;
+            })
+          },
         ),
         SizedBox(height: 32),
         TerminalSelection(onChange: (has) => {this.terminal = has}),
@@ -60,14 +63,16 @@ class StartWorkDialog extends StatelessWidget {
           text: 'Начать',
           buttonType: ButtonType.Accept,
           onPressed: () async => {
-            if ((2 < end[0] - begin[0] && end[0] - begin[0] < 10) ||
-                (end[0] - begin[0] == 2 && end[1] >= begin[1]) ||
-                (end[0] - begin[0] == 10 && end[1] <= begin[1]))
+            if (!(dur[0] == 10 && dur[1] > 0))
               {
+                now = DateTime.now(),
                 shift = WorkShift.create(
                   movement: movement,
-                  begin: begin,
-                  end: end,
+                  begin: [now.hour, now.minute],
+                  end: [
+                    (now.hour + dur[0] + (now.minute + dur[1]) ~/ 60) % 24,
+                    (now.minute + dur[1]) % 60
+                  ],
                   hasTerminal: terminal,
                 ),
                 if (await startWorkShift(context, shift))
