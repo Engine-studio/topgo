@@ -22,6 +22,7 @@ Future<String> apiRequest({
   required String route,
   Map<String, String>? headers,
   Object? body,
+  bool detailed = true,
 }) async {
   while (true) {
     http.Response response = await http.post(
@@ -30,14 +31,16 @@ Future<String> apiRequest({
       body: body,
     );
 
-    print('');
-    print('REQ:');
-    print('route: $route');
-    print('body: $body');
-    print('RESP:');
-    print('code: ${response.statusCode}');
-    print('body: ${response.body}');
-    print('');
+    if (detailed) {
+      print('');
+      print('REQ:');
+      print('route: $route');
+      print('body: $body');
+      print('RESP:');
+      print('code: ${response.statusCode}');
+      print('body: ${response.body}');
+      print('');
+    }
 
     if (response.statusCode == 200)
       return utf8.decode(response.body.codeUnits);

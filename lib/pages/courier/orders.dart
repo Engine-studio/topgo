@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:topgo/api/orders.dart';
+import 'package:topgo/api/polling.dart';
 import 'package:topgo/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:topgo/styles.dart';
@@ -13,8 +13,8 @@ class CourierOrdersTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List>(
-      future: getCurrentOrders(context),
+    return FutureBuilder<bool>(
+      future: pollOrders(context),
       builder: (context, snapshot) {
         if (snapshot.hasError) return Error(text: snapshot.error!.toString());
         if (snapshot.connectionState == ConnectionState.done &&

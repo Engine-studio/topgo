@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:topgo/api/general.dart';
+import 'package:topgo/api/polling.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/styles.dart';
@@ -22,7 +22,7 @@ class CourierProfileTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-      future: logInAgain(context),
+      future: pollSelfData(context),
       builder: (context, snapshot) {
         if (snapshot.hasError) return Error(text: snapshot.error!.toString());
         if (snapshot.connectionState == ConnectionState.done &&

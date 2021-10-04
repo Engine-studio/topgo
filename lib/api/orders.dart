@@ -21,7 +21,7 @@ Future<List<Order>> getOrdersHistory(BuildContext context) async {
   return Future.value([]);
 }
 
-Future<List<Order>> getCurrentOrders(BuildContext context) async {
+Future<bool> getCurrentOrders(BuildContext context) async {
   String json = await apiRequest(
     context: context,
     route: '/api/users/couriers/get_current',
@@ -40,7 +40,7 @@ Future<List<Order>> getCurrentOrders(BuildContext context) async {
       .where((order) => order.status != OrderStatus.CourierConfirmation)
       .toList();
 
-  return Future.value([]);
+  return true;
 }
 
 Future<void> getNewOrder(

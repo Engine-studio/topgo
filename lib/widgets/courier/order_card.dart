@@ -16,7 +16,7 @@ import 'package:topgo/widgets/map/map_card.dart';
 import 'package:topgo/widgets/map/map_marker.dart';
 import 'package:topgo/api/orders.dart' as api;
 
-class OrderCard extends StatelessWidget {
+class OrderCard extends StatefulWidget {
   final Order order;
   final bool request;
   const OrderCard({
@@ -26,13 +26,21 @@ class OrderCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _OrderCardState createState() => _OrderCardState(this.order);
+}
+
+class _OrderCardState extends State<OrderCard> {
+  Order order;
+
+  _OrderCardState(this.order);
+
+  @override
   Widget build(BuildContext context) {
-    print(order);
     SimpleCurator curator;
     return Container(
       child: Column(
         children: [
-          this.request
+          this.widget.request
               ? Flag(text: 'Новый заказ', gradient: GrdStyle.panel)
               : Flag(text: 'Вы выполняете сейчас', gradient: GrdStyle.accept),
           SizedBox(height: 8),
@@ -75,7 +83,7 @@ class OrderCard extends StatelessWidget {
             sum: order.sum!,
           ),
           SizedBox(height: 16),
-          this.request
+          this.widget.request
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -115,7 +123,13 @@ class OrderCard extends StatelessWidget {
                             onPressed: () async => {
                               if (order.status != OrderStatus.Cooking)
                                 if (await api.pickOrder(context, order))
-                                  await api.getCurrentOrders(context),
+                                  {
+                                    setState(() {
+                                      this.order.status =
+                                          OrderStatus.Delivering;
+                                    }),
+                                    await api.getCurrentOrders(context),
+                                  }
                             },
                           )
                         : Button(
