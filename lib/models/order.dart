@@ -23,7 +23,7 @@ class OrderRequest {
 
 class Order {
   int? id, restaurantId, sessionId, total;
-  String? fromAddress, toAddress;
+  String? fromAddress, toAddress, comment;
   LatLng? fromLatLng, toLatLng;
   double? appearance, behavior, sum;
   List<int>? start, stop;
@@ -49,6 +49,7 @@ class Order {
         behavior = (json['politeness_rate'] ?? 0) * 1.0,
         start = parseNaiveDateTime(json['take_datetime']),
         stop = parseNaiveDateTime(json['delivery_datetime']),
+        comment = json['client_comment'],
         sum =
             ((json['pay_amount'] ?? json['order_price']) * 1.0 ?? 0.0) / 100.0,
         status = (json['status'] != null)

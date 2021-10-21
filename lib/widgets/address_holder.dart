@@ -14,7 +14,7 @@ class AddressHolder extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 60,
+          width: 65,
           height: 45,
           alignment: Alignment.topLeft,
           child: Text(dist, style: TxtStyle.smallText),
@@ -22,7 +22,11 @@ class AddressHolder extends StatelessWidget {
         Expanded(
           child: Container(
             height: 45,
-            child: Text(address, style: TxtStyle.smallText),
+            child: SingleChildScrollView(
+                child: Text(
+              address,
+              style: TxtStyle.smallText,
+            )),
           ),
         ),
       ],

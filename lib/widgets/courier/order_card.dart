@@ -64,7 +64,7 @@ class _OrderCardState extends State<OrderCard> {
           ),
           SizedBox(height: 8),
           BorderBox(
-            height: 118,
+            height: 171,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Column(
@@ -72,6 +72,9 @@ class _OrderCardState extends State<OrderCard> {
                   AddressHolder(dist: 'Откуда:', address: order.fromAddress!),
                   SizedBox(height: 8),
                   AddressHolder(dist: 'Куда:', address: order.toAddress!),
+                  SizedBox(height: 8),
+                  AddressHolder(
+                      dist: 'Коммент:', address: order.comment ?? "Not Found"),
                 ],
               ),
             ),

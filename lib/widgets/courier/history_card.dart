@@ -14,7 +14,7 @@ class OrderHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BorderBox(
-      height: 208,
+      height: 261,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
@@ -24,6 +24,9 @@ class OrderHistoryCard extends StatelessWidget {
             SizedBox(height: 8),
             AddressHolder(
                 dist: 'Куда:', address: order.toAddress ?? 'Not found'),
+            SizedBox(height: 8),
+            AddressHolder(
+                dist: 'Коммент:', address: order.comment ?? 'Not found'),
             SizedBox(height: 18),
             OrderInfoHolder(
               time: order.total ?? 0,
