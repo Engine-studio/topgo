@@ -10,11 +10,36 @@ import 'package:topgo/pages/login.dart';
 import 'package:topgo/pages/menu.dart';
 import 'package:topgo/styles.dart';
 import 'package:topgo/widgets/button.dart';
+import 'package:background_fetch/background_fetch.dart';
+import 'dart:io' show Platform;
 
 import 'models/user.dart';
 
+const taskDelay = 60000; // 1 minute polling delay
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+
+final AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('logo');
+
+final IOSInitializationSettings initializationSettingsIOS =
+    IOSInitializationSettings(
+  requestAlertPermission: true,
+  requestBadgePermission: true,
+  requestSoundPermission: true,
+  onDidReceiveLocalNotification: (
+    int id,
+    String? title,
+    String? body,
+    String? payload,
+  ) async {},
+);
+
+final InitializationSettings initializationSettings = InitializationSettings(
+  android: initializationSettingsAndroid,
+  iOS: initializationSettingsIOS,
+);
 
 void showNotification(not.Notification not) async {
   AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -47,29 +72,29 @@ void showNotification(not.Notification not) async {
   );
 }
 
-Future<void> main() async {
+void backgroundFetchFunction(HeadlessTask task) {
+  final taskId = task.taskId;
+  final timeout = task.timeout;
+
+  BackgroundFetch.finish(taskId);
+  if (timeout || taskId == 'flutter_background_fetch') {
+    return;
+  }
+
+  BackgroundFetch.scheduleTask(TaskConfig(
+    taskId: taskId,
+    delay: taskDelay,
+    periodic: false,
+    forceAlarmManager: true,
+    stopOnTerminate: false,
+    enableHeadless: true,
+    requiresNetworkConnectivity: true,
+    requiresCharging: true,
+  ));
+}
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('logo');
-
-  IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-    onDidReceiveLocalNotification: (
-      int id,
-      String? title,
-      String? body,
-      String? payload,
-    ) async {},
-  );
-
-  InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
 
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
@@ -77,6 +102,12 @@ Future<void> main() async {
   );
 
   runApp(MyApp());
+
+  if (Platform.isAndroid) {
+    print('Android detected in main');
+    await BackgroundFetch.registerHeadlessTask(backgroundFetchFunction);
+    print('task registered');
+  }
 }
 
 class MyApp extends StatefulWidget {

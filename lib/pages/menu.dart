@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:topgo/api/polling.dart';
+import 'package:topgo/main.dart';
 import 'package:topgo/models/items.dart';
 import 'package:topgo/models/user.dart';
 import 'package:topgo/pages/administrator/curators.dart';
@@ -16,6 +18,20 @@ import 'package:topgo/pages/curator/restaurants.dart';
 import 'package:topgo/widgets/appbar.dart';
 import 'package:topgo/widgets/bottom_navbar.dart';
 import 'package:provider/provider.dart';
+import 'package:background_fetch/background_fetch.dart';
+
+final fetchConfig = BackgroundFetchConfig(
+  minimumFetchInterval: 15,
+  forceAlarmManager: false,
+  stopOnTerminate: false,
+  startOnBoot: false,
+  enableHeadless: true,
+  requiresBatteryNotLow: false,
+  requiresCharging: false,
+  requiresStorageNotLow: false,
+  requiresDeviceIdle: false,
+  requiredNetworkType: NetworkType.NONE,
+);
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -26,6 +42,7 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   int? currentIndex;
+  bool? threaded;
   Timer? timer, extra;
   final Location _location = Location();
   BuildContext? thisContext;
@@ -52,6 +69,70 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    if (Platform.isAndroid) {
+      print('Android detected');
+      try {
+        BackgroundFetch.configure(
+          fetchConfig,
+          fetchFunctionFirst,
+        );
+        print('task created');
+      } catch (e) {
+        print('task wasnt created: ${e.toString()}');
+      }
+    }
+  }
+
+  void fetchFunctionFirst(String taskId) {
+    print('fetch func');
+    if (mounted) {
+      print('execution');
+      // showNotification(
+      //   not.Notification.create(title: "Title", message: "Message"),
+      // );
+      polling();
+      // setState(() {
+      //   _events.insert(0, "$taskId@${timestamp.toString()}  [НА ЭКРАНЕ 1 SET]");
+      // });
+    }
+
+    BackgroundFetch.finish(taskId);
+
+    if (taskId == 'flutter_background_fetch') {
+      return;
+    }
+
+    BackgroundFetch.scheduleTask(TaskConfig(
+        taskId: taskId,
+        delay: taskDelay,
+        periodic: false,
+        forceAlarmManager: true,
+        stopOnTerminate: false,
+        enableHeadless: true,
+        requiresNetworkConnectivity: true,
+        requiresCharging: true));
+  }
+
+  void _startSheduleTask1() {
+    BackgroundFetch.scheduleTask(TaskConfig(
+        taskId: '1111',
+        delay: taskDelay,
+        periodic: false,
+        forceAlarmManager: true,
+        stopOnTerminate: false,
+        enableHeadless: true,
+        requiresNetworkConnectivity: true,
+        requiresCharging: true));
+  }
+
+  void _stopTasks() {
+    BackgroundFetch.stop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     thisContext = context;
 
@@ -60,16 +141,21 @@ class _MenuPageState extends State<MenuPage> {
     if (currentIndex == null) currentIndex = role == Role.Courier ? 2 : 0;
 
     if (role == Role.Courier) {
-      if (timer == null)
-        timer = Timer.periodic(
-          Duration(seconds: 30),
-          (t) => {if (thisContext != null) polling()},
-        );
-      if (extra == null)
-        extra = Timer.periodic(
-          Duration(minutes: 3),
-          (t) => {if (thisContext != null) extraPolling()},
-        );
+      if (Platform.isAndroid && threaded != true) {
+        _startSheduleTask1();
+        threaded = true;
+      } else if (Platform.isIOS) {
+        if (timer == null)
+          timer = Timer.periodic(
+            Duration(seconds: 30),
+            (t) => {if (thisContext != null) polling()},
+          );
+        if (extra == null)
+          extra = Timer.periodic(
+            Duration(minutes: 3),
+            (t) => {if (thisContext != null) extraPolling()},
+          );
+      }
     }
 
     return Scaffold(
@@ -95,8 +181,14 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   void dispose() {
-    if (timer != null) timer!.cancel();
-    if (extra != null) extra!.cancel();
+    print('dispose');
+
+    if (Platform.isAndroid) {
+      _stopTasks();
+    } else if (Platform.isIOS) {
+      if (timer != null) timer!.cancel();
+      if (extra != null) extra!.cancel();
+    }
     super.dispose();
   }
 }

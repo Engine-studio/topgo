@@ -98,11 +98,11 @@ Future<User> logInFirst(
     }),
   );
 
-  print('');
-  print('route: loginFirst');
-  print('code: ${response.statusCode}');
-  print('body: ${response.body}');
-  print('');
+  // print('');
+  // print('route: loginFirst');
+  // print('code: ${response.statusCode}');
+  // print('body: ${response.body}');
+  // print('');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (response.statusCode == 200) {
