@@ -16,7 +16,7 @@ class RestaurantAdditionDialog extends StatefulWidget {
 }
 
 class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
-  late TextEditingController name, address, password, email;
+  late TextEditingController name, address, password, email, lat, lng;
   late MaskedTextController phone;
   late RegExp regExp;
   List<int> open = [8, 0], close = [23, 0];
@@ -26,6 +26,8 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
     super.initState();
     name = TextEditingController();
     address = TextEditingController();
+    lat = MaskedTextController(mask: '00. 000000');
+    lng = MaskedTextController(mask: '00. 000000');
     phone = MaskedTextController(mask: '+0 (000) 000-00-00');
     password = TextEditingController();
     email = TextEditingController();
@@ -37,15 +39,27 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
   Widget build(BuildContext context) {
     Restaurant restaurant;
     String number;
+    double? lat_val, lng_val;
     return Center(
       child: SingleChildScrollView(
         child: DialogBox(
           title: 'Добавление ресторана',
-          height: 546,
+          height: 598,
           children: [
             Input(text: 'Название', controller: name),
             SizedBox(height: 8),
             Input(text: 'Адрес', controller: address),
+            SizedBox(height: 8),
+            SizedBox(
+              height: 44,
+              child: Row(
+                children: [
+                  Flexible(child: Input(text: 'lat (с. ш.)', controller: lat)),
+                  SizedBox(width: 8),
+                  Flexible(child: Input(text: 'lng (в. д.)', controller: lng)),
+                ],
+              ),
+            ),
             SizedBox(height: 8),
             Input(text: 'Телефон', maskedController: phone),
             SizedBox(height: 8),
@@ -76,10 +90,14 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
               buttonType: ButtonType.Accept,
               onPressed: () async => {
                 number = phone.text,
+                lat_val = double.tryParse(lat.text.replaceAll(' ', '')),
+                lng_val = double.tryParse(lng.text.replaceAll(' ', '')),
                 for (String str in ['+', '(', ')', '-', ' '])
                   number = number.replaceAll(str, ''),
                 if (name.text != '' &&
                     address.text != '' &&
+                    lat_val != null &&
+                    lng_val != null &&
                     number.length == 11 &&
                     password.text != '' &&
                     email.text != '' &&
@@ -90,6 +108,8 @@ class _RestaurantAdditionDialogState extends State<RestaurantAdditionDialog> {
                     restaurant = Restaurant.create(
                       name: name.text,
                       address: address.text,
+                      x: lat_val,
+                      y: lng_val,
                       phone: number,
                       email: email.text,
                       password: password.text,

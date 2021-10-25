@@ -1,10 +1,12 @@
 import 'dart:convert' show utf8, jsonDecode, jsonEncode;
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topgo/models/user.dart';
+import 'package:topgo/widgets/snackbar.dart';
 
 const host = "topgo.club";
 const default_photo =
@@ -42,14 +44,21 @@ Future<String> apiRequest({
       print('');
     }
 
-    if (response.statusCode == 200)
-      return utf8.decode(response.body.codeUnits);
-    else if (response.statusCode == 500 &&
-        jsonDecode(utf8.decode(response.body.codeUnits))['message']
-            .contains('Signature')) {
-      if (!await logInAgain(context)) throw Exception('Unable to log in');
-    } else
-      throw Exception('Unable to connect to the server');
+    int code = response.statusCode;
+    String respBody = utf8.decode(response.body.codeUnits);
+
+    if (code == 200)
+      return respBody;
+    else {
+      String message = jsonDecode(respBody)['message'];
+
+      if (code == 500 && message.contains('Signature')) {
+        if (!await logInAgain(context)) throw Exception('Unable to log in');
+      } else {
+        ApiError(route: route, code: code, text: message).show(context);
+        throw Exception('Unable to connect to the server');
+      }
+    }
   }
 }
 
@@ -122,3 +131,13 @@ Future<User> logInFirst(
 
   return User();
 }
+
+final snackBar = SnackBar(
+  content: Text('Yay! A SnackBar!'),
+  action: SnackBarAction(
+    label: 'Undo',
+    onPressed: () {
+      // Some code to undo the change.
+    },
+  ),
+);

@@ -20,18 +20,20 @@ class AdministratorCouratorsTab extends StatelessWidget {
             snapshot.hasData)
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Wrap(
-              runSpacing: 8,
-              children: [
-                SizedBox(width: 12),
-                ...context
-                    .watch<User>()
-                    .administrator!
-                    .shownCurators
-                    .map((curator) => CuratorCard(curator: curator))
-                    .toList(),
-                SizedBox(width: 8),
-              ],
+            child: SingleChildScrollView(
+              child: Wrap(
+                runSpacing: 8,
+                children: [
+                  SizedBox(width: 12),
+                  ...context
+                      .watch<User>()
+                      .administrator!
+                      .shownCurators
+                      .map((curator) => CuratorCard(curator: curator))
+                      .toList(),
+                  SizedBox(width: 8),
+                ],
+              ),
             ),
           );
         else

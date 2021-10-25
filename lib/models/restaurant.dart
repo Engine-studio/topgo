@@ -33,11 +33,15 @@ class Restaurant {
     required this.password,
     required this.open,
     required this.close,
+    required this.x,
+    required this.y,
   });
 
   String get json => jsonEncode({
         "name": name!,
         "address": address!,
+        "lat": x!,
+        "lng": y!,
         "phone": phone!,
         "email": email!,
         "password": password!,
