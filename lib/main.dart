@@ -15,7 +15,10 @@ import 'dart:io' show Platform;
 
 import 'models/user.dart';
 
-const taskDelay = 60000; // 1 minute polling delay
+const pollingDelay = 60000; // 1 minute polling delay
+const extraPollingDelay = 300000; // 5 minute extra polling delay
+const pollingTaskId = "1111";
+const extraPollingTaskId = "2222";
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -83,7 +86,7 @@ void backgroundFetchFunction(HeadlessTask task) {
 
   BackgroundFetch.scheduleTask(TaskConfig(
     taskId: taskId,
-    delay: taskDelay,
+    delay: pollingDelay,
     periodic: false,
     forceAlarmManager: true,
     stopOnTerminate: false,

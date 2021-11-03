@@ -42,7 +42,7 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   int? currentIndex;
-  bool? threaded;
+  bool? threaded, extraThreaded;
   Timer? timer, extra;
   final Location _location = Location();
   BuildContext? thisContext;
@@ -90,13 +90,9 @@ class _MenuPageState extends State<MenuPage> {
     print('fetch func');
     if (mounted) {
       print('execution');
-      // showNotification(
-      //   not.Notification.create(title: "Title", message: "Message"),
-      // );
-      polling();
-      // setState(() {
-      //   _events.insert(0, "$taskId@${timestamp.toString()}  [НА ЭКРАНЕ 1 SET]");
-      // });
+      if (taskId == pollingTaskId)
+        polling();
+      else if (taskId == extraPollingTaskId) extraPolling();
     }
 
     BackgroundFetch.finish(taskId);
@@ -107,7 +103,7 @@ class _MenuPageState extends State<MenuPage> {
 
     BackgroundFetch.scheduleTask(TaskConfig(
         taskId: taskId,
-        delay: taskDelay,
+        delay: pollingDelay,
         periodic: false,
         forceAlarmManager: true,
         stopOnTerminate: false,
@@ -118,8 +114,20 @@ class _MenuPageState extends State<MenuPage> {
 
   void _startSheduleTask1() {
     BackgroundFetch.scheduleTask(TaskConfig(
-        taskId: '1111',
-        delay: taskDelay,
+        taskId: pollingTaskId,
+        delay: pollingDelay,
+        periodic: false,
+        forceAlarmManager: true,
+        stopOnTerminate: false,
+        enableHeadless: true,
+        requiresNetworkConnectivity: true,
+        requiresCharging: true));
+  }
+
+  void _startSheduleTask2() {
+    BackgroundFetch.scheduleTask(TaskConfig(
+        taskId: extraPollingTaskId,
+        delay: extraPollingDelay,
         periodic: false,
         forceAlarmManager: true,
         stopOnTerminate: false,
@@ -141,9 +149,15 @@ class _MenuPageState extends State<MenuPage> {
     if (currentIndex == null) currentIndex = role == Role.Courier ? 2 : 0;
 
     if (role == Role.Courier) {
-      if (Platform.isAndroid && threaded != true) {
-        _startSheduleTask1();
-        threaded = true;
+      if (Platform.isAndroid) {
+        if (threaded != true) {
+          _startSheduleTask1();
+          threaded = true;
+        }
+        if (extraThreaded != true) {
+          _startSheduleTask2();
+          extraThreaded = true;
+        }
       } else if (Platform.isIOS) {
         if (timer == null)
           timer = Timer.periodic(
