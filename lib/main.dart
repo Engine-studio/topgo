@@ -134,7 +134,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     checkPermissions();
-    return (granted == true)
+    return (Platform.isIOS || granted == true)
         ? ChangeNotifierProvider<User>(
             create: (_) => User(),
             builder: (context, _) {
@@ -156,6 +156,12 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                   screenFunction: () async {
+                    if (Platform.isIOS)
+                      while (granted != true) {
+                        await location.requestPermission();
+                        await checkPermissions();
+                      }
+
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
                     String? phone = prefs.getString('phone');
