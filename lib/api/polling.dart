@@ -5,12 +5,14 @@ import 'package:topgo/api/notifications.dart';
 import 'package:topgo/api/orders.dart';
 import 'package:topgo/api/work.dart';
 import 'package:topgo/main.dart';
+import 'package:topgo/pages/menu.dart' as menu;
 import 'package:topgo/models/courier.dart';
 import 'package:topgo/models/order.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:topgo/models/notification.dart' as notif;
+import 'dart:developer';
 
 Future<bool> pollSelfData(BuildContext context) async {
   print('pollSelfData');
@@ -42,9 +44,12 @@ Future<bool> pollSelfData(BuildContext context) async {
   return self.logined;
 }
 
-Future<LocationData> processLocation(
-    BuildContext context, Location location) async {
+Future<bool> processLocation(BuildContext context, Location location) async {
+  print("Started checking location");
   LocationData locationData = await location.getLocation();
+  print("Finished checking location");
+
+  menu.currentLocation = locationData;
 
   if ((locationData.speed ?? 0) * 3.6 >= 80)
     showNotification(notif.Notification.create(
@@ -54,7 +59,8 @@ Future<LocationData> processLocation(
 
   await clearLocation(context);
   await sendLocation(context, locationData);
-  return locationData;
+
+  return true;
 }
 
 Future<void> pollNotifications(BuildContext context) async {
@@ -65,18 +71,19 @@ Future<void> pollNotifications(BuildContext context) async {
 }
 
 Future<void> getOrder(
-  BuildContext context,
-  Location location, {
+  BuildContext context, {
   required bool extra,
 }) async {
   print('getOrder');
   User self = context.read<User>();
   Courier selfCourier = self.courier!;
 
+  LocationData loc = menu.currentLocation;
+
   if (selfCourier.shift != null) {
     OrderRequest orderRequest = OrderRequest.create(
       courierId: self.id!,
-      locationData: await processLocation(context, location),
+      locationData: loc,
     );
 
     int pCount = selfCourier.ordersRequest.length;
@@ -109,34 +116,50 @@ Future<void> getOrder(
 Future<bool> pollOrders(BuildContext context) async {
   print('pollOrders');
 
-  List<Order> pOrders = context.read<User>().courier!.orders;
-  List<Order> pHistory = context.read<User>().courier!.history;
-  await getCurrentOrders(context);
-  await getOrdersHistory(context);
-  List<Order> orders = context.read<User>().courier!.orders;
-  List<Order> history = context.read<User>().courier!.history;
+  if (savedOrders == null || savedHistory == null) {
+    await getCurrentOrders(context);
+    await getOrdersHistory(context);
+  } else {
+    List<Order> pOrders = savedOrders!;
+    print("previous:");
+    print(inspect(pOrders));
+    List<Order> pHistory = savedHistory!;
+    await getCurrentOrders(context);
+    await getOrdersHistory(context);
+    List<Order> orders = context.read<User>().courier!.orders;
+    print("current:");
+    print(inspect(orders));
+    List<Order> history = context.read<User>().courier!.history;
 
-  for (Order order in pOrders) {
-    if (order.status == OrderStatus.Cooking)
-      for (Order actual in orders)
-        if (order.id == actual.id &&
-            actual.status == OrderStatus.ReadyForDelivery)
-          showNotification(notif.Notification.create(
-            title: "Заказ готов",
-            message: "Заказ #${actual.id} готов к доставке!",
-          ));
-  }
+    for (Order order in pOrders) {
+      if (order.status == OrderStatus.Cooking)
+        for (Order actual in orders)
+          if (order.id == actual.id &&
+              actual.status == OrderStatus.ReadyForDelivery) {
+            print("Заказ #${actual.id} готов к доставке!");
+            showNotification(notif.Notification.create(
+              title: "Заказ готов",
+              message: "Заказ #${actual.id} готов к доставке!",
+            ));
+          }
+    }
 
-  if (orders.length < pOrders.length && history.length == pHistory.length) {
     bool found;
     for (Order order in pOrders) {
       found = false;
       for (Order actual in orders) if (actual.id == order.id) found = true;
       if (!found)
-        showNotification(notif.Notification.create(
-          title: "Заказ отменен",
-          message: "Заказ #${order.id} был отменен!",
-        ));
+        for (Order hist in history)
+          if (hist.id == order.id) if (![
+            OrderStatus.Success,
+            OrderStatus.Delivered
+          ].contains(hist.status)) {
+            print("Заказ #${order.id} был отменен!");
+            showNotification(notif.Notification.create(
+              title: "Заказ отменен",
+              message: "Заказ #${order.id} был отменен!",
+            ));
+          }
     }
   }
 

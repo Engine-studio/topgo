@@ -7,6 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:topgo/models/simple_courier.dart';
 import 'package:topgo/models/user.dart';
 
+// ignore: avoid_init_to_null
+List<Order>? savedOrders = null;
+// ignore: avoid_init_to_null
+List<Order>? savedHistory = null;
+
 Future<List<Order>> getOrdersHistory(BuildContext context) async {
   String json = await apiRequest(
     context: context,
@@ -14,6 +19,11 @@ Future<List<Order>> getOrdersHistory(BuildContext context) async {
   );
 
   context.read<User>().ordersHistory = jsonDecode(json)
+      .cast<Map<String, dynamic>>()
+      .map<Order>((json) => Order.fromJson(json))
+      .toList();
+
+  savedHistory = jsonDecode(json)
       .cast<Map<String, dynamic>>()
       .map<Order>((json) => Order.fromJson(json))
       .toList();
@@ -37,6 +47,10 @@ Future<bool> getCurrentOrders(BuildContext context) async {
       .toList();
 
   context.read<User>().orders = orders
+      .where((order) => order.status != OrderStatus.CourierConfirmation)
+      .toList();
+
+  savedOrders = orders
       .where((order) => order.status != OrderStatus.CourierConfirmation)
       .toList();
 

@@ -15,6 +15,17 @@ const default_photo =
 Map<String, String> jsonHeader(BuildContext context) =>
     {'Content-Type': 'application/json', 'jwt': context.read<User>().token!};
 
+void dots({bool? end}) {
+  if (end == true)
+    for (int i = 3; i >= 0; i--) {
+      print("." * i);
+    }
+  else
+    for (int i = 1; i <= 3; i++) {
+      print("." * i);
+    }
+}
+
 /// Returns utf8 decoded codeUnits of response from server.
 ///
 /// If headers is null uses jsonHeader with token.
@@ -34,14 +45,14 @@ Future<String> apiRequest({
     );
 
     if (detailed) {
-      print('');
+      dots();
       print('REQ:');
       print('route: $route');
       print('body: $body');
       print('RESP:');
       print('code: ${response.statusCode}');
       print('body: ${response.body}');
-      print('');
+      dots(end: true);
     }
 
     int code = response.statusCode;

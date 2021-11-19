@@ -20,6 +20,8 @@ import 'package:topgo/widgets/bottom_navbar.dart';
 import 'package:provider/provider.dart';
 import 'package:background_fetch/background_fetch.dart';
 
+late LocationData currentLocation;
+
 final fetchConfig = BackgroundFetchConfig(
   minimumFetchInterval: 15,
   forceAlarmManager: false,
@@ -42,8 +44,8 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   int? currentIndex;
-  bool? threaded, extraThreaded;
-  Timer? timer, extra;
+  bool? threaded, extraThreaded, locThreaded;
+  Timer? timer, extra, loc;
   final Location _location = Location();
   BuildContext? thisContext;
 
@@ -53,7 +55,7 @@ class _MenuPageState extends State<MenuPage> {
       await pollSelfData(thisContext!);
       await pollNotifications(thisContext!);
       await pollOrders(thisContext!);
-      await getOrder(thisContext!, _location, extra: false);
+      await getOrder(thisContext!, extra: false);
     } catch (e) {
       print('POLLING ERR: ' + e.toString());
     }
@@ -62,9 +64,18 @@ class _MenuPageState extends State<MenuPage> {
   void extraPolling() async {
     print('EXTRA POLLING');
     try {
-      await getOrder(thisContext!, _location, extra: true);
+      await getOrder(thisContext!, extra: true);
     } catch (e) {
       print('EXTRA POLLING ERR: ' + e.toString());
+    }
+  }
+
+  void locationPolling() async {
+    print("LOCATION POLLING");
+    try {
+      await processLocation(context, _location);
+    } catch (e) {
+      print("LOCATION POLLING ERR: " + e.toString());
     }
   }
 
@@ -92,7 +103,9 @@ class _MenuPageState extends State<MenuPage> {
       print('execution');
       if (taskId == pollingTaskId)
         polling();
-      else if (taskId == extraPollingTaskId) extraPolling();
+      else if (taskId == extraPollingTaskId)
+        extraPolling();
+      else if (taskId == locationPollingId) locationPolling();
     }
 
     BackgroundFetch.finish(taskId);
@@ -114,26 +127,41 @@ class _MenuPageState extends State<MenuPage> {
 
   void _startSheduleTask1() {
     BackgroundFetch.scheduleTask(TaskConfig(
-        taskId: pollingTaskId,
-        delay: pollingDelay,
-        periodic: false,
-        forceAlarmManager: true,
-        stopOnTerminate: false,
-        enableHeadless: true,
-        requiresNetworkConnectivity: true,
-        requiresCharging: true));
+      taskId: pollingTaskId,
+      delay: pollingDelay,
+      periodic: false,
+      forceAlarmManager: true,
+      stopOnTerminate: false,
+      enableHeadless: true,
+      requiresNetworkConnectivity: true,
+      requiresCharging: true,
+    ));
   }
 
   void _startSheduleTask2() {
     BackgroundFetch.scheduleTask(TaskConfig(
-        taskId: extraPollingTaskId,
-        delay: extraPollingDelay,
-        periodic: false,
-        forceAlarmManager: true,
-        stopOnTerminate: false,
-        enableHeadless: true,
-        requiresNetworkConnectivity: true,
-        requiresCharging: true));
+      taskId: extraPollingTaskId,
+      delay: extraPollingDelay,
+      periodic: false,
+      forceAlarmManager: true,
+      stopOnTerminate: false,
+      enableHeadless: true,
+      requiresNetworkConnectivity: true,
+      requiresCharging: true,
+    ));
+  }
+
+  void _startSheduleTask3() {
+    BackgroundFetch.scheduleTask(TaskConfig(
+      taskId: locationPollingId,
+      delay: locationPollingDelay,
+      periodic: false,
+      forceAlarmManager: true,
+      stopOnTerminate: false,
+      enableHeadless: true,
+      requiresNetworkConnectivity: true,
+      requiresCharging: true,
+    ));
   }
 
   void _stopTasks() {
@@ -150,6 +178,11 @@ class _MenuPageState extends State<MenuPage> {
 
     if (role == Role.Courier) {
       if (Platform.isAndroid) {
+        if (locThreaded != true) {
+          locationPolling();
+          _startSheduleTask3();
+          locThreaded = true;
+        }
         if (threaded != true) {
           _startSheduleTask1();
           threaded = true;
@@ -159,6 +192,11 @@ class _MenuPageState extends State<MenuPage> {
           extraThreaded = true;
         }
       } else if (Platform.isIOS) {
+        if (loc == null)
+          loc = Timer.periodic(
+            Duration(seconds: 20),
+            (t) => {if (thisContext != null) locationPolling()},
+          );
         if (timer == null)
           timer = Timer.periodic(
             Duration(seconds: 30),

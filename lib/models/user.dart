@@ -159,6 +159,8 @@ class User with ChangeNotifier {
 
   List<Order> get shownHistory => courier!.shownHistory;
 
+  List<Order> get orders => this.courier!.orders;
+
   void deleteCourier(SimpleCourier courier) {
     if (role == Role.Administrator) {
       administrator!.couriers.remove(courier);

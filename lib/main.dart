@@ -15,10 +15,12 @@ import 'dart:io' show Platform;
 
 import 'models/user.dart';
 
-const pollingDelay = 60000; // 1 minute polling delay
+const pollingDelay = 20000; // 1 minute polling delay
 const extraPollingDelay = 300000; // 5 minute extra polling delay
+const locationPollingDelay = 20000; // 20 sec polling delay for location fetch
 const pollingTaskId = "1111";
 const extraPollingTaskId = "2222";
+const locationPollingId = "3333";
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
