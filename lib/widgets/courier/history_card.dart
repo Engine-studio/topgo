@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:topgo/functions/money_string.dart';
 import 'package:topgo/functions/time_string.dart';
 import 'package:topgo/models/order.dart';
 import 'package:topgo/styles.dart';
@@ -14,26 +15,39 @@ class OrderHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BorderBox(
-      height: 269,
+      height: 302,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
             AddressHolder(
-                dist: 'Откуда:', address: order.fromAddress ?? 'Not found'),
+              dist: 'Откуда:',
+              address: order.fromAddress ?? 'Not found',
+            ),
             SizedBox(height: 8),
             AddressHolder(
-                dist: 'Куда:', address: order.toAddress ?? 'Not found'),
+              dist: 'Куда:',
+              address: order.toAddress ?? 'Not found',
+            ),
             SizedBox(height: 8),
             AddressHolder(
-                dist: 'Коммент:', address: order.comment ?? 'Not found'),
-            SizedBox(height: 18),
+              dist: 'Коммент:',
+              address: order.comment ?? 'Not found',
+            ),
+            SizedBox(height: 8),
+            AddressHolder(
+              dist: 'Доставка:',
+              address: order.courierShare != null
+                  ? moneyString(order.courierShare!)
+                  : 'Not found',
+            ),
+            SizedBox(height: 8),
             OrderInfoHolder(
               time: order.total ?? 0,
               payment: order.withCash!,
               sum: order.sum ?? 0,
             ),
-            SizedBox(height: 18),
+            SizedBox(height: 8),
             Row(
               children: [
                 Flexible(

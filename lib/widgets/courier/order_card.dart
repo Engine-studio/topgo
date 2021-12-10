@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topgo/api/work.dart';
+import 'package:topgo/functions/money_string.dart';
 import 'package:topgo/models/order.dart';
 import 'package:topgo/models/restaurant.dart';
 import 'package:topgo/models/simple_courier.dart';
@@ -64,17 +65,27 @@ class _OrderCardState extends State<OrderCard> {
           ),
           SizedBox(height: 8),
           BorderBox(
-            height: 171,
+            height: 224,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Column(
                 children: [
-                  AddressHolder(dist: 'Откуда:', address: order.fromAddress!),
-                  SizedBox(height: 8),
-                  AddressHolder(dist: 'Куда:', address: order.toAddress!),
+                  AddressHolder(
+                      dist: 'Откуда:',
+                      address: order.fromAddress ?? 'Not Found'),
                   SizedBox(height: 8),
                   AddressHolder(
-                      dist: 'Коммент:', address: order.comment ?? "Not Found"),
+                      dist: 'Куда:', address: order.toAddress ?? 'Not Found'),
+                  SizedBox(height: 8),
+                  AddressHolder(
+                      dist: 'Коммент:', address: order.comment ?? 'Not Found'),
+                  SizedBox(height: 8),
+                  AddressHolder(
+                    dist: 'Доставка:',
+                    address: order.courierShare != null
+                        ? moneyString(order.courierShare!)
+                        : 'Not found',
+                  ),
                 ],
               ),
             ),

@@ -21,9 +21,9 @@ class OrderInfoHolder extends StatelessWidget {
             ? 'Терминал'
             : 'Оплачен';
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
-          flex: 3,
+        Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -44,8 +44,7 @@ class OrderInfoHolder extends StatelessWidget {
             ],
           ),
         ),
-        Flexible(
-          flex: 4,
+        Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -66,8 +65,7 @@ class OrderInfoHolder extends StatelessWidget {
             ],
           ),
         ),
-        Flexible(
-          flex: 4,
+        Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -84,7 +82,11 @@ class OrderInfoHolder extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8),
-              Text(moneyString(sum, fix: 1), style: TxtStyle.smallText),
+              Text(
+                moneyString(sum, fix: 1),
+                style: TxtStyle.smallText
+                    .copyWith(overflow: TextOverflow.ellipsis),
+              )
             ],
           ),
         ),

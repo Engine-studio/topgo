@@ -25,7 +25,7 @@ class Order {
   int? id, restaurantId, sessionId, total;
   String? fromAddress, toAddress, comment;
   LatLng? fromLatLng, toLatLng;
-  double? appearance, behavior, sum;
+  double? appearance, behavior, sum, courierShare;
   List<int>? start, stop;
   String? withCash;
   OrderStatus? status;
@@ -52,6 +52,7 @@ class Order {
         comment = json['client_comment'],
         sum =
             ((json['pay_amount'] ?? json['order_price']) * 1.0 ?? 0.0) / 100.0,
+        courierShare = ((json['courier_share'] ?? 0.0) * 1.0 ?? 0.0) / 100.0,
         status = (json['status'] != null)
             ? OrderStatus.values.firstWhere(
                 (e) => e.toString() == 'OrderStatus.' + json['status'])
